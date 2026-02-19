@@ -97,6 +97,15 @@ class OnboardingPage extends StatelessWidget {
   }
 }
 
+/// Displays the Wasla brand logo group: red circle with "W" followed by "ASLA".
+///
+/// This widget is wrapped in [Directionality] with [TextDirection.ltr] to
+/// ensure the internal content order (circle "W" → "ASLA") never mirrors
+/// when the app switches to an RTL language (e.g. Arabic). Brand elements
+/// must remain visually fixed regardless of locale direction.
+///
+/// The parent [Center] widget keeps the group horizontally centered on screen,
+/// and [FittedBox] scales it down proportionally on smaller devices.
 class _LogoGroup extends StatelessWidget {
   const _LogoGroup();
 
@@ -130,7 +139,6 @@ class _LogoGroup extends StatelessWidget {
                 Text(
                   'W',
                   style: TextStyle(
-                    fontFamily: 'Nunito Sans',
                     fontSize: _wFontSize,
                     fontWeight: FontWeight.w800,
                     color: AppColors.background,
@@ -142,7 +150,6 @@ class _LogoGroup extends StatelessWidget {
             Text(
               'ASLA',
               style: TextStyle(
-                fontFamily: 'Nunito Sans',
                 fontSize: _aslaFontSize,
                 fontWeight: FontWeight.w800,
                 color: AppColors.brandRed,
