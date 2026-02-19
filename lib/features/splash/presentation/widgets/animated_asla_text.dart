@@ -25,10 +25,9 @@ class AnimatedAslaText extends StatelessWidget {
           ),
         );
       },
-      child: const Text(
+      child: Text(
         'ASLA',
         style: TextStyle(
-          fontFamily: 'Nunito Sans',
           fontSize: _fontSize,
           fontWeight: FontWeight.w800,
           color: AppColors.brandRed,

@@ -25,8 +25,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late Animation<double> _dotsVisibilityAnimation;
   late Animation<double> _dotsAnimation;
 
-  static const double _logoSlideDistance = 50.0;
-  static const double _aslaSpacing = 50.0;
+  
 
   @override
   void initState() {
@@ -111,24 +110,27 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 children: [
                   FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Transform.translate(
-                          offset: Offset(-10* _logoSlideAnimation.value, 0),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              AnimatedLogoCircle(animation: _circleDropAnimation),
-                              AnimatedWLetter(animation: _wFadeAnimation),
-                            ],
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Transform.translate(
+                            offset: Offset(-10* _logoSlideAnimation.value, 0),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                AnimatedLogoCircle(animation: _circleDropAnimation),
+                                AnimatedWLetter(animation: _wFadeAnimation),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(width:  _aslaSlideAnimation.value),
-                        AnimatedAslaText(animation: _aslaSlideAnimation),
-                      ],
+                          SizedBox(width:10* _aslaSlideAnimation.value),
+                          AnimatedAslaText(animation: _aslaSlideAnimation),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppDimensions.spacingXxl),

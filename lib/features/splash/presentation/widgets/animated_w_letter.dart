@@ -21,10 +21,9 @@ class AnimatedWLetter extends StatelessWidget {
           child: child,
         );
       },
-      child: const Text(
+      child: Text(
         'W',
         style: TextStyle(
-          fontFamily: 'Nunito Sans',
           fontSize: _fontSize,
           fontWeight: FontWeight.w800,
           color: AppColors.background,
