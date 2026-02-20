@@ -133,6 +133,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'For support, please contact us at support@wasla.com'**
   String get supportPageDescription;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get loginTitle;
+
+  /// No description provided for @loginEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get loginEmail;
+
+  /// No description provided for @loginPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get loginPassword;
+
+  /// No description provided for @loginRememberMe.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember me'**
+  String get loginRememberMe;
+
+  /// No description provided for @loginForgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get loginForgotPassword;
+
+  /// No description provided for @loginSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get loginSignIn;
+
+  /// No description provided for @loginSignUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Sign Up'**
+  String get loginSignUp;
+
+  /// No description provided for @loginSignUpAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get loginSignUpAction;
+
+  /// No description provided for @loginInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email or password'**
+  String get loginInvalidCredentials;
+
+  /// No description provided for @loginEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get loginEmailRequired;
+
+  /// No description provided for @loginPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get loginPasswordRequired;
+
+  /// No description provided for @loginEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get loginEmailInvalid;
+
+  /// No description provided for @loginUnexpectedError.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again.'**
+  String get loginUnexpectedError;
+
+  /// No description provided for @loginNoConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network.'**
+  String get loginNoConnection;
+
+  /// No description provided for @loginRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many attempts. Please try again later.'**
+  String get loginRateLimited;
+
+  /// No description provided for @loginSessionExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Session expired. Please sign in again.'**
+  String get loginSessionExpired;
 }
 
 class _AppLocalizationsDelegate

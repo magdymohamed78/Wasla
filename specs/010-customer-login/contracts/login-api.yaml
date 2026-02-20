@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: Wasla Customer Login API
+  description: Authentication endpoint for customer login
+  version: 1.0.0
+
+servers:
+  - url: http://waslacrm.runasp.net/
+    description: Production server
+
+paths:
+  /api/customer-portal/login:
+    post:
+      summary: Customer Login
+      description: |
+        Authenticates a customer using email and password credentials.
+        Returns a session token and user profile data on success.
+      operationId: customerLogin
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: "customer@example.com"
+              password: "securePassword123"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                userId: 42
+                customerId: 1001
+                firstName: "Ahmed"
+                lastName: "Hassan"
+                email: "customer@example.com"
+        '401':
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Invalid email or password"
+        '400':
+          description: Bad request (missing or malformed fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Email and password are required"
+        '429':
+          description: Too many requests (rate limiting)
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+              description: Number of seconds to wait before retrying
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Too many attempts. Please try again later."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "An unexpected error occurred"
+
+components:
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: Customer's registered email address
+          example: "customer@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 1
+          description: Customer's password
+          example: "securePassword123"
+
+    LoginResponse:
+      type: object
+      required:
+        - token
+        - userId
+        - customerId
+        - firstName
+        - lastName
+        - email
+      properties:
+        token:
+          type: string
+          description: JWT or session token for authenticated requests
+        userId:
+          type: integer
+          description: Unique user identifier
+        customerId:
+          type: integer
+          description: Unique customer identifier
+        firstName:
+          type: string
+          description: Customer's first name
+        lastName:
+          type: string
+          description: Customer's last name
+        email:
+          type: string
+          format: email
+          description: Customer's email address
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message
