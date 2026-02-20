@@ -65,6 +65,21 @@ class AppRouter {
           builder: (context, state) =>
               const HomePlaceholderPage(),
         ),
+        GoRoute(
+          path: forgotPassword,
+          builder: (context, state) => const ForgotPasswordPlaceholderPage(),
+        ),
+        GoRoute(
+          path: home,
+          builder: (context, state) => const HomePlaceholderPage(),
+          redirect: (context, state) async {
+            final session = await authRepository.getStoredSession();
+            if (session == null) {
+              return login;
+            }
+            return null;
+          },
+        ),
       ],
     );
   }

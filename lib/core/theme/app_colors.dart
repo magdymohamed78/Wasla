@@ -8,6 +8,7 @@ class AppColors {
   static const Color surface = Color(0xFFFFFFFF);
   static const Color textPrimary = Color(0xFF212121);
   static const Color textSecondary = Color(0xFF757575);
+  static const Color text3 = Color(0x7D8593);
   static const Color buttonPrimary = brandRed;
   static const Color buttonSecondary = Color(0xFFEEEEEE);
   static const Color divider = Color(0xFFE0E0E0);
