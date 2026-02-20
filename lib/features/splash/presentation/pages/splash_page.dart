@@ -127,7 +127,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                               ],
                             ),
                           ),
-                          SizedBox(width:10* _aslaSlideAnimation.value),
+                          SizedBox(width: _aslaSlideAnimation.value),
                           AnimatedAslaText(animation: _aslaSlideAnimation),
                         ],
                       ),

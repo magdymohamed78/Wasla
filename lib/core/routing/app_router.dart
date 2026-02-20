@@ -33,7 +33,8 @@ class AppRouter {
           pageBuilder: (context, state) => CustomTransitionPage(
             key: state.pageKey,
             child: const OnboardingPage(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
               return FadeTransition(
                 opacity: animation,
                 child: child,
@@ -51,22 +52,18 @@ class AppRouter {
         ),
         GoRoute(
           path: register,
-          builder: (context, state) => const RegisterPlaceholderPage(),
+          builder: (context, state) =>
+              const RegisterPlaceholderPage(),
         ),
         GoRoute(
           path: forgotPassword,
-          builder: (context, state) => const ForgotPasswordPlaceholderPage(),
+          builder: (context, state) =>
+              const ForgotPasswordPlaceholderPage(),
         ),
         GoRoute(
           path: home,
-          builder: (context, state) => const HomePlaceholderPage(),
-          redirect: (context, state) async {
-            final session = await authRepository.getStoredSession();
-            if (session == null) {
-              return login;
-            }
-            return null;
-          },
+          builder: (context, state) =>
+              const HomePlaceholderPage(),
         ),
       ],
     );

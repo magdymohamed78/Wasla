@@ -16,7 +16,8 @@ import '../../domain/entities/login_entity.dart';
 class LoginResponseModel {
   final String token;
   final int userId;
-  final int customerId;
+  final int ? customerId;
+  final int? leadId; 
   final String firstName;
   final String lastName;
   final String email;
@@ -24,7 +25,8 @@ class LoginResponseModel {
   const LoginResponseModel({
     required this.token,
     required this.userId,
-    required this.customerId,
+     this.customerId,
+     this.leadId,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -35,7 +37,8 @@ class LoginResponseModel {
     return LoginResponseModel(
       token: json['token'] as String,
       userId: json['userId'] as int,
-      customerId: json['customerId'] as int,
+      customerId: json['customerId'] as int?,
+      leadId: json['leadId'] as int?,
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
       email: json['email'] as String,
@@ -48,6 +51,7 @@ class LoginResponseModel {
       token: token,
       userId: userId,
       customerId: customerId,
+       leadId: leadId, 
       firstName: firstName,
       lastName: lastName,
       email: email,

@@ -77,4 +77,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loginSessionExpired => 'انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.';
+
+  @override
+  String get loginErrorInvalidCredentials =>
+      'بيانات تسجيل الدخول غير صحيحة أو الحساب غير مفعل.';
+
+  @override
+  String get loginErrorAccountNotSetup =>
+      'حسابك لم يتم إعداده بالكامل. يرجى التواصل مع الدعم للمساعدة.';
+
+  @override
+  String get loginErrorRateLimit =>
+      'عدد محاولات تسجيل الدخول كبير. حاول مرة أخرى لاحقًا.';
+
+  @override
+  String get loginErrorNetwork =>
+      'لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة والمحاولة مرة أخرى.';
+
+  @override
+  String get loginErrorServer =>
+      'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقًا.';
 }

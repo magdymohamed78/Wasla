@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/localization/l10n/AppLocalizations.dart';
-import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -15,7 +13,9 @@ import '../cubit/login_state.dart';
 /// Reads state from [LoginCubit] and dispatches user interactions.
 /// Pure presentation — no business logic or navigation.
 class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+  final VoidCallback? onForgotPasswordTap;
+
+  const LoginForm({super.key, this.onForgotPasswordTap});
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +80,8 @@ class LoginForm extends StatelessWidget {
               TextFormField(
                 onChanged: cubit.passwordChanged,
                 obscureText: state.obscurePassword,
+                keyboardType: TextInputType.visiblePassword,
+                textDirection: TextDirection.ltr,
                 autofillHints: const [AutofillHints.password],
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => _onSubmit(state, cubit),
@@ -165,7 +167,7 @@ class LoginForm extends StatelessWidget {
 
                   // Forgot password
                   TextButton(
-                    onPressed: () => context.push(AppRouter.forgotPassword),
+                    onPressed: onForgotPasswordTap,
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       minimumSize: Size.zero,
@@ -197,7 +199,7 @@ class LoginForm extends StatelessWidget {
                   : PrimaryButton(
                       label: localizations.loginSignIn,
                       icon: Icons.arrow_forward_rounded,
-                      onPressed: state.status == LoginStatus.loading
+                      onPressed: state.status == LoginStatus.loading || state.isRateLimited
                           ? null
                           : () => _onSubmit(state, cubit),
                     ),

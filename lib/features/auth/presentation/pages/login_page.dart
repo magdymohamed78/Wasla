@@ -29,10 +29,10 @@ class LoginPage extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) =>
           previous.status != current.status &&
-          current.status == LoginStatus.failure,
+          (current.status == LoginStatus.failure || current.status == LoginStatus.success),
       listener: (context, state) {
         if (state.status == LoginStatus.failure) {
-          _showErrorSnackBar(context, state.errorMessage, localizations);
+          _showErrorSnackBar(context, state.errorCode, localizations, state.errorCategory);
         }
 
         if (state.status == LoginStatus.success) {
@@ -103,7 +103,9 @@ class LoginPage extends StatelessWidget {
 
                                 const SizedBox(height: AppDimensions.spacingXxl),
 
-                                const LoginForm(),
+                                LoginForm(
+                                  onForgotPasswordTap: () => context.push(AppRouter.forgotPassword),
+                                ),
 
                                 const SizedBox(height: AppDimensions.spacingMd),
 
@@ -153,38 +155,62 @@ class LoginPage extends StatelessWidget {
 
   void _showErrorSnackBar(
     BuildContext context,
-    String? errorMessage,
+    LoginErrorCode? errorCode,
     AppLocalizations localizations,
+    LoginErrorCategory? errorCategory,
   ) {
-    if (errorMessage == null || errorMessage.isEmpty) {
-      errorMessage = localizations.loginUnexpectedError;
-    }
+    final message = _mapErrorCodeToMessage(errorCode, localizations);
+    
+    final showRetry = errorCategory == LoginErrorCategory.server || 
+                      errorCategory == LoginErrorCategory.network;
+    
     ScaffoldMessenger.of(context)
       ..clearSnackBars()
       ..showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 5),
+          duration: const Duration(seconds: 4),
           backgroundColor: AppColors.error,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
           ),
           content: Row(
             children: [
-              Expanded(child: Text(errorMessage)),
-              TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  context.read<LoginCubit>().login();
-                },
-                child: const Text(
-                  'Retry',
-                  style: TextStyle(color: Colors.white),
+              Expanded(child: Text(message)),
+              if (showRetry)
+                TextButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    context.read<LoginCubit>().login();
+                  },
+                  child: const Text(
+                    'Retry',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
             ],
           ),
         ),
       );
+  }
+
+  String _mapErrorCodeToMessage(LoginErrorCode? errorCode, AppLocalizations localizations) {
+    switch (errorCode) {
+      case LoginErrorCode.invalidCredentials:
+        return localizations.loginErrorInvalidCredentials;
+      case LoginErrorCode.accountNotSetup:
+        return localizations.loginErrorAccountNotSetup;
+      case LoginErrorCode.rateLimit:
+        return localizations.loginErrorRateLimit;
+      case LoginErrorCode.networkError:
+        return localizations.loginErrorNetwork;
+      case LoginErrorCode.serverError:
+        return localizations.loginErrorServer;
+      case LoginErrorCode.sessionExpired:
+        return localizations.loginSessionExpired;
+      case LoginErrorCode.unexpectedError:
+      case null:
+        return localizations.loginUnexpectedError;
+    }
   }
 }
