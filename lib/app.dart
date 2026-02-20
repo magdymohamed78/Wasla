@@ -82,6 +82,7 @@ class _AppState extends State<App> {
         RepositoryProvider<LocaleRepositoryImpl>(
           create: (_) => LocaleRepositoryImpl(widget.sharedPreferences),
         ),
+        RepositoryProvider<AuthRepository>.value(value: _authRepository),
       ],
       child: MultiBlocProvider(
         providers: [

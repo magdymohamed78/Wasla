@@ -76,4 +76,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginSessionExpired => 'Session expired. Please sign in again.';
+
+  @override
+  String get loginErrorInvalidCredentials =>
+      'Invalid credentials or inactive account.';
+
+  @override
+  String get loginErrorAccountNotSetup =>
+      'Your account is not fully set up. Please contact support for help.';
+
+  @override
+  String get loginErrorRateLimit =>
+      'Too many login attempts. Please try again later.';
+
+  @override
+  String get loginErrorNetwork =>
+      'No internet connection. Please check your network and try again.';
+
+  @override
+  String get loginErrorServer =>
+      'An unexpected error occurred. Please try again later.';
 }

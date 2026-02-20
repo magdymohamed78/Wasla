@@ -15,7 +15,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<LoginResponseModel> login(LoginRequestModel request) async {
-    final url = '${_dio.options.baseUrl}${_loginEndpoint}';
+    final url = '${_dio.options.baseUrl}$_loginEndpoint';
     
     debugPrint('════════════════════════════════════════════════════');
     debugPrint('[AuthRemoteDataSource] LOGIN REQUEST');
@@ -44,6 +44,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             message: 'Empty response body from server',
           );
         }
+        
+        if (_isErrorResponse(response.data!)) {
+          final errorMessage = _extractErrorMessage(response.data!);
+          throw DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            message: errorMessage,
+          );
+        }
+        
         return LoginResponseModel.fromJson(response.data!);
       }
 
@@ -74,5 +84,36 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: 'Unexpected error: $e',
       );
     }
+  }
+
+  bool _isErrorResponse(Map<String, dynamic> data) {
+    if (data.containsKey('token') && data['token'] is String) {
+      return false;
+    }
+    
+    if (data.containsKey('success') && data['success'] == false) {
+      return true;
+    }
+    
+    if (data.containsKey('error') || data.containsKey('errors')) {
+      return !data.containsKey('token');
+    }
+    
+    if (data.containsKey('statusCode')) {
+      final code = data['statusCode'];
+      if (code is int && code >= 400) {
+        return true;
+      }
+    }
+    
+    return !data.containsKey('token');
+  }
+
+  String _extractErrorMessage(Map<String, dynamic> data) {
+    return data['message'] as String? ??
+        data['error'] as String? ??
+        data['errorMessage'] as String? ??
+        data['errors']?.toString() ??
+        'Unknown error occurred';
   }
 }

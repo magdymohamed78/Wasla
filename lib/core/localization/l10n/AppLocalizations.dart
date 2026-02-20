@@ -229,6 +229,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Session expired. Please sign in again.'**
   String get loginSessionExpired;
+
+  /// No description provided for @loginErrorInvalidCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid credentials or inactive account.'**
+  String get loginErrorInvalidCredentials;
+
+  /// No description provided for @loginErrorAccountNotSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is not fully set up. Please contact support for help.'**
+  String get loginErrorAccountNotSetup;
+
+  /// No description provided for @loginErrorRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many login attempts. Please try again later.'**
+  String get loginErrorRateLimit;
+
+  /// No description provided for @loginErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network and try again.'**
+  String get loginErrorNetwork;
+
+  /// No description provided for @loginErrorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again later.'**
+  String get loginErrorServer;
 }
 
 class _AppLocalizationsDelegate

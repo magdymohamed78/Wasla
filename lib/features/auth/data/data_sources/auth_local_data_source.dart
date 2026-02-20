@@ -40,7 +40,11 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> saveUser(LoginEntity user) async {
     await sharedPreferences.setInt(_userIdKey, user.userId);
-    await sharedPreferences.setInt(_customerIdKey, user.customerId);
+    if (user.customerId != null) {
+    await sharedPreferences.setInt(_customerIdKey, user.customerId!);
+  } else {
+    await sharedPreferences.remove(_customerIdKey);
+  }
     await sharedPreferences.setString(_firstNameKey, user.firstName);
     await sharedPreferences.setString(_lastNameKey, user.lastName);
     await sharedPreferences.setString(_emailKey, user.email);

@@ -21,5 +21,10 @@
   "loginUnexpectedError": "An unexpected error occurred. Please try again.",
   "loginNoConnection": "No internet connection. Please check your network.",
   "loginRateLimited": "Too many attempts. Please try again later.",
-  "loginSessionExpired": "Session expired. Please sign in again."
+  "loginSessionExpired": "Session expired. Please sign in again.",
+  "loginErrorInvalidCredentials": "Invalid credentials or inactive account.",
+  "loginErrorAccountNotSetup": "Your account is not fully set up. Please contact support for help.",
+  "loginErrorRateLimit": "Too many login attempts. Please try again later.",
+  "loginErrorNetwork": "No internet connection. Please check your network and try again.",
+  "loginErrorServer": "An unexpected error occurred. Please try again later."
 }

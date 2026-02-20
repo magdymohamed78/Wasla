@@ -5,7 +5,8 @@
 class LoginEntity {
   final String token;
   final int userId;
-  final int customerId;
+  final int? customerId;
+  final int? leadId;
   final String firstName;
   final String lastName;
   final String email;
@@ -13,7 +14,8 @@ class LoginEntity {
   const LoginEntity({
     required this.token,
     required this.userId,
-    required this.customerId,
+     this.customerId,
+     this.leadId,
     required this.firstName,
     required this.lastName,
     required this.email,
