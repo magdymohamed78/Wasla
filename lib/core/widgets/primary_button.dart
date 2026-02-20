@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_typography.dart';
-import '../theme/app_dimensions.dart';
+import 'package:waslaapp/core/theme/app_colors.dart';
+import 'package:waslaapp/core/theme/app_dimensions.dart';
+import 'package:waslaapp/core/theme/app_typography.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
+  final IconData? icon; // 👈 اختياري
 
   const PrimaryButton({
     super.key,
     required this.label,
     this.onPressed,
+    this.icon,
   });
 
   @override
@@ -26,12 +28,27 @@ class PrimaryButton extends StatelessWidget {
           elevation: 4,
           shadowColor: AppColors.brandRed.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+            borderRadius:
+                BorderRadius.circular(AppDimensions.borderRadiusMd),
           ),
         ),
-        child: Text(
-          label,
-          style: AppTypography.buttonLabel,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: AppTypography.buttonLabel,
+            ),
+            if (icon != null) ...[
+              const SizedBox(width: 10),
+              Icon(
+                icon,
+                size: 22,
+                
+              ),
+            ],
+          ],
         ),
       ),
     );

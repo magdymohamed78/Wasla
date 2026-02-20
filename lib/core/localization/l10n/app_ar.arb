@@ -5,5 +5,21 @@
   "languageEnglish": "English",
   "languageArabic": "العربية",
   "supportPageTitle": "الدعم",
-  "supportPageDescription": "للدعم، يرجى التواصل معنا على support@wasla.com"
+  "supportPageDescription": "للدعم، يرجى التواصل معنا على support@wasla.com",
+  "loginTitle": "تسجيل الدخول",
+  "loginEmail": "البريد الإلكتروني",
+  "loginPassword": "كلمة المرور",
+  "loginRememberMe": "تذكرني",
+  "loginForgotPassword": "نسيت كلمة المرور؟",
+  "loginSignIn": "تسجيل الدخول",
+  "loginSignUp": "ليس لديك حساب؟ سجل الآن",
+  "loginSignUpAction": "سجل الآن",
+  "loginInvalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+  "loginEmailRequired": "البريد الإلكتروني مطلوب",
+  "loginPasswordRequired": "كلمة المرور مطلوبة",
+  "loginEmailInvalid": "يرجى إدخال بريد إلكتروني صالح",
+  "loginUnexpectedError": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
+  "loginNoConnection": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
+  "loginRateLimited": "محاولات كثيرة. يرجى المحاولة لاحقاً.",
+  "loginSessionExpired": "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى."
 }

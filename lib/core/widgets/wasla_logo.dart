@@ -24,7 +24,7 @@ class WaslaLogo extends StatelessWidget {
           'W',
           style: TextStyle(
             color: AppColors.background,
-            fontSize: size * 0.5,
+            fontSize: size *0.8,
             fontWeight: FontWeight.w800,
           ),
         ),

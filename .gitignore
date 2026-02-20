@@ -56,3 +56,7 @@ coverage/
 
 # Test results
 test_results/
+
+# Environment files
+.env*
+!.env.example

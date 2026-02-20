@@ -5,5 +5,21 @@
   "languageEnglish": "English",
   "languageArabic": "العربية",
   "supportPageTitle": "Support",
-  "supportPageDescription": "For support, please contact us at support@wasla.com"
+  "supportPageDescription": "For support, please contact us at support@wasla.com",
+  "loginTitle": "Sign In",
+  "loginEmail": "Email",
+  "loginPassword": "Password",
+  "loginRememberMe": "Remember me",
+  "loginForgotPassword": "Forgot Password?",
+  "loginSignIn": "Sign In",
+  "loginSignUp": "Don't have an account? Sign Up",
+  "loginSignUpAction": "Sign Up",
+  "loginInvalidCredentials": "Invalid email or password",
+  "loginEmailRequired": "Email is required",
+  "loginPasswordRequired": "Password is required",
+  "loginEmailInvalid": "Please enter a valid email",
+  "loginUnexpectedError": "An unexpected error occurred. Please try again.",
+  "loginNoConnection": "No internet connection. Please check your network.",
+  "loginRateLimited": "Too many attempts. Please try again later.",
+  "loginSessionExpired": "Session expired. Please sign in again."
 }
