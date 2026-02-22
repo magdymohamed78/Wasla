@@ -97,4 +97,29 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get loginErrorServer =>
       'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقًا.';
+
+  @override
+  String get forgotPasswordTitle => 'نسيت كلمة المرور ؟';
+
+  @override
+  String get forgotPasswordDescription =>
+      'لا تقلق! يحدث هذا. يرجى إدخال عنوان البريد الإلكتروني المرتبط بحسابك.';
+
+  @override
+  String get forgotPasswordEmailLabel => 'أدخل عنوان بريدك الإلكتروني';
+
+  @override
+  String get forgotPasswordEmailPlaceholder => 'yourmail@gmail.com';
+
+  @override
+  String get forgotPasswordSend => 'إرسال';
+
+  @override
+  String get forgotPasswordSuccess => 'تم إرسال رابط إعادة التعيين بنجاح';
+
+  @override
+  String get forgotPasswordEmailRequired => 'البريد الإلكتروني مطلوب';
+
+  @override
+  String get forgotPasswordEmailInvalid => 'يرجى إدخال بريد إلكتروني صالح';
 }

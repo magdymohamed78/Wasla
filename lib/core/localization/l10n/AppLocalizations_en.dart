@@ -96,4 +96,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get loginErrorServer =>
       'An unexpected error occurred. Please try again later.';
+
+  @override
+  String get forgotPasswordTitle => 'Forget Password ?';
+
+  @override
+  String get forgotPasswordDescription =>
+      'Don\'t worry! It occurs. Please enter the email address linked with your account.';
+
+  @override
+  String get forgotPasswordEmailLabel => 'Enter Your Email Address';
+
+  @override
+  String get forgotPasswordEmailPlaceholder => 'yourmail@gmail.com';
+
+  @override
+  String get forgotPasswordSend => 'Send';
+
+  @override
+  String get forgotPasswordSuccess => 'Reset link sent successfully';
+
+  @override
+  String get forgotPasswordEmailRequired => 'Email is required';
+
+  @override
+  String get forgotPasswordEmailInvalid => 'Please enter a valid email';
 }

@@ -26,5 +26,13 @@
   "loginErrorAccountNotSetup": "حسابك لم يتم إعداده بالكامل. يرجى التواصل مع الدعم للمساعدة.",
   "loginErrorRateLimit": "عدد محاولات تسجيل الدخول كبير. حاول مرة أخرى لاحقًا.",
   "loginErrorNetwork": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة والمحاولة مرة أخرى.",
-  "loginErrorServer": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقًا."
+  "loginErrorServer": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقًا.",
+  "forgotPasswordTitle": "نسيت كلمة المرور ؟",
+  "forgotPasswordDescription": "لا تقلق! يحدث هذا. يرجى إدخال عنوان البريد الإلكتروني المرتبط بحسابك.",
+  "forgotPasswordEmailLabel": "أدخل عنوان بريدك الإلكتروني",
+  "forgotPasswordEmailPlaceholder": "yourmail@gmail.com",
+  "forgotPasswordSend": "إرسال",
+  "forgotPasswordSuccess": "تم إرسال رابط إعادة التعيين بنجاح",
+  "forgotPasswordEmailRequired": "البريد الإلكتروني مطلوب",
+  "forgotPasswordEmailInvalid": "يرجى إدخال بريد إلكتروني صالح"
 }

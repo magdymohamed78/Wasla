@@ -259,6 +259,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred. Please try again later.'**
   String get loginErrorServer;
+
+  /// No description provided for @forgotPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget Password ?'**
+  String get forgotPasswordTitle;
+
+  /// No description provided for @forgotPasswordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t worry! It occurs. Please enter the email address linked with your account.'**
+  String get forgotPasswordDescription;
+
+  /// No description provided for @forgotPasswordEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Your Email Address'**
+  String get forgotPasswordEmailLabel;
+
+  /// No description provided for @forgotPasswordEmailPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'yourmail@gmail.com'**
+  String get forgotPasswordEmailPlaceholder;
+
+  /// No description provided for @forgotPasswordSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get forgotPasswordSend;
+
+  /// No description provided for @forgotPasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset link sent successfully'**
+  String get forgotPasswordSuccess;
+
+  /// No description provided for @forgotPasswordEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get forgotPasswordEmailRequired;
+
+  /// No description provided for @forgotPasswordEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get forgotPasswordEmailInvalid;
 }
 
 class _AppLocalizationsDelegate
