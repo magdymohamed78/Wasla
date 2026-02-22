@@ -6,7 +6,7 @@ import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/support/presentation/pages/support_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_placeholder_page.dart';
-import '../../features/auth/presentation/pages/forgot_password_placeholder_page.dart';
+import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/home/presentation/pages/home_placeholder_page.dart';
 
 class AppRouter {
@@ -24,10 +24,7 @@ class AppRouter {
     return GoRouter(
       initialLocation: splash,
       routes: [
-        GoRoute(
-          path: splash,
-          builder: (context, state) => const SplashPage(),
-        ),
+        GoRoute(path: splash, builder: (context, state) => const SplashPage()),
         GoRoute(
           path: onboarding,
           pageBuilder: (context, state) => CustomTransitionPage(
@@ -35,39 +32,22 @@ class AppRouter {
             child: const OnboardingPage(),
             transitionsBuilder:
                 (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
+                  return FadeTransition(opacity: animation, child: child);
+                },
           ),
         ),
         GoRoute(
           path: support,
           builder: (context, state) => const SupportPage(),
         ),
-        GoRoute(
-          path: login,
-          builder: (context, state) => const LoginPage(),
-        ),
+        GoRoute(path: login, builder: (context, state) => const LoginPage()),
         GoRoute(
           path: register,
-          builder: (context, state) =>
-              const RegisterPlaceholderPage(),
+          builder: (context, state) => const RegisterPlaceholderPage(),
         ),
         GoRoute(
           path: forgotPassword,
-          builder: (context, state) =>
-              const ForgotPasswordPlaceholderPage(),
-        ),
-        GoRoute(
-          path: home,
-          builder: (context, state) =>
-              const HomePlaceholderPage(),
-        ),
-        GoRoute(
-          path: forgotPassword,
-          builder: (context, state) => const ForgotPasswordPlaceholderPage(),
+          builder: (context, state) => const ForgotPasswordPage(),
         ),
         GoRoute(
           path: home,

@@ -26,5 +26,13 @@
   "loginErrorAccountNotSetup": "Your account is not fully set up. Please contact support for help.",
   "loginErrorRateLimit": "Too many login attempts. Please try again later.",
   "loginErrorNetwork": "No internet connection. Please check your network and try again.",
-  "loginErrorServer": "An unexpected error occurred. Please try again later."
+  "loginErrorServer": "An unexpected error occurred. Please try again later.",
+  "forgotPasswordTitle": "Forget Password ?",
+  "forgotPasswordDescription": "Don't worry! It occurs. Please enter the email address linked with your account.",
+  "forgotPasswordEmailLabel": "Enter Your Email Address",
+  "forgotPasswordEmailPlaceholder": "yourmail@gmail.com",
+  "forgotPasswordSend": "Send",
+  "forgotPasswordSuccess": "Reset link sent successfully",
+  "forgotPasswordEmailRequired": "Email is required",
+  "forgotPasswordEmailInvalid": "Please enter a valid email"
 }
