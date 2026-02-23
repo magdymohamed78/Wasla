@@ -6,6 +6,14 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<LoginEntity> register({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    String? phoneNumber,
+  });
+
   Future<LoginEntity?> getStoredSession();
 
   Future<void> saveSession(LoginEntity user);

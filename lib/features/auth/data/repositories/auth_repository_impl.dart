@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../data_sources/auth_remote_data_source.dart';
 import '../data_sources/auth_local_data_source.dart';
 import '../models/login_request_model.dart';
+import '../models/register_request_model.dart';
 import '../../domain/entities/login_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 
@@ -46,6 +47,51 @@ class AuthRepositoryImpl implements AuthRepository {
       rethrow;
     } catch (e) {
       debugPrint('[AuthRepository] ✗ Login FAILED with unknown error: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<LoginEntity> register({
+    required String email,
+    required String password,
+    required String firstName,
+    required String lastName,
+    String? phoneNumber,
+  }) async {
+    final trimmedEmail = email.trim();
+    final trimmedPassword = password.trim();
+    final trimmedFirstName = firstName.trim();
+    final trimmedLastName = lastName.trim();
+    final trimmedPhoneNumber = phoneNumber?.trim();
+
+    debugPrint('════════════════════════════════════════════════════');
+    debugPrint('[AuthRepository] REGISTER ATTEMPT');
+    debugPrint('[AuthRepository] Email: $trimmedEmail');
+    debugPrint('[AuthRepository] FirstName: $trimmedFirstName');
+    debugPrint('[AuthRepository] LastName: $trimmedLastName');
+    debugPrint('[AuthRepository] Phone: $trimmedPhoneNumber');
+    debugPrint('════════════════════════════════════════════════════');
+
+    try {
+      final request = RegisterRequestModel(
+        email: trimmedEmail,
+        password: trimmedPassword,
+        firstName: trimmedFirstName,
+        lastName: trimmedLastName,
+        phoneNumber: trimmedPhoneNumber,
+      );
+      final response = await _remoteDataSource.register(request);
+      debugPrint('[AuthRepository] ✓ Register successful for: $trimmedEmail');
+      return response.toEntity();
+    } on DioException catch (e) {
+      debugPrint('[AuthRepository] ✗ Register FAILED');
+      debugPrint('[AuthRepository] DioException type: ${e.type}');
+      debugPrint('[AuthRepository] Status code: ${e.response?.statusCode}');
+      debugPrint('[AuthRepository] Response: ${e.response?.data}');
+      rethrow;
+    } catch (e) {
+      debugPrint('[AuthRepository] ✗ Register FAILED with unknown error: $e');
       rethrow;
     }
   }

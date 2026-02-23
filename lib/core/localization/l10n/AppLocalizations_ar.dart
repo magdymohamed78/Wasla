@@ -122,4 +122,82 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get forgotPasswordEmailInvalid => 'يرجى إدخال بريد إلكتروني صالح';
+
+  @override
+  String get signUpTitle => 'إنشاء حساب';
+
+  @override
+  String get signUpFirstName => 'الاسم الأول';
+
+  @override
+  String get signUpLastName => 'اسم العائلة';
+
+  @override
+  String get signUpPhoneNumber => 'رقم الهاتف';
+
+  @override
+  String get signUpEmail => 'البريد الإلكتروني';
+
+  @override
+  String get signUpEmailHint => 'youremail@gmail.com';
+
+  @override
+  String get signUpPassword => 'كلمة المرور';
+
+  @override
+  String get signUpConfirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get signUpButton => 'إنشاء حساب';
+
+  @override
+  String get signUpHaveAccount => 'لديك حساب بالفعل؟ تسجيل الدخول';
+
+  @override
+  String get signUpHaveAccountAction => 'تسجيل الدخول';
+
+  @override
+  String get signUpFirstNameRequired => 'الاسم الأول مطلوب';
+
+  @override
+  String get signUpLastNameRequired => 'اسم العائلة مطلوب';
+
+  @override
+  String get signUpNameTooLong => 'يجب أن يكون 100 حرف أو أقل';
+
+  @override
+  String get signUpPhoneTooLong => 'يجب أن يكون 50 حرف أو أقل';
+
+  @override
+  String get signUpEmailRequired => 'البريد الإلكتروني مطلوب';
+
+  @override
+  String get signUpEmailInvalid => 'أدخل بريد إلكتروني صالح';
+
+  @override
+  String get signUpPasswordRequired => 'كلمة المرور مطلوبة';
+
+  @override
+  String get signUpPasswordTooShort =>
+      'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+
+  @override
+  String get signUpConfirmPasswordRequired => 'يرجى تأكيد كلمة المرور';
+
+  @override
+  String get signUpConfirmPasswordMismatch => 'كلمات المرور غير متطابقة';
+
+  @override
+  String get signUpErrorEmailInUse => 'هذا البريد الإلكتروني مسجل بالفعل';
+
+  @override
+  String get signUpErrorServer => 'حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get signUpErrorNetwork =>
+      'لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.';
+
+  @override
+  String get signUpErrorUnexpected =>
+      'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.';
 }

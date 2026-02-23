@@ -19,4 +19,34 @@ class Validators {
     }
     return null;
   }
+
+  static String? validateName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'name_empty';
+    }
+    if (value.trim().length > 100) {
+      return 'name_too_long';
+    }
+    return null;
+  }
+
+  static String? validatePhone(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
+    if (value.trim().length > 50) {
+      return 'phone_too_long';
+    }
+    return null;
+  }
+
+  static String? validatePasswordLength(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'password_empty';
+    }
+    if (value.trim().length < 6) {
+      return 'password_too_short';
+    }
+    return null;
+  }
 }

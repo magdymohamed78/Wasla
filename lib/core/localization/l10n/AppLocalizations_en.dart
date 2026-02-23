@@ -121,4 +121,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordEmailInvalid => 'Please enter a valid email';
+
+  @override
+  String get signUpTitle => 'Sign Up';
+
+  @override
+  String get signUpFirstName => 'First Name';
+
+  @override
+  String get signUpLastName => 'Last Name';
+
+  @override
+  String get signUpPhoneNumber => 'Phone Number';
+
+  @override
+  String get signUpEmail => 'Email Address';
+
+  @override
+  String get signUpEmailHint => 'youremail@gmail.com';
+
+  @override
+  String get signUpPassword => 'Password';
+
+  @override
+  String get signUpConfirmPassword => 'Confirm Password';
+
+  @override
+  String get signUpButton => 'Sign Up';
+
+  @override
+  String get signUpHaveAccount => 'Already have an account? Log In';
+
+  @override
+  String get signUpHaveAccountAction => 'Log In';
+
+  @override
+  String get signUpFirstNameRequired => 'First name is required';
+
+  @override
+  String get signUpLastNameRequired => 'Last name is required';
+
+  @override
+  String get signUpNameTooLong => 'Must be 100 characters or less';
+
+  @override
+  String get signUpPhoneTooLong => 'Must be 50 characters or less';
+
+  @override
+  String get signUpEmailRequired => 'Email is required';
+
+  @override
+  String get signUpEmailInvalid => 'Enter a valid email address';
+
+  @override
+  String get signUpPasswordRequired => 'Password is required';
+
+  @override
+  String get signUpPasswordTooShort => 'Password must be at least 6 characters';
+
+  @override
+  String get signUpConfirmPasswordRequired => 'Please confirm your password';
+
+  @override
+  String get signUpConfirmPasswordMismatch => 'Passwords do not match';
+
+  @override
+  String get signUpErrorEmailInUse => 'This email is already registered';
+
+  @override
+  String get signUpErrorServer =>
+      'Something went wrong. Please try again later.';
+
+  @override
+  String get signUpErrorNetwork =>
+      'No internet connection. Please check your network.';
+
+  @override
+  String get signUpErrorUnexpected =>
+      'An unexpected error occurred. Please try again.';
 }

@@ -307,6 +307,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid email'**
   String get forgotPasswordEmailInvalid;
+
+  /// No description provided for @signUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUpTitle;
+
+  /// No description provided for @signUpFirstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get signUpFirstName;
+
+  /// No description provided for @signUpLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get signUpLastName;
+
+  /// No description provided for @signUpPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get signUpPhoneNumber;
+
+  /// No description provided for @signUpEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get signUpEmail;
+
+  /// No description provided for @signUpEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'youremail@gmail.com'**
+  String get signUpEmailHint;
+
+  /// No description provided for @signUpPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get signUpPassword;
+
+  /// No description provided for @signUpConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get signUpConfirmPassword;
+
+  /// No description provided for @signUpButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUpButton;
+
+  /// No description provided for @signUpHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Log In'**
+  String get signUpHaveAccount;
+
+  /// No description provided for @signUpHaveAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get signUpHaveAccountAction;
+
+  /// No description provided for @signUpFirstNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'First name is required'**
+  String get signUpFirstNameRequired;
+
+  /// No description provided for @signUpLastNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Last name is required'**
+  String get signUpLastNameRequired;
+
+  /// No description provided for @signUpNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be 100 characters or less'**
+  String get signUpNameTooLong;
+
+  /// No description provided for @signUpPhoneTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be 50 characters or less'**
+  String get signUpPhoneTooLong;
+
+  /// No description provided for @signUpEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get signUpEmailRequired;
+
+  /// No description provided for @signUpEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get signUpEmailInvalid;
+
+  /// No description provided for @signUpPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get signUpPasswordRequired;
+
+  /// No description provided for @signUpPasswordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get signUpPasswordTooShort;
+
+  /// No description provided for @signUpConfirmPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password'**
+  String get signUpConfirmPasswordRequired;
+
+  /// No description provided for @signUpConfirmPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get signUpConfirmPasswordMismatch;
+
+  /// No description provided for @signUpErrorEmailInUse.
+  ///
+  /// In en, this message translates to:
+  /// **'This email is already registered'**
+  String get signUpErrorEmailInUse;
+
+  /// No description provided for @signUpErrorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again later.'**
+  String get signUpErrorServer;
+
+  /// No description provided for @signUpErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network.'**
+  String get signUpErrorNetwork;
+
+  /// No description provided for @signUpErrorUnexpected.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again.'**
+  String get signUpErrorUnexpected;
 }
 
 class _AppLocalizationsDelegate
