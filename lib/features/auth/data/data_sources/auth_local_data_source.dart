@@ -61,7 +61,6 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
     if (token == null ||
         userId == null ||
-        customerId == null ||
         firstName == null ||
         lastName == null ||
         email == null) {

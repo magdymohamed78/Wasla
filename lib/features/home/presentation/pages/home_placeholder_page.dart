@@ -6,6 +6,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../auth/domain/repositories/auth_repository.dart';
+import '../../../auth/presentation/cubit/login_cubit.dart';
 import '../../../../core/routing/app_router.dart';
 
 class HomePlaceholderPage extends StatelessWidget {
@@ -39,7 +40,9 @@ class HomePlaceholderPage extends StatelessWidget {
                 icon: Icons.logout,
                 onPressed: () async {
                   final authRepository = context.read<AuthRepository>();
+                  final loginCubit = context.read<LoginCubit>();
                   await authRepository.clearSession();
+                  loginCubit.resetState();
                   if (context.mounted) {
                     context.go(AppRouter.login);
                   }

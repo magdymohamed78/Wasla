@@ -126,7 +126,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void resetState() {
-    emit(state.copyWith(status: LoginStatus.initial));
+    emit(const LoginState());
   }
 
   String? _validateEmail(String email) {
