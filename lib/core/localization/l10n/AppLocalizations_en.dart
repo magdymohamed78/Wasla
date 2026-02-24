@@ -199,4 +199,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get signUpErrorUnexpected =>
       'An unexpected error occurred. Please try again.';
+
+  @override
+  String get signUpSuccessMessage => 'You are successfully registered!';
+
+  @override
+  String get signUpSuccessButton => 'Let\'s Start';
 }

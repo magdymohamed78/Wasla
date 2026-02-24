@@ -31,7 +31,7 @@ class SignUpPage extends StatelessWidget {
         }
 
         if (state.status == RegisterStatus.success) {
-          context.go(AppRouter.home);
+          context.go(AppRouter.registerSuccess);
         }
       },
       child: Scaffold(

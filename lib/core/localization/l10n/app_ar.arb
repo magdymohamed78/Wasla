@@ -59,5 +59,7 @@
   "signUpErrorEmailInUse": "هذا البريد الإلكتروني مسجل بالفعل",
   "signUpErrorServer": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.",
   "signUpErrorNetwork": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
-  "signUpErrorUnexpected": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
+  "signUpErrorUnexpected": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
+  "signUpSuccessMessage": "تم تسجيلك بنجاح!",
+  "signUpSuccessButton": "لنبدأ"
 }

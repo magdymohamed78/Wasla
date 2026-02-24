@@ -6,6 +6,7 @@ import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/support/presentation/pages/support_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/sign_up_page.dart';
+import '../../features/auth/presentation/pages/sign_up_success_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/home/presentation/pages/home_placeholder_page.dart';
 
@@ -18,6 +19,7 @@ class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
+  static const String registerSuccess = '/register-success';
   static const String home = '/home';
 
   static GoRouter router(AuthRepository authRepository) {
@@ -48,6 +50,10 @@ class AppRouter {
         GoRoute(
           path: forgotPassword,
           builder: (context, state) => const ForgotPasswordPage(),
+        ),
+        GoRoute(
+          path: registerSuccess,
+          builder: (context, state) => const SignUpSuccessPage(),
         ),
         GoRoute(
           path: home,

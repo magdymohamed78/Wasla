@@ -59,5 +59,7 @@
   "signUpErrorEmailInUse": "This email is already registered",
   "signUpErrorServer": "Something went wrong. Please try again later.",
   "signUpErrorNetwork": "No internet connection. Please check your network.",
-  "signUpErrorUnexpected": "An unexpected error occurred. Please try again."
+  "signUpErrorUnexpected": "An unexpected error occurred. Please try again.",
+  "signUpSuccessMessage": "You are successfully registered!",
+  "signUpSuccessButton": "Let's Start"
 }

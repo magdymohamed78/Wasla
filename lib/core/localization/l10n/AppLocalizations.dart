@@ -457,6 +457,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred. Please try again.'**
   String get signUpErrorUnexpected;
+
+  /// No description provided for @signUpSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You are successfully registered!'**
+  String get signUpSuccessMessage;
+
+  /// No description provided for @signUpSuccessButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Start'**
+  String get signUpSuccessButton;
 }
 
 class _AppLocalizationsDelegate

@@ -200,4 +200,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get signUpErrorUnexpected =>
       'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get signUpSuccessMessage => 'تم تسجيلك بنجاح!';
+
+  @override
+  String get signUpSuccessButton => 'لنبدأ';
 }

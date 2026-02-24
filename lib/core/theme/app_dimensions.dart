@@ -26,6 +26,7 @@ class AppDimensions {
   static const double iconSizeXl = 48.0;
 
   static const double buttonHeight = 48.0;
+  static const double smallbuttonMinWidth = 185;
   static const double buttonMinWidth = 120.0;
 
   static const double logoSizeSmall = 48.0;
