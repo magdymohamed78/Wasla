@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../cubit/splash_cubit.dart';
+import '../cubit/splash_state.dart';
 import '../widgets/animated_logo_circle.dart';
 import '../widgets/animated_w_letter.dart';
 import '../widgets/animated_asla_text.dart';
@@ -24,8 +25,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late Animation<double> _aslaSlideAnimation;
   late Animation<double> _dotsVisibilityAnimation;
   late Animation<double> _dotsAnimation;
-
-  
 
   @override
   void initState() {
@@ -77,12 +76,18 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       ),
     );
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SplashCubit>()
+        ..checkAuthStatus()
+        ..startAnimation();
+    });
+
     _controller.forward();
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         if (mounted) {
-          context.go('/onboarding');
+          context.read<SplashCubit>().onAnimationComplete();
         }
       }
     });
@@ -96,11 +101,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => SplashCubit()..startAnimation(),
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: Center(
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: BlocListener<SplashCubit, SplashState>(
+        listenWhen: (previous, current) => current.readyToNavigate,
+        listener: (context, state) {
+          context.go(state.destination);
+        },
+        child: Center(
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, _) {
@@ -118,7 +126,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Transform.translate(
-                            offset: Offset(-10* _logoSlideAnimation.value, 0),
+                            offset: Offset(-10 * _logoSlideAnimation.value, 0),
                             child: Stack(
                               alignment: Alignment.center,
                               children: [

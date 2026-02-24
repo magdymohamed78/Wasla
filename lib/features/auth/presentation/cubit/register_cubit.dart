@@ -144,7 +144,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         phoneNumber: normalizedPhone,
       );
 
-      await _authRepository.saveSession(user);
+      await _authRepository.saveSession(user, rememberMe: false);
 
       emit(state.copyWith(status: RegisterStatus.success, user: user));
     } on DioException catch (e) {

@@ -205,4 +205,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signUpSuccessButton => 'Let\'s Start';
+
+  @override
+  String get networkErrorNoConnection => 'No internet connection';
+
+  @override
+  String get networkErrorRetry => 'Retry';
+
+  @override
+  String get networkErrorServer => 'Server error. Please try again later.';
 }

@@ -61,5 +61,8 @@
   "signUpErrorNetwork": "No internet connection. Please check your network.",
   "signUpErrorUnexpected": "An unexpected error occurred. Please try again.",
   "signUpSuccessMessage": "You are successfully registered!",
-  "signUpSuccessButton": "Let's Start"
+  "signUpSuccessButton": "Let's Start",
+  "networkErrorNoConnection": "No internet connection",
+  "networkErrorRetry": "Retry",
+  "networkErrorServer": "Server error. Please try again later."
 }

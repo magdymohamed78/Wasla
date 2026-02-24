@@ -3,16 +3,20 @@ import 'package:flutter/foundation.dart';
 import '../models/login_request_model.dart';
 import '../models/login_response_model.dart';
 import '../models/register_request_model.dart';
+import '../models/refresh_token_request_model.dart';
+import '../models/refresh_token_response_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<LoginResponseModel> login(LoginRequestModel request);
   Future<LoginResponseModel> register(RegisterRequestModel request);
+  Future<RefreshTokenResponseModel> refreshToken(RefreshTokenRequestModel request);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
   static const String _loginEndpoint = '/api/customer-portal/login';
   static const String _registerEndpoint = '/api/customer-portal/register';
+  static const String _refreshTokenEndpoint = '/api/customer-portal/refresh-token';
 
   const AuthRemoteDataSourceImpl(this._dio);
 
@@ -155,6 +159,64 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('════════════════════════════════════════════════════');
       throw DioException(
         requestOptions: RequestOptions(path: _registerEndpoint),
+        error: e,
+        type: DioExceptionType.unknown,
+        message: 'Unexpected error: $e',
+      );
+    }
+  }
+
+  @override
+  Future<RefreshTokenResponseModel> refreshToken(RefreshTokenRequestModel request) async {
+    final url = '${_dio.options.baseUrl}$_refreshTokenEndpoint';
+    
+    debugPrint('════════════════════════════════════════════════════');
+    debugPrint('[AuthRemoteDataSource] REFRESH TOKEN REQUEST');
+    debugPrint('[AuthRemoteDataSource] URL: POST $url');
+    debugPrint('════════════════════════════════════════════════════');
+
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        _refreshTokenEndpoint,
+        data: request.toJson(),
+      );
+
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] REFRESH TOKEN RESPONSE');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${response.statusCode}');
+      debugPrint('════════════════════════════════════════════════════');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (response.data == null) {
+          throw DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            message: 'Empty response body from server',
+          );
+        }
+        
+        return RefreshTokenResponseModel.fromJson(response.data!);
+      }
+
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        message: 'Unexpected status code: ${response.statusCode}',
+      );
+    } on DioException catch (e) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] REFRESH TOKEN EXCEPTION');
+      debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint('════════════════════════════════════════════════════');
+      rethrow;
+    } catch (e, stackTrace) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] UNEXPECTED EXCEPTION: $e');
+      debugPrint('[AuthRemoteDataSource] StackTrace: $stackTrace');
+      debugPrint('════════════════════════════════════════════════════');
+      throw DioException(
+        requestOptions: RequestOptions(path: _refreshTokenEndpoint),
         error: e,
         type: DioExceptionType.unknown,
         message: 'Unexpected error: $e',

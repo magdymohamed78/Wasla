@@ -206,4 +206,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get signUpSuccessButton => 'لنبدأ';
+
+  @override
+  String get networkErrorNoConnection => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get networkErrorRetry => 'إعادة المحاولة';
+
+  @override
+  String get networkErrorServer => 'خطأ في الخادم. يرجى المحاولة لاحقًا.';
 }

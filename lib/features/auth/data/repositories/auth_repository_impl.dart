@@ -1,54 +1,42 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import '../data_sources/auth_remote_data_source.dart';
 import '../data_sources/auth_local_data_source.dart';
 import '../models/login_request_model.dart';
 import '../models/register_request_model.dart';
+import '../models/refresh_token_request_model.dart';
 import '../../domain/entities/login_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
-  final AuthLocalDataSource _localDataSource;
+  final AuthLocalDataSource _secureLocalDataSource;
+  final AuthLocalDataSource _inMemoryLocalDataSource;
+  AuthLocalDataSource _activeLocalDataSource;
 
   AuthRepositoryImpl({
     required AuthRemoteDataSource remoteDataSource,
-    required AuthLocalDataSource localDataSource,
+    required AuthLocalDataSource secureLocalDataSource,
+    required AuthLocalDataSource inMemoryLocalDataSource,
   })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource;
+        _secureLocalDataSource = secureLocalDataSource,
+        _inMemoryLocalDataSource = inMemoryLocalDataSource,
+        _activeLocalDataSource = secureLocalDataSource;
 
   @override
   Future<LoginEntity> login({
     required String email,
     required String password,
+    required bool rememberMe,
   }) async {
     final trimmedEmail = email.trim();
     final trimmedPassword = password.trim();
 
-    debugPrint('════════════════════════════════════════════════════');
-    debugPrint('[AuthRepository] LOGIN ATTEMPT');
-    debugPrint('[AuthRepository] Email: $trimmedEmail');
-    debugPrint('[AuthRepository] Password: ${'*' * trimmedPassword.length}');
-    debugPrint('════════════════════════════════════════════════════');
-
-    try {
-      final request = LoginRequestModel(
-        email: trimmedEmail,
-        password: trimmedPassword,
-      );
-      final response = await _remoteDataSource.login(request);
-      debugPrint('[AuthRepository] ✓ Login successful for: $trimmedEmail');
-      return response.toEntity();
-    } on DioException catch (e) {
-      debugPrint('[AuthRepository] ✗ Login FAILED');
-      debugPrint('[AuthRepository] DioException type: ${e.type}');
-      debugPrint('[AuthRepository] Status code: ${e.response?.statusCode}');
-      debugPrint('[AuthRepository] Response: ${e.response?.data}');
-      rethrow;
-    } catch (e) {
-      debugPrint('[AuthRepository] ✗ Login FAILED with unknown error: $e');
-      rethrow;
-    }
+    final request = LoginRequestModel(
+      email: trimmedEmail,
+      password: trimmedPassword,
+      rememberMe: rememberMe,
+    );
+    final response = await _remoteDataSource.login(request);
+    return response.toEntity();
   }
 
   @override
@@ -65,50 +53,73 @@ class AuthRepositoryImpl implements AuthRepository {
     final trimmedLastName = lastName.trim();
     final trimmedPhoneNumber = phoneNumber?.trim();
 
-    debugPrint('════════════════════════════════════════════════════');
-    debugPrint('[AuthRepository] REGISTER ATTEMPT');
-    debugPrint('[AuthRepository] Email: $trimmedEmail');
-    debugPrint('[AuthRepository] FirstName: $trimmedFirstName');
-    debugPrint('[AuthRepository] LastName: $trimmedLastName');
-    debugPrint('[AuthRepository] Phone: $trimmedPhoneNumber');
-    debugPrint('════════════════════════════════════════════════════');
-
-    try {
-      final request = RegisterRequestModel(
-        email: trimmedEmail,
-        password: trimmedPassword,
-        firstName: trimmedFirstName,
-        lastName: trimmedLastName,
-        phoneNumber: trimmedPhoneNumber,
-      );
-      final response = await _remoteDataSource.register(request);
-      debugPrint('[AuthRepository] ✓ Register successful for: $trimmedEmail');
-      return response.toEntity();
-    } on DioException catch (e) {
-      debugPrint('[AuthRepository] ✗ Register FAILED');
-      debugPrint('[AuthRepository] DioException type: ${e.type}');
-      debugPrint('[AuthRepository] Status code: ${e.response?.statusCode}');
-      debugPrint('[AuthRepository] Response: ${e.response?.data}');
-      rethrow;
-    } catch (e) {
-      debugPrint('[AuthRepository] ✗ Register FAILED with unknown error: $e');
-      rethrow;
-    }
+    final request = RegisterRequestModel(
+      email: trimmedEmail,
+      password: trimmedPassword,
+      firstName: trimmedFirstName,
+      lastName: trimmedLastName,
+      phoneNumber: trimmedPhoneNumber,
+    );
+    final response = await _remoteDataSource.register(request);
+    return response.toEntity();
   }
 
   @override
   Future<LoginEntity?> getStoredSession() async {
-    return await _localDataSource.getUser();
+    return await _activeLocalDataSource.getUser();
   }
 
   @override
-  Future<void> saveSession(LoginEntity user) async {
-    await _localDataSource.saveToken(user.token);
-    await _localDataSource.saveUser(user);
+  Future<void> saveSession(LoginEntity user, {required bool rememberMe}) async {
+    if (rememberMe) {
+      await _inMemoryLocalDataSource.clearAll();
+      _activeLocalDataSource = _secureLocalDataSource;
+    } else {
+      await _secureLocalDataSource.clearAll();
+      _activeLocalDataSource = _inMemoryLocalDataSource;
+    }
+    
+    await _activeLocalDataSource.saveToken(user.token);
+    await _activeLocalDataSource.saveUser(user);
+    await _activeLocalDataSource.saveRememberMeFlag(rememberMe);
   }
 
   @override
   Future<void> clearSession() async {
-    await _localDataSource.clearAll();
+    await _secureLocalDataSource.clearAll();
+    await _inMemoryLocalDataSource.clearAll();
+  }
+
+  @override
+  Future<LoginEntity> refreshToken({required String refreshToken}) async {
+    final request = RefreshTokenRequestModel(refreshToken: refreshToken);
+    final response = await _remoteDataSource.refreshToken(request);
+    return response.toEntity();
+  }
+
+  @override
+  Future<bool> getRememberMeFlag() async {
+    return await _activeLocalDataSource.getRememberMeFlag();
+  }
+
+  @override
+  Future<String?> getStoredRefreshToken() async {
+    return await _activeLocalDataSource.getRefreshToken();
+  }
+
+  @override
+  Future<String?> getStoredAccessToken() async {
+    return await _activeLocalDataSource.getToken();
+  }
+
+  @override
+  Future<void> saveAccessToken(String token) async {
+    await _activeLocalDataSource.saveToken(token);
+  }
+
+  @override
+  Future<void> saveRefreshTokenData(String? refreshToken, String? expiry) async {
+    await _activeLocalDataSource.saveRefreshToken(refreshToken);
+    await _activeLocalDataSource.saveRefreshTokenExpiry(expiry);
   }
 }

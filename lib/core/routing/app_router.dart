@@ -13,6 +13,8 @@ import '../../features/home/presentation/pages/home_placeholder_page.dart';
 class AppRouter {
   AppRouter._();
 
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String support = '/support';
@@ -24,6 +26,7 @@ class AppRouter {
 
   static GoRouter router(AuthRepository authRepository) {
     return GoRouter(
+      navigatorKey: navigatorKey,
       initialLocation: splash,
       routes: [
         GoRoute(path: splash, builder: (context, state) => const SplashPage()),

@@ -77,9 +77,10 @@ class LoginCubit extends Cubit<LoginState> {
       final user = await _loginUseCase(
         email: normalizedEmail,
         password: normalizedPassword,
+        rememberMe: state.rememberMe,
       );
       
-      await _authRepository.saveSession(user);
+      await _authRepository.saveSession(user, rememberMe: state.rememberMe);
       
       emit(state.copyWith(status: LoginStatus.success, user: user));
     } on DioException catch (e) {

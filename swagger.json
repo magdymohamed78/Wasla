@@ -97,6 +97,258 @@
         }
       }
     },
+    "/api/Auth/change-password": {
+      "post": {
+        "tags": [
+          "01 - Authentication & Onboarding"
+        ],
+        "summary": "Change the password for the currently authenticated user.",
+        "description": "Requires a valid JWT. The user must supply their current password along with\r\nthe new password (and its confirmation). On success all existing refresh tokens\r\nare revoked, forcing re-authentication on other devices.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangePasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully."
+          },
+          "400": {
+            "description": "Validation error or current password is wrong.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/forgot-password": {
+      "post": {
+        "tags": [
+          "01 - Authentication & Onboarding"
+        ],
+        "summary": "Request a one-time password (OTP) to reset a forgotten password.",
+        "description": "Always returns 200 OK to prevent email enumeration. If the email exists, a\r\n6-digit OTP valid for 10 minutes is sent.\r\n\r\n**Rate limit:** 5 requests per 60 seconds per IP.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request processed (OTP sent if email is registered)."
+          },
+          "429": {
+            "description": "Too many requests.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/reset-password": {
+      "post": {
+        "tags": [
+          "01 - Authentication & Onboarding"
+        ],
+        "summary": "Reset a forgotten password using the OTP received by email.",
+        "description": "The OTP is valid for 10 minutes and can be used only once. After 5 incorrect\r\nattempts the OTP is permanently invalidated.\r\n\r\n**Rate limit:** 5 requests per 60 seconds per IP.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully."
+          },
+          "400": {
+            "description": "Invalid OTP, expired OTP, or password policy violation.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/resend-otp": {
+      "post": {
+        "tags": [
+          "01 - Authentication & Onboarding"
+        ],
+        "summary": "Resend a new OTP for password reset.",
+        "description": "Invalidates any previous active OTP and issues a fresh one.\r\nAlways returns 200 OK to prevent email enumeration.\r\n\r\n**Rate limit:** 5 requests per 60 seconds per IP.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendOtpDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendOtpDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendOtpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request processed (new OTP sent if email is registered)."
+          },
+          "429": {
+            "description": "Too many requests.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/onboarding/register-company": {
       "post": {
         "tags": [
@@ -194,7 +446,7 @@
           "02 - Customer Portal"
         ],
         "summary": "Registers a new portal user account (creates a Lead).",
-        "description": "Registering creates a **Lead** record — a user who is not yet linked to any company.\r\n            \r\nThe response JWT will contain a `leadId` claim but **no** `customerId` yet.\r\nTo become a Customer of a specific company, the lead must send a connection request\r\nvia `POST /companies/connect` and wait for the company to accept it.",
+        "description": "Registering creates a **Lead** record — a user who is not yet linked to any company.\r\n            \r\nThe response JWT will contain a `leadId` claim but **no** `customerId` yet.\r\nTo become a Customer of a specific company, the lead must send a connection request\r\nvia `POST /companies/connect` and wait for the company to accept it.\r\n            \r\nThe response also includes a `refreshToken` and `refreshTokenExpiry` (short-lived, 1 day).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -216,7 +468,7 @@
         },
         "responses": {
           "201": {
-            "description": "Lead account created. Returns JWT token with `leadId`.",
+            "description": "Lead account created. Returns JWT token, refresh token, and user info.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -286,8 +538,8 @@
         "tags": [
           "02 - Customer Portal"
         ],
-        "summary": "Authenticates a portal user and returns a JWT token.",
-        "description": "The returned token may contain:\r\n- `leadId` — if the user is still a Lead (not yet linked to any company)\r\n- `customerId` — if the user has been accepted by at least one company\r\n- Both claims — once a lead has been accepted by a company\r\n            \r\nCheck which claim is present to determine the user's state and which portal\r\nendpoints are available.",
+        "summary": "Authenticates a portal user and returns a JWT token plus a refresh token.",
+        "description": "The returned token may contain:\r\n- `leadId` — if the user is still a Lead (not yet linked to any company)\r\n- `customerId` — if the user has been accepted by at least one company\r\n- Both claims — once a lead has been accepted by a company\r\n            \r\nCheck which claim is present to determine the user's state and which portal\r\nendpoints are available.\r\n            \r\n**Refresh token**: The response includes a `refreshToken` and `refreshTokenExpiry`.\r\nUse `POST /refresh-token` to exchange a valid refresh token for a new access token without re-entering credentials.\r\n            \r\n**Remember Me**: Set `rememberMe: true` for a long-lived refresh token (30 days).\r\nWhen omitted or `false`, the refresh token expires in 1 day.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -309,7 +561,7 @@
         },
         "responses": {
           "200": {
-            "description": "Login successful. Returns JWT with `leadId` and/or `customerId`.",
+            "description": "Login successful. Returns JWT, refresh token, and user info.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -370,6 +622,171 @@
           },
           "429": {
             "description": "Too many login attempts.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/customer-portal/refresh-token": {
+      "post": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Exchanges a valid refresh token for a new access token and rotated refresh token.",
+        "description": "Implements secure token rotation:\r\n- Each refresh token can only be used **once**.\r\n- If a previously-used token is sent again (replay), the entire token family is revoked.\r\n- The old refresh token is invalidated; a new one is returned.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New access token + rotated refresh token.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerLoginResultDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerLoginResultDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerLoginResultDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid, expired, revoked, or replayed refresh token.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/customer-portal/logout": {
+      "post": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Logs out the current session by revoking the provided refresh token (and its rotation family).",
+        "description": "The client should discard the access token locally.\r\nThis endpoint is idempotent — calling it with an already-revoked token returns 204.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Logout successful."
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/customer-portal/logout-all": {
+      "post": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Logs out from **all devices** by revoking every active refresh token for the current user.",
+        "responses": {
+          "204": {
+            "description": "All sessions revoked."
+          },
+          "401": {
+            "description": "Not authenticated.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -1268,6 +1685,184 @@
         }
       }
     },
+    "/api/customer-portal/my/offers/{offerId}/accept": {
+      "post": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Accepts an offer by providing a digital signature.",
+        "description": "Validates that the offer belongs to the authenticated customer before accepting.\r\nStores the digital signature on the offer and marks it as Accepted.",
+        "parameters": [
+          {
+            "name": "offerId",
+            "in": "path",
+            "description": "The ID of the offer to accept.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The acceptance payload containing the digital signature.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptOfferDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptOfferDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcceptOfferDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Offer accepted successfully."
+          },
+          "400": {
+            "description": "Offer is in a terminal state (already accepted, rejected, or cancelled).",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Offer not found or does not belong to this customer.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/customer-portal/my/offers/{offerId}/reject": {
+      "post": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Rejects an offer by providing a rejection reason.",
+        "description": "Validates that the offer belongs to the authenticated customer before rejecting.\r\nStores the rejection reason on the offer and marks it as Rejected.",
+        "parameters": [
+          {
+            "name": "offerId",
+            "in": "path",
+            "description": "The ID of the offer to reject.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The rejection payload containing the reason.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectOfferDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectOfferDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectOfferDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Offer rejected successfully."
+          },
+          "400": {
+            "description": "Offer is in a terminal state (already accepted, rejected, or cancelled).",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Offer not found or does not belong to this customer.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
     "/api/customer-portal/my/dashboard": {
       "get": {
         "tags": [
@@ -1328,9 +1923,9 @@
           "02 - Customer Portal"
         ],
         "summary": "Creates a new service request (inquiry) to a company.",
-        "description": "The company will receive this request and can later generate an offer based on it.",
+        "description": "Can be called by both **Lead** and **Customer** roles.\r\n- If called by a Lead, a Customer record is automatically created or found for that Lead + Company pair.\r\n- If called by a Customer, the existing Customer record is used directly.",
         "requestBody": {
-          "description": "Request details including locations and requested service date.",
+          "description": "Request details including target company, locations, and requested service date.",
           "content": {
             "application/json": {
               "schema": {
@@ -1351,7 +1946,7 @@
         },
         "responses": {
           "201": {
-            "description": "Service request created.",
+            "description": "Service request created successfully.",
             "content": {
               "text/plain": {
                 "schema": {
@@ -1366,6 +1961,26 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CustomerServiceRequestDetailsDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Company not found or inactive.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1892,8 +2507,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "text/plain": {
                 "schema": {
@@ -1911,6 +2526,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -1971,6 +2589,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2034,6 +2675,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2100,6 +2764,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2154,6 +2841,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2187,6 +2897,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2215,6 +2948,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2228,6 +2984,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2307,6 +3086,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2376,6 +3178,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2437,6 +3262,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2488,6 +3316,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2539,6 +3370,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2601,6 +3435,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2644,6 +3481,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2689,6 +3529,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2734,6 +3577,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2794,6 +3640,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2845,6 +3714,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -2907,6 +3799,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -2970,6 +3885,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -3013,6 +3951,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3058,6 +4019,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3120,6 +4104,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3191,6 +4178,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -3242,6 +4252,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3255,6 +4288,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3288,6 +4344,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3353,6 +4432,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -3396,6 +4498,29 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -3699,58 +4824,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/api/Offers/{id}/approve": {
-      "get": {
-        "tags": [
-          "04 - Company Operations"
-        ],
-        "summary": "Public endpoint to approve an offer via a direct link.",
-        "description": "This endpoint is called when a customer clicks \"Approve\" in their offer email. \r\nIt marks the offer as 'Accepted', triggers a notification to the company, and redirects the user to a success page.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The ID of the offer to approve.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "302": {
-            "description": "Redirects to the frontend success or error page."
-          }
-        }
-      }
-    },
-    "/api/Offers/{id}/reject": {
-      "get": {
-        "tags": [
-          "04 - Company Operations"
-        ],
-        "summary": "Public endpoint to reject an offer via a direct link.",
-        "description": "Typically called from the offer email. Marks status as 'Rejected' and redirects the user.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "The ID of the offer to reject.",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "302": {
-            "description": "Redirects to the frontend rejection or error page."
           }
         }
       }
@@ -5188,10 +6261,38 @@
           }
         }
       }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "CRMProject.API"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AcceptOfferDto": {
+        "required": [
+          "digitalSignature"
+        ],
+        "type": "object",
+        "properties": {
+          "digitalSignature": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Typed name or Base64-encoded drawn signature. Max 10,000 chars."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Payload for accepting an offer. Requires a digital signature."
+      },
       "AdditionalCostDto": {
         "type": "object",
         "properties": {
@@ -5319,6 +6420,29 @@
         },
         "additionalProperties": false,
         "description": "Successful authentication response containing JWT and user profile metadata."
+      },
+      "ChangePasswordDto": {
+        "required": [
+          "confirmNewPassword",
+          "currentPassword",
+          "newPassword"
+        ],
+        "type": "object",
+        "properties": {
+          "currentPassword": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "newPassword": {
+            "minLength": 6,
+            "type": "string"
+          },
+          "confirmNewPassword": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
       "CleaningServiceDto": {
         "type": "object",
@@ -6541,6 +7665,10 @@
           "password": {
             "minLength": 1,
             "type": "string"
+          },
+          "rememberMe": {
+            "type": "boolean",
+            "description": "When true, the refresh token lifetime is extended (30 days vs 1 day)."
           }
         },
         "additionalProperties": false
@@ -6551,6 +7679,14 @@
           "token": {
             "type": "string",
             "nullable": true
+          },
+          "refreshToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "refreshTokenExpiry": {
+            "type": "string",
+            "format": "date-time"
           },
           "userId": {
             "type": "integer",
@@ -6623,6 +7759,16 @@
           "acceptDate": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "digitalSignature": {
+            "type": "string",
+            "description": "Stored digital signature provided by the customer upon acceptance.",
+            "nullable": true
+          },
+          "rejectionReason": {
+            "type": "string",
+            "description": "Reason provided by the customer upon rejection.",
             "nullable": true
           },
           "insurance": {
@@ -7313,6 +8459,20 @@
         },
         "additionalProperties": false
       },
+      "ForgotPasswordDto": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
       "LeadCompanyDto": {
         "type": "object",
         "properties": {
@@ -7449,6 +8609,19 @@
         },
         "additionalProperties": false,
         "description": "Credentials required for user authentication."
+      },
+      "LogoutRequestDto": {
+        "required": [
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
       "ManagerInfoDto": {
         "type": "object",
@@ -8213,6 +9386,19 @@
         },
         "additionalProperties": false
       },
+      "RefreshTokenRequestDto": {
+        "required": [
+          "refreshToken"
+        ],
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "RegisterCompanyWithManagerDto": {
         "type": "object",
         "properties": {
@@ -8326,6 +9512,66 @@
         },
         "additionalProperties": false,
         "description": "Data required to reject a company registration."
+      },
+      "RejectOfferDto": {
+        "required": [
+          "rejectionReason"
+        ],
+        "type": "object",
+        "properties": {
+          "rejectionReason": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Free-text explanation of why the offer was rejected. Max 2,000 chars."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Payload for rejecting an offer. Requires a reason."
+      },
+      "ResendOtpDto": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResetPasswordDto": {
+        "required": [
+          "confirmNewPassword",
+          "email",
+          "newPassword",
+          "otp"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "otp": {
+            "maxLength": 6,
+            "minLength": 6,
+            "type": "string"
+          },
+          "newPassword": {
+            "minLength": 6,
+            "type": "string"
+          },
+          "confirmNewPassword": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
       },
       "RevenueByServiceDto": {
         "type": "object",

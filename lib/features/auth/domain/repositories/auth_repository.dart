@@ -4,6 +4,7 @@ abstract class AuthRepository {
   Future<LoginEntity> login({
     required String email,
     required String password,
+    required bool rememberMe,
   });
 
   Future<LoginEntity> register({
@@ -16,7 +17,19 @@ abstract class AuthRepository {
 
   Future<LoginEntity?> getStoredSession();
 
-  Future<void> saveSession(LoginEntity user);
+  Future<String?> getStoredAccessToken();
+
+  Future<void> saveSession(LoginEntity user, {required bool rememberMe});
 
   Future<void> clearSession();
+
+  Future<LoginEntity> refreshToken({required String refreshToken});
+
+  Future<bool> getRememberMeFlag();
+
+  Future<String?> getStoredRefreshToken();
+
+  Future<void> saveAccessToken(String token);
+
+  Future<void> saveRefreshTokenData(String? refreshToken, String? expiry);
 }

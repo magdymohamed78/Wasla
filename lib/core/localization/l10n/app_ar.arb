@@ -61,5 +61,8 @@
   "signUpErrorNetwork": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة.",
   "signUpErrorUnexpected": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
   "signUpSuccessMessage": "تم تسجيلك بنجاح!",
-  "signUpSuccessButton": "لنبدأ"
+  "signUpSuccessButton": "لنبدأ",
+  "networkErrorNoConnection": "لا يوجد اتصال بالإنترنت",
+  "networkErrorRetry": "إعادة المحاولة",
+  "networkErrorServer": "خطأ في الخادم. يرجى المحاولة لاحقًا."
 }

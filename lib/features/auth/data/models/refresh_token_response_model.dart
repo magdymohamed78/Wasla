@@ -1,13 +1,13 @@
 import '../../domain/entities/login_entity.dart';
 
-/// Data model for the login API success response.
+/// Data model for the refresh token API success response.
 ///
 /// Maps from the JSON response to [LoginEntity].
 /// ```json
 /// {
 ///   "token": "string",
-///   "refreshToken": "string | null",
-///   "refreshTokenExpiry": "datetime | null",
+///   "refreshToken": "string",
+///   "refreshTokenExpiry": "datetime",
 ///   "userId": 0,
 ///   "customerId": 0,
 ///   "leadId": 0,
@@ -16,21 +16,21 @@ import '../../domain/entities/login_entity.dart';
 ///   "email": "string"
 /// }
 /// ```
-class LoginResponseModel {
+class RefreshTokenResponseModel {
   final String token;
-  final String? refreshToken;
-  final String? refreshTokenExpiry;
+  final String refreshToken;
+  final String refreshTokenExpiry;
   final int userId;
   final int? customerId;
-  final int? leadId; 
+  final int? leadId;
   final String firstName;
   final String lastName;
   final String email;
 
-  const LoginResponseModel({
+  const RefreshTokenResponseModel({
     required this.token,
-    this.refreshToken,
-    this.refreshTokenExpiry,
+    required this.refreshToken,
+    required this.refreshTokenExpiry,
     required this.userId,
     this.customerId,
     this.leadId,
@@ -39,12 +39,12 @@ class LoginResponseModel {
     required this.email,
   });
 
-  /// Creates a [LoginResponseModel] from a JSON map.
-  factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    return LoginResponseModel(
+  /// Creates a [RefreshTokenResponseModel] from a JSON map.
+  factory RefreshTokenResponseModel.fromJson(Map<String, dynamic> json) {
+    return RefreshTokenResponseModel(
       token: json['token'] as String,
-      refreshToken: json['refreshToken'] as String?,
-      refreshTokenExpiry: json['refreshTokenExpiry'] as String?,
+      refreshToken: json['refreshToken'] as String,
+      refreshTokenExpiry: json['refreshTokenExpiry'] as String,
       userId: json['userId'] as int,
       customerId: json['customerId'] as int?,
       leadId: json['leadId'] as int?,
@@ -62,7 +62,7 @@ class LoginResponseModel {
       refreshTokenExpiry: refreshTokenExpiry,
       userId: userId,
       customerId: customerId,
-      leadId: leadId, 
+      leadId: leadId,
       firstName: firstName,
       lastName: lastName,
       email: email,

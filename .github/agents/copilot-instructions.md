@@ -11,6 +11,8 @@ Auto-generated from all feature plans. Last updated: 2026-02-19
 - Dart SDK ^3.11.0, Flutter 3.11+ (latest stable) + flutter_bloc 8.1.6, go_router 14.8.1, dio 5.7.0, shared_preferences 2.3.3, flutter_localizations + intl (020-company-signup)
 - SharedPreferences (session token + user data persistence via AuthLocalDataSource) (020-company-signup)
 - N/A (static page, no persistence) (022-registration-success-page)
+- Dart SDK ^3.11.0, Flutter (latest stable) + flutter_bloc 8.1.6, go_router 14.8.1, dio 5.7.0, shared_preferences 2.3.3, flutter_secure_storage ^9.2.4 (new) (023-login-remember-me)
+- FlutterSecureStorage (encrypted, Keystore/Keychain) for tokens; SharedPreferences for locale prefs (023-login-remember-me)
 
 - Dart (null-safe), SDK ^3.11.0 + flutter_bloc (Cubit), go_router, flutter_localizations, intl (006-fix-logo-rtl)
 
@@ -30,9 +32,9 @@ tests/
 Dart (null-safe), SDK ^3.11.0: Follow standard conventions
 
 ## Recent Changes
+- 023-login-remember-me: Added Dart SDK ^3.11.0, Flutter (latest stable) + flutter_bloc 8.1.6, go_router 14.8.1, dio 5.7.0, shared_preferences 2.3.3, flutter_secure_storage ^9.2.4 (new)
 - 022-registration-success-page: Added Dart (null-safe), SDK ^3.11.0 + flutter_bloc (Cubit), go_router, flutter_localizations, intl
 - 020-company-signup: Added Dart SDK ^3.11.0, Flutter 3.11+ (latest stable) + flutter_bloc 8.1.6, go_router 14.8.1, dio 5.7.0, shared_preferences 2.3.3, flutter_localizations + intl
-- 011-login-error-handling: Added Dart 3.11 / Flutter (latest stable) + flutter_bloc 8.1.6, dio 5.7.0, go_router 14.8.1, flutter_localizations
 
 
 <!-- MANUAL ADDITIONS START -->

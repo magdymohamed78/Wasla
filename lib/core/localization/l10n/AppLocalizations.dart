@@ -469,6 +469,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Let\'s Start'**
   String get signUpSuccessButton;
+
+  /// No description provided for @networkErrorNoConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get networkErrorNoConnection;
+
+  /// No description provided for @networkErrorRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get networkErrorRetry;
+
+  /// No description provided for @networkErrorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Server error. Please try again later.'**
+  String get networkErrorServer;
 }
 
 class _AppLocalizationsDelegate
