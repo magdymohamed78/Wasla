@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/localization/l10n/AppLocalizations.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/wasla_logo.dart';
+import '../../domain/repositories/auth_repository.dart';
+import '../../domain/use_cases/forgot_password_use_case.dart';
 import '../cubit/forgot_password_cubit.dart';
 import '../cubit/forgot_password_state.dart';
 import '../widgets/forgot_password_form.dart';
@@ -17,13 +21,20 @@ class ForgotPasswordPage extends StatelessWidget {
     final localizations = AppLocalizations.of(context);
 
     return BlocProvider(
-      create: (_) => ForgotPasswordCubit(),
+      create: (context) => ForgotPasswordCubit(
+        forgotPasswordUseCase: ForgotPasswordUseCase(
+          context.read<AuthRepository>(),
+        ),
+      ),
       child: BlocListener<ForgotPasswordCubit, ForgotPasswordState>(
         listenWhen: (prev, curr) => prev.status != curr.status,
         listener: (context, state) {
           if (state.status == ForgotPasswordStatus.success) {
-            _showSuccessSnackBar(context, localizations);
+            context.push(AppRouter.changePassword, extra: {'email': state.email});
             context.read<ForgotPasswordCubit>().resetAfterToast();
+          } else if (state.status == ForgotPasswordStatus.failure &&
+              state.errorMessage != null) {
+            _showErrorSnackBar(context, state.errorMessage!);
           }
         },
         child: Scaffold(
@@ -68,7 +79,7 @@ class ForgotPasswordPage extends StatelessWidget {
                             _Title(localizations: localizations),
                             const SizedBox(height: AppDimensions.spacingSm),
                             _Description(localizations: localizations),
-                            const SizedBox(height: AppDimensions.spacingXxl),
+                            const SizedBox(height: AppDimensions.spacingXl),
                             const ForgotPasswordForm(),
                           ],
                         ),
@@ -82,25 +93,6 @@ class ForgotPasswordPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _showSuccessSnackBar(
-    BuildContext context,
-    AppLocalizations localizations,
-  ) {
-    ScaffoldMessenger.of(context)
-      ..clearSnackBars()
-      ..showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 3),
-          backgroundColor: AppColors.brandRed,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-          ),
-          content: Text(localizations.forgotPasswordSuccess),
-        ),
-      );
   }
 }
 
@@ -175,5 +167,35 @@ class _Description extends StatelessWidget {
       style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
       textAlign: TextAlign.center,
     );
+  }
+}
+
+void _showErrorSnackBar(BuildContext context, String errorKey) {
+  final localizations = AppLocalizations.of(context);
+  final message = _mapErrorMessage(errorKey, localizations);
+
+  ScaffoldMessenger.of(context)
+    ..clearSnackBars()
+    ..showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 4),
+        backgroundColor: AppColors.error,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
+        ),
+        content: Text(message),
+      ),
+    );
+}
+
+String _mapErrorMessage(String errorKey, AppLocalizations localizations) {
+  switch (errorKey) {
+    case 'rateLimit':
+      return localizations.errorRateLimit;
+    case 'network':
+      return localizations.errorNetwork;
+    default:
+      return localizations.errorServer;
   }
 }

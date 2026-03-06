@@ -1,14 +1,22 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:waslaapp/features/auth/domain/use_cases/forgot_password_use_case.dart';
 import 'package:waslaapp/features/auth/presentation/cubit/forgot_password_cubit.dart';
 import 'package:waslaapp/features/auth/presentation/cubit/forgot_password_state.dart';
+
+class MockForgotPasswordUseCase extends Mock implements ForgotPasswordUseCase {}
 
 void main() {
   group('ForgotPasswordCubit', () {
     late ForgotPasswordCubit cubit;
+    late MockForgotPasswordUseCase mockUseCase;
 
     setUp(() {
-      cubit = ForgotPasswordCubit();
+      mockUseCase = MockForgotPasswordUseCase();
+      when(() => mockUseCase(email: any(named: 'email')))
+          .thenAnswer((_) async {});
+      cubit = ForgotPasswordCubit(forgotPasswordUseCase: mockUseCase);
     });
 
     tearDown(() {
@@ -67,7 +75,11 @@ void main() {
 
     blocTest<ForgotPasswordCubit, ForgotPasswordState>(
       'submit sets isSubmitting and then success for valid email',
-      build: () => cubit,
+      build: () {
+        when(() => mockUseCase(email: any(named: 'email')))
+            .thenAnswer((_) async {});
+        return ForgotPasswordCubit(forgotPasswordUseCase: mockUseCase);
+      },
       seed: () => const ForgotPasswordState(
         email: 'test@example.com',
         emailError: null,
@@ -76,9 +88,9 @@ void main() {
       wait: const Duration(milliseconds: 600),
       expect: () => [
         isA<ForgotPasswordState>().having(
-          (s) => s.isSubmitting,
-          'isSubmitting',
-          true,
+          (s) => s.status,
+          'status',
+          ForgotPasswordStatus.loading,
         ),
         isA<ForgotPasswordState>()
             .having((s) => s.isSubmitting, 'isSubmitting', false)

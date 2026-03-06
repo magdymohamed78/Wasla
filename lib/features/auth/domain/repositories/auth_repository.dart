@@ -32,4 +32,15 @@ abstract class AuthRepository {
   Future<void> saveAccessToken(String token);
 
   Future<void> saveRefreshTokenData(String? refreshToken, String? expiry);
+
+  Future<void> forgotPassword({required String email});
+
+  Future<void> resendOtp({required String email});
+
+  Future<void> resetPassword({
+    required String email,
+    required String otp,
+    required String newPassword,
+    required String confirmNewPassword,
+  });
 }

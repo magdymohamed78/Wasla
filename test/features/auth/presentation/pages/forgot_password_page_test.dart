@@ -1,19 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:waslaapp/core/localization/l10n/AppLocalizations.dart';
+import 'package:waslaapp/features/auth/domain/repositories/auth_repository.dart';
 import 'package:waslaapp/features/auth/presentation/pages/forgot_password_page.dart';
+
+class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
   group('ForgotPasswordPage', () {
-    testWidgets('renders page with all required elements', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ForgotPasswordPage(),
-        ),
+    late MockAuthRepository mockAuthRepository;
+
+    setUp(() {
+      mockAuthRepository = MockAuthRepository();
+      when(() => mockAuthRepository.forgotPassword(email: any(named: 'email')))
+          .thenAnswer((_) async {});
+    });
+
+    Widget buildSubject() {
+      final router = GoRouter(
+        initialLocation: '/forgot-password',
+        routes: [
+          GoRoute(
+            path: '/forgot-password',
+            builder: (_, _) => const ForgotPasswordPage(),
+          ),
+          GoRoute(
+            path: '/otp-verification',
+            builder: (_, _) => const Scaffold(body: Text('OTP Page')),
+          ),
+        ],
       );
 
+      return RepositoryProvider<AuthRepository>.value(
+        value: mockAuthRepository,
+        child: MaterialApp.router(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routerConfig: router,
+        ),
+      );
+    }
+
+    testWidgets('renders page with all required elements', (tester) async {
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       expect(find.text('Forget Password ?'), findsOneWidget);
@@ -22,28 +54,14 @@ void main() {
     });
 
     testWidgets('shows email field with correct placeholder', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ForgotPasswordPage(),
-        ),
-      );
-
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       expect(find.text('yourmail@gmail.com'), findsOneWidget);
     });
 
     testWidgets('send button is disabled initially', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ForgotPasswordPage(),
-        ),
-      );
-
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
@@ -51,14 +69,7 @@ void main() {
     });
 
     testWidgets('enables button when valid email is entered', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ForgotPasswordPage(),
-        ),
-      );
-
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), 'test@example.com');
@@ -68,36 +79,25 @@ void main() {
       expect(button.onPressed, isNotNull);
     });
 
-    testWidgets('shows success toast when send is clicked', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ForgotPasswordPage(),
-        ),
-      );
-
+    testWidgets('calls forgotPassword API when send is clicked', (tester) async {
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), 'test@example.com');
       await tester.pump();
 
+      await tester.ensureVisible(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
       await tester.tap(find.byType(ElevatedButton));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
 
-      expect(find.text('Reset link sent successfully'), findsOneWidget);
+      verify(() => mockAuthRepository.forgotPassword(email: 'test@example.com'))
+          .called(1);
     });
 
     testWidgets('shows error for invalid email', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ForgotPasswordPage(),
-        ),
-      );
-
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), 'invalid-email');
@@ -107,14 +107,7 @@ void main() {
     });
 
     testWidgets('shows error for empty email', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const ForgotPasswordPage(),
-        ),
-      );
-
+      await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
       await tester.enterText(find.byType(TextField), 'test@test.com');

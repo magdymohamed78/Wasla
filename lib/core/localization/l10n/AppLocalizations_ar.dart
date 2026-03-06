@@ -215,4 +215,71 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get networkErrorServer => 'خطأ في الخادم. يرجى المحاولة لاحقًا.';
+
+  @override
+  String get otpVerificationTitle => 'تغيير كلمة المرور';
+
+  @override
+  String get otpVerificationDescription =>
+      'أدخل رمز التحقق المرسل إلى بريدك الإلكتروني للمتابعة.';
+
+  @override
+  String otpVerificationTimerText(int seconds) {
+    return 'إعادة إرسال الرمز خلال $seconds ثانية';
+  }
+
+  @override
+  String get otpVerificationResend => 'إعادة إرسال رمز التحقق';
+
+  @override
+  String get otpVerificationVerify => 'تحقق';
+
+  @override
+  String get otpVerificationOtpRequired => 'يرجى إدخال رمز التحقق';
+
+  @override
+  String get otpVerificationOtpInvalid => 'يرجى إدخال رمز مكون من 6 أرقام';
+
+  @override
+  String get changePasswordTitle => 'تغيير كلمة المرور';
+
+  @override
+  String get changePasswordDescription =>
+      'يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور المستخدمة سابقاً.';
+
+  @override
+  String get changePasswordNewPasswordLabel => 'كلمة المرور الجديدة';
+
+  @override
+  String get changePasswordConfirmPasswordLabel => 'تأكيد كلمة المرور';
+
+  @override
+  String get changePasswordConfirm => 'تأكيد';
+
+  @override
+  String get changePasswordMinLength =>
+      'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+
+  @override
+  String get changePasswordMismatch => 'كلمات المرور غير متطابقة';
+
+  @override
+  String get changePasswordSuccess => 'تم إعادة تعيين كلمة المرور بنجاح';
+
+  @override
+  String get errorRateLimit => 'طلبات كثيرة. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get errorNetwork =>
+      'لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة والمحاولة مرة أخرى.';
+
+  @override
+  String get errorExpiredOtp => 'انتهت صلاحية رمز التحقق. يرجى طلب رمز جديد.';
+
+  @override
+  String get errorPasswordPolicy =>
+      'كلمة المرور لا تستوفي الحد الأدنى من المتطلبات.';
+
+  @override
+  String get errorServer => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.';
 }

@@ -169,8 +169,8 @@ class SignUpPage extends StatelessWidget {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   context.read<RegisterCubit>().register();
                 },
-                child: const Text(
-                  'Retry',
+                child:  Text(
+                  localizations.networkErrorRetry,
                   style: TextStyle(color: Colors.white),
                 ),
               ),

@@ -8,6 +8,7 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/sign_up_page.dart';
 import '../../features/auth/presentation/pages/sign_up_success_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
+import '../../features/auth/presentation/pages/change_password_page.dart';
 import '../../features/home/presentation/pages/home_placeholder_page.dart';
 
 class AppRouter {
@@ -21,6 +22,8 @@ class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
+  static const String otpVerification = '/otp-verification';
+  static const String changePassword = '/change-password';
   static const String registerSuccess = '/register-success';
   static const String home = '/home';
 
@@ -53,6 +56,22 @@ class AppRouter {
         GoRoute(
           path: forgotPassword,
           builder: (context, state) => const ForgotPasswordPage(),
+        ),
+        GoRoute(
+          path: otpVerification,
+          // Redirects to /change-password so the old deep-link still works.
+          redirect: (context, state) {
+            final email = state.extra as String? ?? '';
+            return '$changePassword?email=${Uri.encodeComponent(email)}';
+          },
+        ),
+        GoRoute(
+          path: changePassword,
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            final email = extra['email'] as String? ?? '';
+            return ChangePasswordPage(email: email);
+          },
         ),
         GoRoute(
           path: registerSuccess,

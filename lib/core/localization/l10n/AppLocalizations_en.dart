@@ -214,4 +214,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get networkErrorServer => 'Server error. Please try again later.';
+
+  @override
+  String get otpVerificationTitle => 'Change Password';
+
+  @override
+  String get otpVerificationDescription =>
+      'Enter the OTP sent to your email to proceed.';
+
+  @override
+  String otpVerificationTimerText(int seconds) {
+    return 'Resend code in ${seconds}s';
+  }
+
+  @override
+  String get otpVerificationResend => 'Resend OTP';
+
+  @override
+  String get otpVerificationVerify => 'Verify';
+
+  @override
+  String get otpVerificationOtpRequired => 'Please enter the OTP code';
+
+  @override
+  String get otpVerificationOtpInvalid => 'Please enter a valid 6-digit code';
+
+  @override
+  String get changePasswordTitle => 'Change Password';
+
+  @override
+  String get changePasswordDescription =>
+      'Your new password must be different from previously used passwords.';
+
+  @override
+  String get changePasswordNewPasswordLabel => 'New Password';
+
+  @override
+  String get changePasswordConfirmPasswordLabel => 'Confirm Password';
+
+  @override
+  String get changePasswordConfirm => 'Confirm';
+
+  @override
+  String get changePasswordMinLength =>
+      'Password must be at least 6 characters';
+
+  @override
+  String get changePasswordMismatch => 'Passwords do not match';
+
+  @override
+  String get changePasswordSuccess => 'Password reset successfully';
+
+  @override
+  String get errorRateLimit => 'Too many requests. Please try again later.';
+
+  @override
+  String get errorNetwork =>
+      'No internet connection. Please check your network and try again.';
+
+  @override
+  String get errorExpiredOtp =>
+      'Your OTP has expired. Please request a new one.';
+
+  @override
+  String get errorPasswordPolicy =>
+      'Password does not meet the minimum requirements.';
+
+  @override
+  String get errorServer =>
+      'An unexpected error occurred. Please try again later.';
 }

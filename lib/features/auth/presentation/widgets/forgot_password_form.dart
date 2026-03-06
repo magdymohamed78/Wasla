@@ -18,9 +18,11 @@ class ForgotPasswordForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _EmailField(localizations: localizations),
+        const SizedBox(height: AppDimensions.spacingSm),
+        const _ErrorMessage(),
         const SizedBox(height: AppDimensions.spacingXxl),
         _SubmitButton(localizations: localizations),
-        const SizedBox(height: AppDimensions.spacingXxl),
+        const SizedBox(height: AppDimensions.spacingLg),
       ],
     );
   }
@@ -85,9 +87,11 @@ class _SubmitButton extends StatelessWidget {
     return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
       buildWhen: (prev, curr) =>
           prev.isValid != curr.isValid ||
-          prev.isSubmitting != curr.isSubmitting,
+          prev.isSubmitting != curr.isSubmitting ||
+          prev.status != curr.status,
       builder: (context, state) {
-        final isEnabled = state.isValid && !state.isSubmitting;
+        final isLoading = state.status == ForgotPasswordStatus.loading;
+        final isEnabled = state.isValid && !isLoading;
 
         return SizedBox(
           height: AppDimensions.buttonHeight,
@@ -104,17 +108,68 @@ class _SubmitButton extends StatelessWidget {
                 ),
               ),
             ),
-            child: Text(
-              localizations.forgotPasswordSend,
-              style: isEnabled
-                  ? AppTypography.buttonLabel
-                  : AppTypography.buttonLabel.copyWith(
-                      color: AppColors.textSecondary,
+            child: isLoading
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      color: Colors.white,
                     ),
-            ),
+                  )
+                : Text(
+                    localizations.forgotPasswordSend,
+                    style: isEnabled
+                        ? AppTypography.buttonLabel
+                        : AppTypography.buttonLabel.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                  ),
           ),
         );
       },
     );
+  }
+}
+
+class _ErrorMessage extends StatelessWidget {
+  const _ErrorMessage();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+      buildWhen: (prev, curr) =>
+          prev.errorMessage != curr.errorMessage ||
+          prev.status != curr.status,
+      builder: (context, state) {
+        if (state.status != ForgotPasswordStatus.failure ||
+            state.errorMessage == null) {
+          return const SizedBox.shrink();
+        }
+
+        final localizations = AppLocalizations.of(context);
+        final message = _mapErrorMessage(state.errorMessage!, localizations);
+
+        return Padding(
+          padding: const EdgeInsets.only(top: AppDimensions.spacingSm),
+          child: Text(
+            message,
+            style: AppTypography.bodySmall.copyWith(color: AppColors.error),
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
+  }
+
+  String _mapErrorMessage(String errorKey, AppLocalizations localizations) {
+    switch (errorKey) {
+      case 'rateLimit':
+        return localizations.errorRateLimit;
+      case 'network':
+        return localizations.errorNetwork;
+      default:
+        return localizations.errorServer;
+    }
   }
 }

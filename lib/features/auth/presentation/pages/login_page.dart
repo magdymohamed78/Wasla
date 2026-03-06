@@ -183,8 +183,8 @@ class LoginPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     context.read<LoginCubit>().login();
                   },
-                  child: const Text(
-                    'Retry',
+                  child:  Text(
+                    localizations.networkErrorRetry,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

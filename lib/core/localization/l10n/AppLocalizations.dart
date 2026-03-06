@@ -487,6 +487,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Server error. Please try again later.'**
   String get networkErrorServer;
+
+  /// No description provided for @otpVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get otpVerificationTitle;
+
+  /// No description provided for @otpVerificationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the OTP sent to your email to proceed.'**
+  String get otpVerificationDescription;
+
+  /// No description provided for @otpVerificationTimerText.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code in {seconds}s'**
+  String otpVerificationTimerText(int seconds);
+
+  /// No description provided for @otpVerificationResend.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend OTP'**
+  String get otpVerificationResend;
+
+  /// No description provided for @otpVerificationVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get otpVerificationVerify;
+
+  /// No description provided for @otpVerificationOtpRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the OTP code'**
+  String get otpVerificationOtpRequired;
+
+  /// No description provided for @otpVerificationOtpInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid 6-digit code'**
+  String get otpVerificationOtpInvalid;
+
+  /// No description provided for @changePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePasswordTitle;
+
+  /// No description provided for @changePasswordDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your new password must be different from previously used passwords.'**
+  String get changePasswordDescription;
+
+  /// No description provided for @changePasswordNewPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get changePasswordNewPasswordLabel;
+
+  /// No description provided for @changePasswordConfirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get changePasswordConfirmPasswordLabel;
+
+  /// No description provided for @changePasswordConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get changePasswordConfirm;
+
+  /// No description provided for @changePasswordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get changePasswordMinLength;
+
+  /// No description provided for @changePasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get changePasswordMismatch;
+
+  /// No description provided for @changePasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset successfully'**
+  String get changePasswordSuccess;
+
+  /// No description provided for @errorRateLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please try again later.'**
+  String get errorRateLimit;
+
+  /// No description provided for @errorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Please check your network and try again.'**
+  String get errorNetwork;
+
+  /// No description provided for @errorExpiredOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Your OTP has expired. Please request a new one.'**
+  String get errorExpiredOtp;
+
+  /// No description provided for @errorPasswordPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Password does not meet the minimum requirements.'**
+  String get errorPasswordPolicy;
+
+  /// No description provided for @errorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'An unexpected error occurred. Please try again later.'**
+  String get errorServer;
 }
 
 class _AppLocalizationsDelegate

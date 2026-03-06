@@ -1,7 +1,10 @@
 import '../data_sources/auth_remote_data_source.dart';
 import '../data_sources/auth_local_data_source.dart';
+import '../models/forgot_password_request_model.dart';
 import '../models/login_request_model.dart';
 import '../models/register_request_model.dart';
+import '../models/resend_otp_request_model.dart';
+import '../models/reset_password_request_model.dart';
 import '../models/refresh_token_request_model.dart';
 import '../../domain/entities/login_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -121,5 +124,33 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> saveRefreshTokenData(String? refreshToken, String? expiry) async {
     await _activeLocalDataSource.saveRefreshToken(refreshToken);
     await _activeLocalDataSource.saveRefreshTokenExpiry(expiry);
+  }
+
+  @override
+  Future<void> forgotPassword({required String email}) async {
+    final request = ForgotPasswordRequestModel(email: email.trim());
+    await _remoteDataSource.forgotPassword(request);
+  }
+
+  @override
+  Future<void> resendOtp({required String email}) async {
+    final request = ResendOtpRequestModel(email: email.trim());
+    await _remoteDataSource.resendOtp(request);
+  }
+
+  @override
+  Future<void> resetPassword({
+    required String email,
+    required String otp,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    final request = ResetPasswordRequestModel(
+      email: email.trim(),
+      otp: otp.trim(),
+      newPassword: newPassword,
+      confirmNewPassword: confirmNewPassword,
+    );
+    await _remoteDataSource.resetPassword(request);
   }
 }

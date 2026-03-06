@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import '../models/forgot_password_request_model.dart';
 import '../models/login_request_model.dart';
 import '../models/login_response_model.dart';
 import '../models/register_request_model.dart';
+import '../models/resend_otp_request_model.dart';
+import '../models/reset_password_request_model.dart';
 import '../models/refresh_token_request_model.dart';
 import '../models/refresh_token_response_model.dart';
 
@@ -10,6 +13,9 @@ abstract class AuthRemoteDataSource {
   Future<LoginResponseModel> login(LoginRequestModel request);
   Future<LoginResponseModel> register(RegisterRequestModel request);
   Future<RefreshTokenResponseModel> refreshToken(RefreshTokenRequestModel request);
+  Future<void> forgotPassword(ForgotPasswordRequestModel request);
+  Future<void> resendOtp(ResendOtpRequestModel request);
+  Future<void> resetPassword(ResetPasswordRequestModel request);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -17,6 +23,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   static const String _loginEndpoint = '/api/customer-portal/login';
   static const String _registerEndpoint = '/api/customer-portal/register';
   static const String _refreshTokenEndpoint = '/api/customer-portal/refresh-token';
+  static const String _forgotPasswordEndpoint = '/api/Auth/forgot-password';
+  static const String _resendOtpEndpoint = '/api/Auth/resend-otp';
+  static const String _resetPasswordEndpoint = '/api/Auth/reset-password';
 
   const AuthRemoteDataSourceImpl(this._dio);
 
@@ -253,5 +262,140 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         data['errorMessage'] as String? ??
         data['errors']?.toString() ??
         'Unknown error occurred';
+  }
+
+  @override
+  Future<void> forgotPassword(ForgotPasswordRequestModel request) async {
+    final url = '${_dio.options.baseUrl}$_forgotPasswordEndpoint';
+
+    debugPrint('════════════════════════════════════════════════════');
+    debugPrint('[AuthRemoteDataSource] FORGOT PASSWORD REQUEST');
+    debugPrint('[AuthRemoteDataSource] URL: POST $url');
+    debugPrint('[AuthRemoteDataSource] Headers: ${_dio.options.headers}');
+    debugPrint('[AuthRemoteDataSource] Body: ${request.toJson()}');
+    debugPrint('════════════════════════════════════════════════════');
+
+    try {
+      final response = await _dio.post<dynamic>(
+        _forgotPasswordEndpoint,
+        data: request.toJson(),
+      );
+
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] FORGOT PASSWORD RESPONSE');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${response.statusCode}');
+      debugPrint('[AuthRemoteDataSource] Data: ${response.data}');
+      debugPrint('════════════════════════════════════════════════════');
+    } on DioException catch (e) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] FORGOT PASSWORD EXCEPTION');
+      debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
+      debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
+      debugPrint('════════════════════════════════════════════════════');
+      rethrow;
+    } catch (e, stackTrace) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] UNEXPECTED EXCEPTION: $e');
+      debugPrint('[AuthRemoteDataSource] StackTrace: $stackTrace');
+      debugPrint('════════════════════════════════════════════════════');
+      throw DioException(
+        requestOptions: RequestOptions(path: _forgotPasswordEndpoint),
+        error: e,
+        type: DioExceptionType.unknown,
+        message: 'Unexpected error: $e',
+      );
+    }
+  }
+
+  @override
+  Future<void> resendOtp(ResendOtpRequestModel request) async {
+    final url = '${_dio.options.baseUrl}$_resendOtpEndpoint';
+
+    debugPrint('════════════════════════════════════════════════════');
+    debugPrint('[AuthRemoteDataSource] RESEND OTP REQUEST');
+    debugPrint('[AuthRemoteDataSource] URL: POST $url');
+    debugPrint('[AuthRemoteDataSource] Headers: ${_dio.options.headers}');
+    debugPrint('[AuthRemoteDataSource] Body: ${request.toJson()}');
+    debugPrint('════════════════════════════════════════════════════');
+
+    try {
+      final response = await _dio.post<dynamic>(
+        _resendOtpEndpoint,
+        data: request.toJson(),
+      );
+
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] RESEND OTP RESPONSE');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${response.statusCode}');
+      debugPrint('[AuthRemoteDataSource] Data: ${response.data}');
+      debugPrint('════════════════════════════════════════════════════');
+    } on DioException catch (e) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] RESEND OTP EXCEPTION');
+      debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
+      debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
+      debugPrint('════════════════════════════════════════════════════');
+      rethrow;
+    } catch (e, stackTrace) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] UNEXPECTED EXCEPTION: $e');
+      debugPrint('[AuthRemoteDataSource] StackTrace: $stackTrace');
+      debugPrint('════════════════════════════════════════════════════');
+      throw DioException(
+        requestOptions: RequestOptions(path: _resendOtpEndpoint),
+        error: e,
+        type: DioExceptionType.unknown,
+        message: 'Unexpected error: $e',
+      );
+    }
+  }
+
+  @override
+  Future<void> resetPassword(ResetPasswordRequestModel request) async {
+    final url = '${_dio.options.baseUrl}$_resetPasswordEndpoint';
+
+    debugPrint('════════════════════════════════════════════════════');
+    debugPrint('[AuthRemoteDataSource] RESET PASSWORD REQUEST');
+    debugPrint('[AuthRemoteDataSource] URL: POST $url');
+    debugPrint('[AuthRemoteDataSource] Headers: ${_dio.options.headers}');
+    debugPrint('[AuthRemoteDataSource] Body: ${request.toJson()}');
+    debugPrint('════════════════════════════════════════════════════');
+
+    try {
+      final response = await _dio.post<dynamic>(
+        _resetPasswordEndpoint,
+        data: request.toJson(),
+      );
+
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] RESET PASSWORD RESPONSE');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${response.statusCode}');
+      debugPrint('[AuthRemoteDataSource] Data: ${response.data}');
+      debugPrint('════════════════════════════════════════════════════');
+    } on DioException catch (e) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] RESET PASSWORD EXCEPTION');
+      debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
+      debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
+      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
+      debugPrint('════════════════════════════════════════════════════');
+      rethrow;
+    } catch (e, stackTrace) {
+      debugPrint('════════════════════════════════════════════════════');
+      debugPrint('[AuthRemoteDataSource] UNEXPECTED EXCEPTION: $e');
+      debugPrint('[AuthRemoteDataSource] StackTrace: $stackTrace');
+      debugPrint('════════════════════════════════════════════════════');
+      throw DioException(
+        requestOptions: RequestOptions(path: _resetPasswordEndpoint),
+        error: e,
+        type: DioExceptionType.unknown,
+        message: 'Unexpected error: $e',
+      );
+    }
   }
 }

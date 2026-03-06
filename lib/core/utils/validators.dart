@@ -49,4 +49,26 @@ class Validators {
     }
     return null;
   }
+
+  static final _otpRegex = RegExp(r'^\d{6}$');
+
+  static String? validateOtp(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'otp_empty';
+    }
+    if (!_otpRegex.hasMatch(value.trim())) {
+      return 'otp_invalid';
+    }
+    return null;
+  }
+
+  static String? validatePasswordMatch(String? password, String? confirmPassword) {
+    if (confirmPassword == null || confirmPassword.trim().isEmpty) {
+      return 'confirm_password_empty';
+    }
+    if (password != confirmPassword) {
+      return 'passwords_do_not_match';
+    }
+    return null;
+  }
 }

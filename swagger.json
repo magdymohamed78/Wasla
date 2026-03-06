@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "CRM Project API",
-    "description": "Comprehensive CRM API for multi-tenant service businesses.\n\n**Portal user lifecycle:**\nRegister → Lead (no company) → Connect to company → Accepted → Customer (company-scoped).\n\n**JWT claims:**\n- `leadId` — present when user is a Lead (before any company acceptance).\n- `customerId` — present once accepted by at least one company.\n\n**Multi-tenancy:** all company-scoped endpoints resolve CompanyId from the JWT.",
+    "title": "Wasla CRM API",
+    "description": "Wasla CRM — Comprehensive API for multi-tenant service businesses.\n\n**Portal user lifecycle:**\nRegister (Digital Signature) → Lead (no company) → Submit Service Request (to any company) → Company Conversion → Customer (company-scoped).\n\n**JWT claims:**\n- `leadId` — present when user is a Lead.\n- `customerId` — present once converted/accepted by at least one company.\n\n**Multi-tenancy:** all company-scoped endpoints resolve CompanyId from the JWT.",
     "version": "v1"
   },
   "paths": {
@@ -446,7 +446,7 @@
           "02 - Customer Portal"
         ],
         "summary": "Registers a new portal user account (creates a Lead).",
-        "description": "Registering creates a **Lead** record — a user who is not yet linked to any company.\r\n            \r\nThe response JWT will contain a `leadId` claim but **no** `customerId` yet.\r\nTo become a Customer of a specific company, the lead must send a connection request\r\nvia `POST /companies/connect` and wait for the company to accept it.\r\n            \r\nThe response also includes a `refreshToken` and `refreshTokenExpiry` (short-lived, 1 day).",
+        "description": "Registering creates a **Lead** record — a user who is not yet linked to any company.\r\nA unique **Digital Signature** is automatically generated for the lead upon registration.\r\n            \r\nThe response JWT will contain a `leadId` claim but **no** `customerId` yet.\r\nTo become a Customer of a specific company, the lead must submit a **Service Request**\r\nto that company. The company will then convert the inquiry into a customer account.\r\n            \r\nThe response also includes a `refreshToken` and `refreshTokenExpiry` (short-lived, 1 day).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -539,7 +539,7 @@
           "02 - Customer Portal"
         ],
         "summary": "Authenticates a portal user and returns a JWT token plus a refresh token.",
-        "description": "The returned token may contain:\r\n- `leadId` — if the user is still a Lead (not yet linked to any company)\r\n- `customerId` — if the user has been accepted by at least one company\r\n- Both claims — once a lead has been accepted by a company\r\n            \r\nCheck which claim is present to determine the user's state and which portal\r\nendpoints are available.\r\n            \r\n**Refresh token**: The response includes a `refreshToken` and `refreshTokenExpiry`.\r\nUse `POST /refresh-token` to exchange a valid refresh token for a new access token without re-entering credentials.\r\n            \r\n**Remember Me**: Set `rememberMe: true` for a long-lived refresh token (30 days).\r\nWhen omitted or `false`, the refresh token expires in 1 day.",
+        "description": "The returned token may contain:\r\n- `leadId` — if the user is a Lead.\r\n- `customerId` — if the user has been accepted/converted by at least one company.\r\n- Both claims — once a lead has a customer record in one or more companies.\r\n            \r\nThe response also includes the user's unique **Digital Signature**, which is required \r\nto accept offers.\r\n            \r\nCheck which claim is present to determine the user's state and which portal\r\nendpoints are available.\r\n            \r\n**Refresh token**: The response includes a `refreshToken` and `refreshTokenExpiry`.\r\nUse `POST /refresh-token` to exchange a valid refresh token for a new access token without re-entering credentials.\r\n            \r\n**Remember Me**: Set `rememberMe: true` for a long-lived refresh token (30 days).\r\nWhen omitted or `false`, the refresh token expires in 1 day.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -890,6 +890,164 @@
                   "items": {
                     "$ref": "#/components/schemas/PublicCompanyListDto"
                   }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/customer-portal/recommended-companies": {
+      "get": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Retrieves a public paginated list of recommended companies ranked by weighted composite score.",
+        "description": "Ranking uses deduplicated latest-per-customer reviews, Bayesian weighting, and recency decay.\r\nResults can be filtered by service type and are returned in descending recommendation order.",
+        "parameters": [
+          {
+            "name": "ServiceType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PageIndex",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a paginated recommendation result.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendedCompanyDtoPaginatedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendedCompanyDtoPaginatedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecommendedCompanyDtoPaginatedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid page index or page size.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/customer-portal/trending-companies": {
+      "get": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Retrieves a public paginated list of trending companies with significantly improving recent reviews.",
+        "description": "Trending requires at least 2 deduplicated reviews in the last 90 days and\r\na recent-average improvement of at least 0.5 stars over the all-time average.\r\nResults are sorted by improvement delta descending with review count as tiebreaker.",
+        "parameters": [
+          {
+            "name": "ServiceType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PageIndex",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a paginated trending companies result.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingCompanyDtoPaginatedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingCompanyDtoPaginatedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrendingCompanyDtoPaginatedResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid page index or page size.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2325,140 +2483,6 @@
         }
       }
     },
-    "/api/customer-portal/companies/connect": {
-      "post": {
-        "tags": [
-          "02 - Customer Portal"
-        ],
-        "summary": "Sends a connection request from the lead to a specific company.",
-        "description": "Creates a `LeadCompany` record with status `Pending`.\r\nThe company manager will see this request and can **Accept** or **Reject** it.\r\n            \r\n- **Accepted** → a `Customer` record is created for that company and the lead\r\n  receives a `customerId` for that company's context.\r\n- **Rejected** → no Customer record is created; the lead may request again after\r\n  the company resets the connection.\r\n            \r\nA lead can connect to **multiple** companies; each creates a separate connection record.\r\nAttempting to connect to the same company twice returns **409 Conflict**.",
-        "requestBody": {
-          "description": "Target company ID and an optional introductory message.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LeadConnectToCompanyDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LeadConnectToCompanyDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/LeadConnectToCompanyDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Connection request created with status `Pending`.",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/LeadCompanyDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LeadCompanyDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LeadCompanyDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Validation errors (e.g. missing CompanyId).",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "No valid JWT provided.",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Company not found or inactive.",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "A connection request to this company already exists.",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Unexpected error."
-          }
-        }
-      }
-    },
     "/api/CompanyDashboard": {
       "get": {
         "tags": [
@@ -3007,6 +3031,319 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/CompanySettings/services": {
+      "get": {
+        "tags": [
+          "03 - Company Management"
+        ],
+        "summary": "Retrieves all service catalog items for the company.",
+        "description": "Returns a list of custom services specifically defined by this company,\r\nordered by their `SortOrder` and creation date.",
+        "responses": {
+          "200": {
+            "description": "List of service catalog items.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "03 - Company Management"
+        ],
+        "summary": "Adds a new service to the company's catalog.",
+        "description": "Creates a new service that will be visible to leads/customers when \r\nbrowsing this company's profile in the portal.",
+        "requestBody": {
+          "description": "Service details including title, description, and pricing.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceCatalogDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceCatalogDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceCatalogDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Service created successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/CompanySettings/services/{id}": {
+      "put": {
+        "tags": [
+          "03 - Company Management"
+        ],
+        "summary": "Updates an existing service in the company's catalog.",
+        "description": "Modifies an existing service's details. Only services belonging to\r\nthe authenticated company can be updated.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service catalog item ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated service details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceCatalogDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceCatalogDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceCatalogDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Service updated successfully.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service not found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "03 - Company Management"
+        ],
+        "summary": "Deletes a service from the company's catalog.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service catalog item ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Service deleted."
+          },
+          "404": {
+            "description": "Service not found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/CompanySettings/services/{id}/toggle": {
+      "patch": {
+        "tags": [
+          "03 - Company Management"
+        ],
+        "summary": "Toggles the active/inactive status of a service.",
+        "description": "Inactive services are hidden from the customer portal but remain\r\nin the database for historical purposes.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service catalog item ID.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Service status toggled.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Service not found.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error."
           }
         }
       }
@@ -4597,7 +4934,7 @@
           "04 - Company Operations"
         ],
         "summary": "Creates a new offer with one or more services (Move, Cleaning, etc.).",
-        "description": "This is the main endpoint for generating quotes. \r\nIf `EmailToCustomer` is set to true, the system will automatically generate a PDF and email it to the customer with approval/rejection links.",
+        "description": "This is the main endpoint for generating quotes.\r\n\r\nWhen a `ServiceRequestId` is provided, the offer is linked to that request and\r\nthe service request status is **automatically updated to `OfferSent`**.\r\n\r\nOnce created, the offer appears in the customer's portal where they can\r\n**Accept** (with their Digital Signature) or **Reject** (with a reason).",
         "requestBody": {
           "description": "The offer configuration and service details.",
           "content": {
@@ -4833,7 +5170,8 @@
         "tags": [
           "04 - Company Operations"
         ],
-        "summary": "Manually updates the status of an offer (e.g. Cancelled, Invoiced).",
+        "summary": "Manually updates the status of an offer (e.g. Canceled).",
+        "description": "Use this endpoint for company-initiated status changes.\r\nCustomer-initiated changes (Accept/Reject) are handled through the Customer Portal.\r\nAvailable statuses: Pending, Sent, Accepted, Rejected, Canceled.",
         "parameters": [
           {
             "name": "id",
@@ -6284,14 +6622,14 @@
         "type": "object",
         "properties": {
           "digitalSignature": {
-            "maxLength": 10000,
+            "maxLength": 64,
             "minLength": 1,
             "type": "string",
-            "description": "Typed name or Base64-encoded drawn signature. Max 10,000 chars."
+            "description": "The customer's digital signature (received at registration). Must match the one on file."
           }
         },
         "additionalProperties": false,
-        "description": "Payload for accepting an offer. Requires a digital signature."
+        "description": "Payload for accepting an offer. The customer must provide their digital signature for verification."
       },
       "AdditionalCostDto": {
         "type": "object",
@@ -6451,12 +6789,12 @@
             "type": "string",
             "nullable": true
           },
-          "fixedPriceRateCHF": {
+          "fixedPriceRateEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "hourlyRateCHFPerHour": {
+          "hourlyRateEGPPerHour": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -7322,9 +7660,9 @@
             "type": "string",
             "nullable": true
           },
-          "amountCHF": {
+          "amountEGP": {
             "type": "number",
-            "description": "Financial amount in local currency (CHF).",
+            "description": "Financial amount in local currency (EGP).",
             "format": "double"
           },
           "expenseDate": {
@@ -7437,6 +7775,50 @@
         },
         "additionalProperties": false,
         "description": "Data required to create a new commercial offer."
+      },
+      "CreateServiceCatalogDto": {
+        "required": [
+          "serviceType",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "serviceType": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "indicativePriceFrom": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "indicativePriceTo": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pricingUnit": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
       },
       "CreateServiceRequestDto": {
         "required": [
@@ -7712,6 +8094,11 @@
           },
           "email": {
             "type": "string",
+            "nullable": true
+          },
+          "digitalSignature": {
+            "type": "string",
+            "description": "Unique digital signature assigned to this customer at registration.",
             "nullable": true
           }
         },
@@ -8243,12 +8630,12 @@
       "DisposalServiceDto": {
         "type": "object",
         "properties": {
-          "volumeRateCHFPerM3": {
+          "volumeRateEGPPerM3": {
             "type": "number",
             "format": "double",
             "nullable": true
           },
-          "flatRateDisposalCostCHF": {
+          "flatRateDisposalCostEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -8272,7 +8659,7 @@
             "format": "int32",
             "nullable": true
           },
-          "hourlyRateCHF": {
+          "hourlyRateEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -8292,7 +8679,7 @@
             "format": "date-span",
             "nullable": true
           },
-          "roundTripCostCHF": {
+          "roundTripCostEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -8514,25 +8901,6 @@
         "additionalProperties": false,
         "description": "Summary of a lead-to-company connection."
       },
-      "LeadConnectToCompanyDto": {
-        "required": [
-          "companyId"
-        ],
-        "type": "object",
-        "properties": {
-          "companyId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "maxLength": 500,
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Request sent by a lead to connect to a company."
-      },
       "LeadProfileDto": {
         "type": "object",
         "properties": {
@@ -8710,7 +9078,7 @@
             "format": "date-span",
             "nullable": true
           },
-          "roundTripCostCHF": {
+          "roundTripCostEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -8729,7 +9097,7 @@
             "format": "int32",
             "nullable": true
           },
-          "hourlyRateCHF": {
+          "hourlyRateEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -9090,7 +9458,7 @@
             "format": "date-span",
             "nullable": true
           },
-          "roundTripCostCHF": {
+          "roundTripCostEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -9109,7 +9477,7 @@
             "format": "int32",
             "nullable": true
           },
-          "hourlyRateCHF": {
+          "hourlyRateEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -9386,6 +9754,72 @@
         },
         "additionalProperties": false
       },
+      "RecommendedCompanyDto": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyLogoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "averageRating": {
+            "type": "number",
+            "format": "double"
+          },
+          "reviewCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "serviceTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RecommendedCompanyDtoPaginatedResult": {
+        "type": "object",
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecommendedCompanyDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RefreshTokenRequestDto": {
         "required": [
           "refreshToken"
@@ -9587,10 +10021,62 @@
         },
         "additionalProperties": false
       },
+      "ServiceCatalogResponseDto": {
+        "type": "object",
+        "properties": {
+          "companyServiceCatalogId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "serviceType": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "indicativePriceFrom": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "indicativePriceTo": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pricingUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "StorageServiceDto": {
         "type": "object",
         "properties": {
-          "rateCHFPerM3PerMonth": {
+          "rateEGPPerM3PerMonth": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -9915,7 +10401,7 @@
             "type": "string",
             "nullable": true
           },
-          "fixedRateCHF": {
+          "fixedRateEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -9934,7 +10420,7 @@
             "format": "int32",
             "nullable": true
           },
-          "hourlyRateCHF": {
+          "hourlyRateEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -9954,7 +10440,7 @@
             "format": "date-span",
             "nullable": true
           },
-          "roundTripCostCHF": {
+          "roundTripCostEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -9979,6 +10465,84 @@
         },
         "additionalProperties": false
       },
+      "TrendingCompanyDto": {
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyLogoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "averageRating": {
+            "type": "number",
+            "format": "double"
+          },
+          "reviewCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "serviceTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "improvementDelta": {
+            "type": "number",
+            "format": "double"
+          },
+          "recentAverage": {
+            "type": "number",
+            "format": "double"
+          },
+          "allTimeAverage": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "TrendingCompanyDtoPaginatedResult": {
+        "type": "object",
+        "properties": {
+          "pageIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrendingCompanyDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "UnpackingServiceDto": {
         "type": "object",
         "properties": {
@@ -9992,7 +10556,7 @@
             "format": "date-span",
             "nullable": true
           },
-          "roundTripCostCHF": {
+          "roundTripCostEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -10011,7 +10575,7 @@
             "format": "int32",
             "nullable": true
           },
-          "hourlyRateCHF": {
+          "hourlyRateEGP": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -10247,9 +10811,9 @@
             "type": "string",
             "nullable": true
           },
-          "amountCHF": {
+          "amountEGP": {
             "type": "number",
-            "description": "Financial amount in local currency (CHF).",
+            "description": "Financial amount in local currency (EGP).",
             "format": "double"
           },
           "expenseDate": {
@@ -10388,6 +10952,50 @@
         },
         "additionalProperties": false
       },
+      "UpdateServiceCatalogDto": {
+        "required": [
+          "serviceType",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "serviceType": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 1000,
+            "type": "string",
+            "nullable": true
+          },
+          "indicativePriceFrom": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "indicativePriceTo": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "pricingUnit": {
+            "maxLength": 50,
+            "type": "string",
+            "nullable": true
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateSubsTypedto": {
         "type": "object",
         "properties": {
@@ -10428,15 +11036,15 @@
     },
     {
       "name": "02 - Customer Portal",
-      "description": "Public and customer-authenticated endpoints for the self-service portal.\n\n**User lifecycle:**\n1. `POST /register` → creates a **Lead** (no company link). JWT contains `leadId`.\n2. Lead browses companies and calls `POST /companies/connect` to request a connection.\n3. Company manager accepts → a **Customer** record is created. JWT gains `customerId`.\n4. Customer can now access offers, service requests, reviews, and dashboard.\n\nA lead can connect to **multiple** companies; each produces a separate Customer record."
+      "description": "Public and customer-authenticated endpoints for the self-service portal.\n\n**User lifecycle:**\n1. `POST /register` → creates a **Lead** (no company link). A unique **Digital Signature** is generated. JWT contains `leadId`.\n2. Lead browses companies and submits a **Service Request** to a company.\n3. Company manager processes the request → a **Customer** record is created. JWT gains `customerId`.\n4. Customer can now access offers, service requests, reviews, and dashboard.\n\nA lead can connect to **multiple** companies; each produces a separate Customer record."
     },
     {
       "name": "03 - Company Management",
-      "description": "Manager-level operations for company settings, logos, and high-level dashboard metrics."
+      "description": "Manager-level operations for company settings, logos, service catalog, and high-level dashboard metrics."
     },
     {
       "name": "04 - Company Operations",
-      "description": "Core business tasks: managing customers, employees, tasks, expenses, and service requests."
+      "description": "Core day-to-day business operations for managers and employees.\n\n**Includes:**\n- **Offers** — Create multi-service quotes (optionally from a Service Request), send PDFs, and track status (Pending → Sent → Accepted/Rejected). Customers accept via **Digital Signature** in the portal.\n- **Tasks** — Full lifecycle management (Pending → InProgress → Completed) with reassignment, audit trails, and time tracking.\n- **Customers** — Company-scoped customer records. Customers can also be auto-created when a Lead submits a Service Request.\n- **Employees** — Workforce management with performance analytics and task history.\n- **Expenses** — Financial tracking with category/date filtering and charting.\n- **Appointments** — Schedule site visits with optional Google Calendar sync."
     },
     {
       "name": "05 - Integrations",

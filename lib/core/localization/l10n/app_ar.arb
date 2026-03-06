@@ -64,5 +64,35 @@
   "signUpSuccessButton": "لنبدأ",
   "networkErrorNoConnection": "لا يوجد اتصال بالإنترنت",
   "networkErrorRetry": "إعادة المحاولة",
-  "networkErrorServer": "خطأ في الخادم. يرجى المحاولة لاحقًا."
+  "networkErrorServer": "خطأ في الخادم. يرجى المحاولة لاحقًا.",
+
+  "otpVerificationTitle": "تغيير كلمة المرور",
+  "otpVerificationDescription": "أدخل رمز التحقق المرسل إلى بريدك الإلكتروني للمتابعة.",
+  "otpVerificationTimerText": "إعادة إرسال الرمز خلال {seconds} ثانية",
+  "@otpVerificationTimerText": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "otpVerificationResend": "إعادة إرسال رمز التحقق",
+  "otpVerificationVerify": "تحقق",
+  "otpVerificationOtpRequired": "يرجى إدخال رمز التحقق",
+  "otpVerificationOtpInvalid": "يرجى إدخال رمز مكون من 6 أرقام",
+
+  "changePasswordTitle": "تغيير كلمة المرور",
+  "changePasswordDescription": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور المستخدمة سابقاً.",
+  "changePasswordNewPasswordLabel": "كلمة المرور الجديدة",
+  "changePasswordConfirmPasswordLabel": "تأكيد كلمة المرور",
+  "changePasswordConfirm": "تأكيد",
+  "changePasswordMinLength": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+  "changePasswordMismatch": "كلمات المرور غير متطابقة",
+  "changePasswordSuccess": "تم إعادة تعيين كلمة المرور بنجاح",
+
+  "errorRateLimit": "طلبات كثيرة. يرجى المحاولة مرة أخرى لاحقاً.",
+  "errorNetwork": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة والمحاولة مرة أخرى.",
+  "errorExpiredOtp": "انتهت صلاحية رمز التحقق. يرجى طلب رمز جديد.",
+  "errorPasswordPolicy": "كلمة المرور لا تستوفي الحد الأدنى من المتطلبات.",
+  "errorServer": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً."
 }

@@ -1,0 +1,87 @@
+# POST /api/Auth/resend-otp
+
+**Tag**: 01 - Authentication & Onboarding  
+**Summary**: Resend a new OTP for password reset.  
+**Description**: Invalidates any previous active OTP and issues a fresh one. Always returns 200 OK to prevent email enumeration.  
+**Rate limit**: 5 requests per 60 seconds per IP.
+
+## Request
+
+**Content-Type**: `application/json`
+
+### Schema: ResendOtpDto
+
+```yaml
+ResendOtpDto:
+  required:
+    - email
+  type: object
+  properties:
+    email:
+      minLength: 1
+      type: string
+      format: email
+  additionalProperties: false
+```
+
+### Example Request Body
+
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+## Responses
+
+### 200 OK
+
+**Description**: Request processed (new OTP sent if email is registered).  
+**Body**: Empty (no response body).
+
+### 429 Too Many Requests
+
+**Description**: Too many requests.  
+**Content-Type**: `application/json`
+
+```yaml
+ProblemDetails:
+  type: object
+  properties:
+    type:
+      type: string
+      nullable: true
+    title:
+      type: string
+      nullable: true
+    status:
+      type: integer
+      format: int32
+      nullable: true
+    detail:
+      type: string
+      nullable: true
+    instance:
+      type: string
+      nullable: true
+  additionalProperties: {}
+```
+
+### Example 429 Response
+
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc6585#section-4",
+  "title": "Too Many Requests",
+  "status": 429,
+  "detail": "Rate limit exceeded. Try again later."
+}
+```
+
+## Client Behavior
+
+1. Only enabled after the 60-second countdown timer reaches zero.
+2. Show loading indicator on the Resend OTP button during request.
+3. On **200**: Restart the 60-second countdown timer.
+4. On **429**: Display "Too many requests" error message AND restart the 60-second countdown timer (prevents immediate re-tap).
+5. On **network error**: Display user-friendly error message.

@@ -64,5 +64,35 @@
   "signUpSuccessButton": "Let's Start",
   "networkErrorNoConnection": "No internet connection",
   "networkErrorRetry": "Retry",
-  "networkErrorServer": "Server error. Please try again later."
+  "networkErrorServer": "Server error. Please try again later.",
+
+  "otpVerificationTitle": "Change Password",
+  "otpVerificationDescription": "Enter the OTP sent to your email to proceed.",
+  "otpVerificationTimerText": "Resend code in {seconds}s",
+  "@otpVerificationTimerText": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "otpVerificationResend": "Resend OTP",
+  "otpVerificationVerify": "Verify",
+  "otpVerificationOtpRequired": "Please enter the OTP code",
+  "otpVerificationOtpInvalid": "Please enter a valid 6-digit code",
+
+  "changePasswordTitle": "Change Password",
+  "changePasswordDescription": "Your new password must be different from previously used passwords.",
+  "changePasswordNewPasswordLabel": "New Password",
+  "changePasswordConfirmPasswordLabel": "Confirm Password",
+  "changePasswordConfirm": "Confirm",
+  "changePasswordMinLength": "Password must be at least 6 characters",
+  "changePasswordMismatch": "Passwords do not match",
+  "changePasswordSuccess": "Password reset successfully",
+
+  "errorRateLimit": "Too many requests. Please try again later.",
+  "errorNetwork": "No internet connection. Please check your network and try again.",
+  "errorExpiredOtp": "Your OTP has expired. Please request a new one.",
+  "errorPasswordPolicy": "Password does not meet the minimum requirements.",
+  "errorServer": "An unexpected error occurred. Please try again later."
 }
