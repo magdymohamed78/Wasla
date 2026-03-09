@@ -542,6 +542,12 @@ abstract class AppLocalizations {
   /// **'Your new password must be different from previously used passwords.'**
   String get changePasswordDescription;
 
+  /// No description provided for @changePasswordDescription2.
+  ///
+  /// In en, this message translates to:
+  /// **'If that email is registered, an OTP has been sent.'**
+  String get changePasswordDescription2;
+
   /// No description provided for @changePasswordNewPasswordLabel.
   ///
   /// In en, this message translates to:
@@ -607,6 +613,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred. Please try again later.'**
   String get errorServer;
+
+  /// No description provided for @signatureModalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Digital Signature'**
+  String get signatureModalTitle;
+
+  /// No description provided for @signatureModalGuidance.
+  ///
+  /// In en, this message translates to:
+  /// **'Please keep this signature safe. You will need it later to approve offers.'**
+  String get signatureModalGuidance;
+
+  /// No description provided for @signatureModalDownloadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save signature. Please try again.'**
+  String get signatureModalDownloadError;
+
+  /// No description provided for @signatureModalOk.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get signatureModalOk;
+
+  /// No description provided for @signatureModalDownloadButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Download signature'**
+  String get signatureModalDownloadButton;
+
+  /// No description provided for @signUpErrorMissingSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration incomplete. Please try again or contact support.'**
+  String get signUpErrorMissingSignature;
+
+  /// No description provided for @signatureModalCopySuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature copied to clipboard.'**
+  String get signatureModalCopySuccess;
 }
 
 class _AppLocalizationsDelegate

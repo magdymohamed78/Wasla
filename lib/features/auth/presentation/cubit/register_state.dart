@@ -11,6 +11,7 @@ enum RegisterErrorCode {
   networkError,
   serverError,
   unexpectedError,
+  missingSignature,
 }
 
 class RegisterState {
@@ -34,6 +35,7 @@ class RegisterState {
   final String? phoneError;
   final bool hasSubmitted;
   final String? serverErrorMessage;
+  final String? digitalSignature;
 
   const RegisterState({
     this.firstName = '',
@@ -56,6 +58,7 @@ class RegisterState {
     this.phoneError,
     this.hasSubmitted = false,
     this.serverErrorMessage,
+    this.digitalSignature,
   });
 
   RegisterState copyWith({
@@ -79,6 +82,7 @@ class RegisterState {
     String? phoneError,
     bool? hasSubmitted,
     String? serverErrorMessage,
+    String? digitalSignature,
   }) {
     return RegisterState(
       firstName: firstName ?? this.firstName,
@@ -101,6 +105,7 @@ class RegisterState {
       phoneError: phoneError,
       hasSubmitted: hasSubmitted ?? this.hasSubmitted,
       serverErrorMessage: serverErrorMessage,
+      digitalSignature: digitalSignature ?? this.digitalSignature,
     );
   }
 }

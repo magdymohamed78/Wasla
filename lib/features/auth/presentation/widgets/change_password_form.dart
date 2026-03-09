@@ -24,7 +24,7 @@ class ChangePasswordForm extends StatelessWidget {
         _OtpField(localizations: localizations),
         const SizedBox(height: AppDimensions.spacingMd),
         const _TimerAndResend(),
-        const SizedBox(height: AppDimensions.spacingXxl),
+        const SizedBox(height: AppDimensions.spacingXl),
         _NewPasswordField(localizations: localizations),
         const SizedBox(height: AppDimensions.spacingMd),
         _ConfirmPasswordField(localizations: localizations),

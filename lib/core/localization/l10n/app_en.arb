@@ -83,6 +83,7 @@
 
   "changePasswordTitle": "Change Password",
   "changePasswordDescription": "Your new password must be different from previously used passwords.",
+  "changePasswordDescription2": "If that email is registered, an OTP has been sent.",
   "changePasswordNewPasswordLabel": "New Password",
   "changePasswordConfirmPasswordLabel": "Confirm Password",
   "changePasswordConfirm": "Confirm",
@@ -94,5 +95,13 @@
   "errorNetwork": "No internet connection. Please check your network and try again.",
   "errorExpiredOtp": "Your OTP has expired. Please request a new one.",
   "errorPasswordPolicy": "Password does not meet the minimum requirements.",
-  "errorServer": "An unexpected error occurred. Please try again later."
+  "errorServer": "An unexpected error occurred. Please try again later.",
+
+  "signatureModalTitle": "Your Digital Signature",
+  "signatureModalGuidance": "Please keep this signature safe. You will need it later to approve offers.",
+  "signatureModalDownloadError": "Failed to save signature. Please try again.",
+  "signatureModalOk": "OK",
+  "signatureModalDownloadButton": "Download signature",
+  "signUpErrorMissingSignature": "Registration incomplete. Please try again or contact support.",
+  "signatureModalCopySuccess": "Signature copied to clipboard."
 }

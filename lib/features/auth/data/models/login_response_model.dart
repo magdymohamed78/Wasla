@@ -26,6 +26,7 @@ class LoginResponseModel {
   final String firstName;
   final String lastName;
   final String email;
+  final String? digitalSignature;
 
   const LoginResponseModel({
     required this.token,
@@ -37,6 +38,7 @@ class LoginResponseModel {
     required this.firstName,
     required this.lastName,
     required this.email,
+    this.digitalSignature,
   });
 
   /// Creates a [LoginResponseModel] from a JSON map.
@@ -51,6 +53,7 @@ class LoginResponseModel {
       firstName: json['firstName'] as String,
       lastName: json['lastName'] as String,
       email: json['email'] as String,
+      digitalSignature: json['digitalSignature'] as String?,
     );
   }
 
@@ -66,6 +69,7 @@ class LoginResponseModel {
       firstName: firstName,
       lastName: lastName,
       email: email,
+      digitalSignature: digitalSignature,
     );
   }
 }

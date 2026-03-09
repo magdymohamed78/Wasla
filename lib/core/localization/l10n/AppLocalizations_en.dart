@@ -247,6 +247,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your new password must be different from previously used passwords.';
 
   @override
+  String get changePasswordDescription2 =>
+      'If that email is registered, an OTP has been sent.';
+
+  @override
   String get changePasswordNewPasswordLabel => 'New Password';
 
   @override
@@ -283,4 +287,28 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get errorServer =>
       'An unexpected error occurred. Please try again later.';
+
+  @override
+  String get signatureModalTitle => 'Your Digital Signature';
+
+  @override
+  String get signatureModalGuidance =>
+      'Please keep this signature safe. You will need it later to approve offers.';
+
+  @override
+  String get signatureModalDownloadError =>
+      'Failed to save signature. Please try again.';
+
+  @override
+  String get signatureModalOk => 'OK';
+
+  @override
+  String get signatureModalDownloadButton => 'Download signature';
+
+  @override
+  String get signUpErrorMissingSignature =>
+      'Registration incomplete. Please try again or contact support.';
+
+  @override
+  String get signatureModalCopySuccess => 'Signature copied to clipboard.';
 }

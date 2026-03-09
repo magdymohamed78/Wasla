@@ -83,6 +83,7 @@
 
   "changePasswordTitle": "تغيير كلمة المرور",
   "changePasswordDescription": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور المستخدمة سابقاً.",
+  "changePasswordDescription2": "إذا كان هذا البريد الإلكتروني مسجّلًا، فقد تم إرسال رمز التحقق.",
   "changePasswordNewPasswordLabel": "كلمة المرور الجديدة",
   "changePasswordConfirmPasswordLabel": "تأكيد كلمة المرور",
   "changePasswordConfirm": "تأكيد",
@@ -94,5 +95,13 @@
   "errorNetwork": "لا يوجد اتصال بالإنترنت. يرجى التحقق من الشبكة والمحاولة مرة أخرى.",
   "errorExpiredOtp": "انتهت صلاحية رمز التحقق. يرجى طلب رمز جديد.",
   "errorPasswordPolicy": "كلمة المرور لا تستوفي الحد الأدنى من المتطلبات.",
-  "errorServer": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً."
+  "errorServer": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.",
+
+  "signatureModalTitle": "توقيعك الرقمي",
+  "signatureModalGuidance": "يرجى الحفاظ على هذا التوقيع. ستحتاجه لاحقاً للموافقة على العروض.",
+  "signatureModalDownloadError": "فشل حفظ التوقيع. يرجى المحاولة مرة أخرى.",
+  "signatureModalOk": "موافق",
+  "signatureModalDownloadButton": "تحميل التوقيع",
+  "signUpErrorMissingSignature": "التسجيل غير مكتمل. يرجى المحاولة مرة أخرى أو التواصل مع الدعم.",
+  "signatureModalCopySuccess": "تم نسخ التوقيع إلى الحافظة."
 }
