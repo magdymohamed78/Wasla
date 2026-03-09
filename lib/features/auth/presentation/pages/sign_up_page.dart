@@ -9,6 +9,8 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/wasla_logo.dart';
 import '../cubit/register_cubit.dart';
 import '../cubit/register_state.dart';
+import '../cubit/signature_modal_cubit.dart';
+import '../widgets/digital_signature_modal.dart';
 import '../widgets/sign_up_form.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -31,7 +33,21 @@ class SignUpPage extends StatelessWidget {
         }
 
         if (state.status == RegisterStatus.success) {
-          context.go(AppRouter.registerSuccess);
+          final signature = state.digitalSignature;
+          if (signature == null || signature.isEmpty) return;
+          showDialog<void>(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => BlocProvider(
+              create: (_) => SignatureModalCubit(signature),
+              child: DigitalSignatureModal(
+                onOkPressed: () {
+                  Navigator.of(context).pop();
+                  context.go(AppRouter.registerSuccess);
+                },
+              ),
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -196,6 +212,8 @@ class SignUpPage extends StatelessWidget {
       case RegisterErrorCode.badRequest:
         return serverMessage ?? localizations.signUpErrorUnexpected;
       case RegisterErrorCode.unexpectedError:
+      case RegisterErrorCode.missingSignature:
+        return localizations.signUpErrorMissingSignature;
       case null:
         return localizations.signUpErrorUnexpected;
     }

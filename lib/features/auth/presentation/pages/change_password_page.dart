@@ -112,7 +112,6 @@ class ChangePasswordPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      
                       const SizedBox(height: AppDimensions.spacingXxl),
                       Container(
                         constraints: const BoxConstraints(maxWidth: 600),
@@ -131,13 +130,16 @@ class ChangePasswordPage extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(height: AppDimensions.spacingXl),
+                            const SizedBox(height: AppDimensions.spacingLg),
                             const _Illustration(),
                             const SizedBox(height: AppDimensions.spacingMd),
                             _Title(localizations: localizations),
                             const SizedBox(height: AppDimensions.spacingSm),
                             _Description(localizations: localizations),
-                            const SizedBox(height: AppDimensions.spacingXxl),
+                            const SizedBox(height: AppDimensions.spacingXl),
+                            _Description2(localizations: localizations),
+                            const SizedBox(height: AppDimensions.spacingLg),
+
                             const ChangePasswordForm(),
                           ],
                         ),
@@ -153,7 +155,6 @@ class ChangePasswordPage extends StatelessWidget {
     );
   }
 }
-
 
 class _Illustration extends StatelessWidget {
   const _Illustration();
@@ -198,6 +199,21 @@ class _Description extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       localizations.changePasswordDescription,
+      style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class _Description2 extends StatelessWidget {
+  const _Description2({required this.localizations});
+
+  final AppLocalizations localizations;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      localizations.changePasswordDescription2,
       style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
       textAlign: TextAlign.center,
     );

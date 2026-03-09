@@ -146,7 +146,21 @@ class RegisterCubit extends Cubit<RegisterState> {
 
       await _authRepository.saveSession(user, rememberMe: false);
 
-      emit(state.copyWith(status: RegisterStatus.success, user: user));
+      final signature = user.digitalSignature;
+      if (signature == null || signature.isEmpty) {
+        emit(state.copyWith(
+          status: RegisterStatus.failure,
+          errorCode: RegisterErrorCode.missingSignature,
+          errorCategory: RegisterErrorCategory.server,
+        ));
+        return;
+      }
+
+      emit(state.copyWith(
+        status: RegisterStatus.success,
+        user: user,
+        digitalSignature: signature,
+      ));
     } on DioException catch (e) {
       final errorResult = _extractErrorCode(e);
       _logError('DioException during register', e);

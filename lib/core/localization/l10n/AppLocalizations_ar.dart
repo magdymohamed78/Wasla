@@ -248,6 +248,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور المستخدمة سابقاً.';
 
   @override
+  String get changePasswordDescription2 =>
+      'إذا كان هذا البريد الإلكتروني مسجّلًا، فقد تم إرسال رمز التحقق.';
+
+  @override
   String get changePasswordNewPasswordLabel => 'كلمة المرور الجديدة';
 
   @override
@@ -282,4 +286,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get errorServer => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get signatureModalTitle => 'توقيعك الرقمي';
+
+  @override
+  String get signatureModalGuidance =>
+      'يرجى الحفاظ على هذا التوقيع. ستحتاجه لاحقاً للموافقة على العروض.';
+
+  @override
+  String get signatureModalDownloadError =>
+      'فشل حفظ التوقيع. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get signatureModalOk => 'موافق';
+
+  @override
+  String get signatureModalDownloadButton => 'تحميل التوقيع';
+
+  @override
+  String get signUpErrorMissingSignature =>
+      'التسجيل غير مكتمل. يرجى المحاولة مرة أخرى أو التواصل مع الدعم.';
+
+  @override
+  String get signatureModalCopySuccess => 'تم نسخ التوقيع إلى الحافظة.';
 }
