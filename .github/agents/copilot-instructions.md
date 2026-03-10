@@ -17,6 +17,8 @@ Auto-generated from all feature plans. Last updated: 2026-02-19
 - N/A for this feature (email/OTP held in-memory via route params and cubit state) (024-forgot-password-flow)
 - Dart (SDK ^3.11.0), Flutter + flutter_bloc ^8.1.6, go_router ^14.8.1, dio ^5.7.0, path_provider (transitive  promote to direct dependency) (025-signup-signature-modal)
 - No persistent storage for signature. File I/O only (write `.txt` to device documents directory via `path_provider`) (025-signup-signature-modal)
+- Dart (SDK ^3.11.0) / Flutter + flutter_bloc 8.1.6, go_router 14.8.1, dio 5.7.0, intl (any) (026-forgot-password-errors)
+- N/A (no new persistence) (026-forgot-password-errors)
 
 - Dart (null-safe), SDK ^3.11.0 + flutter_bloc (Cubit), go_router, flutter_localizations, intl (006-fix-logo-rtl)
 
@@ -36,8 +38,8 @@ tests/
 Dart (null-safe), SDK ^3.11.0: Follow standard conventions
 
 ## Recent Changes
+- 026-forgot-password-errors: Added Dart (SDK ^3.11.0) / Flutter + flutter_bloc 8.1.6, go_router 14.8.1, dio 5.7.0, intl (any)
 - 025-signup-signature-modal: Added Dart (SDK ^3.11.0), Flutter + flutter_bloc ^8.1.6, go_router ^14.8.1, dio ^5.7.0, path_provider (transitive  promote to direct dependency)
-- 024-forgot-password-flow: Added Dart 3.x / Flutter SDK ^3.11.0 + flutter_bloc ^8.1.6 (Cubit pattern), go_router ^14.8.1, dio ^5.7.0, flutter_localizations
 - 024-forgot-password-flow: Added Dart 3.x / Flutter SDK ^3.11.0 + flutter_bloc ^8.1.6 (Cubit pattern), go_router ^14.8.1, dio ^5.7.0, flutter_localizations
 
 

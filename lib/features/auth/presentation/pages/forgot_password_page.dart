@@ -6,6 +6,7 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/widgets/wasla_logo.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/use_cases/forgot_password_use_case.dart';
@@ -34,7 +35,11 @@ class ForgotPasswordPage extends StatelessWidget {
             context.read<ForgotPasswordCubit>().resetAfterToast();
           } else if (state.status == ForgotPasswordStatus.failure &&
               state.errorMessage != null) {
-            _showErrorSnackBar(context, state.errorMessage!);
+            if (state.errorMessage == 'inactive') {
+              _showInactiveSnackBar(context);
+            } else {
+              _showErrorSnackBar(context, state.errorMessage!);
+            }
           }
         },
         child: Scaffold(
@@ -170,27 +175,35 @@ class _Description extends StatelessWidget {
   }
 }
 
+void _showInactiveSnackBar(BuildContext context) {
+  final localizations = AppLocalizations.of(context);
+
+  ToastUtils.showError(
+    context,
+    localizations.forgotPasswordInactiveAccount,
+    action: SnackBarAction(
+      label: localizations.forgotPasswordContactSupport,
+      textColor: Colors.white,
+      onPressed: () {
+        context.push(AppRouter.support);
+      },
+    ),
+  );
+}
+
 void _showErrorSnackBar(BuildContext context, String errorKey) {
   final localizations = AppLocalizations.of(context);
   final message = _mapErrorMessage(errorKey, localizations);
 
-  ScaffoldMessenger.of(context)
-    ..clearSnackBars()
-    ..showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 4),
-        backgroundColor: AppColors.error,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-        ),
-        content: Text(message),
-      ),
-    );
+  ToastUtils.showError(context, message);
 }
 
 String _mapErrorMessage(String errorKey, AppLocalizations localizations) {
   switch (errorKey) {
+    case 'notFound':
+      return localizations.forgotPasswordNotRegistered;
+    case 'inactive':
+      return localizations.forgotPasswordInactiveAccount;
     case 'rateLimit':
       return localizations.errorRateLimit;
     case 'network':

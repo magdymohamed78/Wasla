@@ -176,8 +176,9 @@
           "01 - Authentication & Onboarding"
         ],
         "summary": "Request a one-time password (OTP) to reset a forgotten password.",
-        "description": "Always returns 200 OK to prevent email enumeration. If the email exists, a\r\n6-digit OTP valid for 10 minutes is sent.\r\n\r\n**Rate limit:** 5 requests per 60 seconds per IP.",
+        "description": "Validates that the provided email corresponds to an existing active account.\r\nIf valid, a 6-digit OTP valid for 10 minutes is sent to the email address.\r\n            \r\n**Rate limit:** 5 requests per 60 seconds per IP.\r\n            \r\n**Breaking change (011):** Previously always returned 200 OK regardless of email existence.\r\nNow returns 404 when the email is not registered, and 403 when the account is inactive.",
         "requestBody": {
+          "description": "Email address to send the OTP to.",
           "content": {
             "application/json": {
               "schema": {
@@ -198,7 +199,67 @@
         },
         "responses": {
           "200": {
-            "description": "Request processed (OTP sent if email is registered)."
+            "description": "OTP sent successfully to the registered email."
+          },
+          "400": {
+            "description": "Invalid email format.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Account exists but is inactive — contact support.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No account found with the provided email address.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           },
           "429": {
             "description": "Too many requests.",
@@ -302,8 +363,9 @@
           "01 - Authentication & Onboarding"
         ],
         "summary": "Resend a new OTP for password reset.",
-        "description": "Invalidates any previous active OTP and issues a fresh one.\r\nAlways returns 200 OK to prevent email enumeration.\r\n\r\n**Rate limit:** 5 requests per 60 seconds per IP.",
+        "description": "Invalidates any previous active OTP and issues a fresh one to the provided email address.\r\nValidates that the email corresponds to an existing active account.\r\n            \r\n**Rate limit:** 5 requests per 60 seconds per IP.",
         "requestBody": {
+          "description": "Email address to resend the OTP to.",
           "content": {
             "application/json": {
               "schema": {
@@ -324,7 +386,67 @@
         },
         "responses": {
           "200": {
-            "description": "Request processed (new OTP sent if email is registered)."
+            "description": "New OTP sent successfully to the registered email."
+          },
+          "400": {
+            "description": "Invalid email format.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Account exists but is inactive — contact support.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No account found with the provided email address.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           },
           "429": {
             "description": "Too many requests.",
@@ -2479,6 +2601,134 @@
           },
           "500": {
             "description": "Unexpected error."
+          }
+        }
+      }
+    },
+    "/api/customer-portal/my/digital-signature": {
+      "post": {
+        "tags": [
+          "02 - Customer Portal"
+        ],
+        "summary": "Retrieve the authenticated user's digital signature.",
+        "description": "Returns the Lead's unique digital signature after verifying the provided password.\r\n            \r\nA digital signature is generated automatically when a user registers and is used\r\nto accept company offers (e.g., signing a moving/service contract).\r\n            \r\n**Brute-force protection:** 5 consecutive incorrect passwords trigger a **15-minute lockout**.\r\nThe lockout counter resets on a successful verification.\r\n            \r\n**Why a password is required:** The digital signature authorises legal/commercial actions.\r\nPassword re-verification ensures it cannot be accessed by session-hijacking alone.",
+        "requestBody": {
+          "description": "Contains the current account password to verify.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetDigitalSignatureDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetDigitalSignatureDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetDigitalSignatureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password verified. Returns the digital signature string.",
+            "content": {
+              "text/plain": {
+                "schema": { }
+              },
+              "application/json": {
+                "schema": { }
+              },
+              "text/json": {
+                "schema": { }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error — password field is missing or empty.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid authentication token provided.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Incorrect password, or account is locked out due to too many failed attempts.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No digital signature associated with this account.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server error."
           }
         }
       }
@@ -8860,6 +9110,21 @@
         },
         "additionalProperties": false
       },
+      "GetDigitalSignatureDto": {
+        "required": [
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "password": {
+            "minLength": 1,
+            "type": "string",
+            "description": "The user's current password, required to verify identity before returning the signature."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Request DTO for retrieving a portal user's digital signature."
+      },
       "LeadCompanyDto": {
         "type": "object",
         "properties": {
@@ -11036,7 +11301,7 @@
     },
     {
       "name": "02 - Customer Portal",
-      "description": "Public and customer-authenticated endpoints for the self-service portal.\n\n**User lifecycle:**\n1. `POST /register` → creates a **Lead** (no company link). A unique **Digital Signature** is generated. JWT contains `leadId`.\n2. Lead browses companies and submits a **Service Request** to a company.\n3. Company manager processes the request → a **Customer** record is created. JWT gains `customerId`.\n4. Customer can now access offers, service requests, reviews, and dashboard.\n\nA lead can connect to **multiple** companies; each produces a separate Customer record."
+      "description": "Public and customer-authenticated endpoints for the self-service portal.\n\n**User lifecycle:**\n1. `POST /register` → creates a **Lead** (no company link). A unique **Digital Signature** is generated. JWT contains `leadId`.\n2. Lead browses companies and submits a **Service Request** to a company.\n3. Company manager processes the request → a **Customer** record is created. JWT gains `customerId`.\n4. Customer can now access offers, service requests, reviews, and dashboard.\n\nA lead can connect to **multiple** companies; each produces a separate Customer record.\n\n**Digital Signature:** `POST my/digital-signature` — retrieves the Lead's unique digital signature after password verification. Used to accept company offers. Protected by a 5-attempt brute-force lockout (15-minute cooldown)."
     },
     {
       "name": "03 - Company Management",

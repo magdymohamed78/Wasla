@@ -305,7 +305,7 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPasswordEmailInvalid.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid email'**
+  /// **'Enter a valid email address'**
   String get forgotPasswordEmailInvalid;
 
   /// No description provided for @signUpTitle.
@@ -392,11 +392,23 @@ abstract class AppLocalizations {
   /// **'Must be 100 characters or less'**
   String get signUpNameTooLong;
 
+  /// No description provided for @signUpNameLettersOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Name must contain letters only'**
+  String get signUpNameLettersOnly;
+
   /// No description provided for @signUpPhoneTooLong.
   ///
   /// In en, this message translates to:
   /// **'Must be 50 characters or less'**
   String get signUpPhoneTooLong;
+
+  /// No description provided for @signUpPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must be exactly 11 digits'**
+  String get signUpPhoneInvalid;
 
   /// No description provided for @signUpEmailRequired.
   ///
@@ -421,6 +433,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password must be at least 6 characters'**
   String get signUpPasswordTooShort;
+
+  /// No description provided for @signUpPasswordMissingUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one uppercase letter'**
+  String get signUpPasswordMissingUppercase;
+
+  /// No description provided for @signUpPasswordMissingNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one number'**
+  String get signUpPasswordMissingNumber;
 
   /// No description provided for @signUpConfirmPasswordRequired.
   ///
@@ -542,12 +566,6 @@ abstract class AppLocalizations {
   /// **'Your new password must be different from previously used passwords.'**
   String get changePasswordDescription;
 
-  /// No description provided for @changePasswordDescription2.
-  ///
-  /// In en, this message translates to:
-  /// **'If that email is registered, an OTP has been sent.'**
-  String get changePasswordDescription2;
-
   /// No description provided for @changePasswordNewPasswordLabel.
   ///
   /// In en, this message translates to:
@@ -655,6 +673,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Signature copied to clipboard.'**
   String get signatureModalCopySuccess;
+
+  /// No description provided for @forgotPasswordNotRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Email not registered. Please sign up first.'**
+  String get forgotPasswordNotRegistered;
+
+  /// No description provided for @forgotPasswordInactiveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Account exists but is inactive — please contact support.'**
+  String get forgotPasswordInactiveAccount;
+
+  /// No description provided for @forgotPasswordSignUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? Sign Up'**
+  String get forgotPasswordSignUp;
+
+  /// No description provided for @forgotPasswordSignUpAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get forgotPasswordSignUpAction;
+
+  /// No description provided for @forgotPasswordContactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Support'**
+  String get forgotPasswordContactSupport;
 }
 
 class _AppLocalizationsDelegate

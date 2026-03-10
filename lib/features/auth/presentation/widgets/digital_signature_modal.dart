@@ -6,6 +6,7 @@ import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../cubit/signature_modal_cubit.dart';
 import '../cubit/signature_modal_state.dart';
 
@@ -123,11 +124,9 @@ class DigitalSignatureModal extends StatelessWidget {
                                 Clipboard.setData(
                                   ClipboardData(text: state.signature),
                                 );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                   SnackBar(
-                                    content: Text(localizations.signatureModalCopySuccess),
-                                    duration: Duration(seconds: 2),
-                                  ),
+                                ToastUtils.showSuccess(
+                                  context,
+                                  localizations.signatureModalCopySuccess,
                                 );
                               },
                             ),

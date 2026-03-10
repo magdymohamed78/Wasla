@@ -70,6 +70,8 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   String _mapDioError(DioException e) {
     if (e.response != null) {
       final statusCode = e.response!.statusCode;
+      if (statusCode == 404) return 'notFound';
+      if (statusCode == 403) return 'inactive';
       if (statusCode == 429) return 'rateLimit';
     }
 

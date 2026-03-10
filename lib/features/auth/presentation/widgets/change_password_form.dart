@@ -317,6 +317,7 @@ class _ErrorMessage extends StatelessWidget {
             message,
             style: AppTypography.bodySmall.copyWith(color: AppColors.error),
             textAlign: TextAlign.center,
+             
           ),
         );
       },

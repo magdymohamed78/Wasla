@@ -121,7 +121,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get forgotPasswordEmailRequired => 'البريد الإلكتروني مطلوب';
 
   @override
-  String get forgotPasswordEmailInvalid => 'يرجى إدخال بريد إلكتروني صالح';
+  String get forgotPasswordEmailInvalid => 'أدخل بريدًا إلكترونيًا صالحًا';
 
   @override
   String get signUpTitle => 'إنشاء حساب';
@@ -166,7 +166,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signUpNameTooLong => 'يجب أن يكون 100 حرف أو أقل';
 
   @override
+  String get signUpNameLettersOnly => 'يجب أن يحتوي الاسم على أحرف فقط';
+
+  @override
   String get signUpPhoneTooLong => 'يجب أن يكون 50 حرف أو أقل';
+
+  @override
+  String get signUpPhoneInvalid => 'يجب أن يكون رقم الهاتف 11 رقماً بالضبط';
 
   @override
   String get signUpEmailRequired => 'البريد الإلكتروني مطلوب';
@@ -180,6 +186,14 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get signUpPasswordTooShort =>
       'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+
+  @override
+  String get signUpPasswordMissingUppercase =>
+      'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل';
+
+  @override
+  String get signUpPasswordMissingNumber =>
+      'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل';
 
   @override
   String get signUpConfirmPasswordRequired => 'يرجى تأكيد كلمة المرور';
@@ -248,10 +262,6 @@ class AppLocalizationsAr extends AppLocalizations {
       'يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور المستخدمة سابقاً.';
 
   @override
-  String get changePasswordDescription2 =>
-      'إذا كان هذا البريد الإلكتروني مسجّلًا، فقد تم إرسال رمز التحقق.';
-
-  @override
   String get changePasswordNewPasswordLabel => 'كلمة المرور الجديدة';
 
   @override
@@ -310,4 +320,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get signatureModalCopySuccess => 'تم نسخ التوقيع إلى الحافظة.';
+
+  @override
+  String get forgotPasswordNotRegistered =>
+      'البريد الإلكتروني غير مسجل. يرجى إنشاء حساب أولاً.';
+
+  @override
+  String get forgotPasswordInactiveAccount =>
+      'الحساب موجود لكنه غير مفعل — يرجى التواصل مع الدعم.';
+
+  @override
+  String get forgotPasswordSignUp => 'ليس لديك حساب؟ سجل الآن';
+
+  @override
+  String get forgotPasswordSignUpAction => 'سجل الآن';
+
+  @override
+  String get forgotPasswordContactSupport => 'تواصل مع الدعم';
 }

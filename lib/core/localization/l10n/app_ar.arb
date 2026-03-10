@@ -34,7 +34,7 @@
   "forgotPasswordSend": "إرسال",
   "forgotPasswordSuccess": "تم إرسال رابط إعادة التعيين بنجاح",
   "forgotPasswordEmailRequired": "البريد الإلكتروني مطلوب",
-  "forgotPasswordEmailInvalid": "يرجى إدخال بريد إلكتروني صالح",
+  "forgotPasswordEmailInvalid": "أدخل بريدًا إلكترونيًا صالحًا",
   "signUpTitle": "إنشاء حساب",
   "signUpFirstName": "الاسم الأول",
   "signUpLastName": "اسم العائلة",
@@ -49,11 +49,15 @@
   "signUpFirstNameRequired": "الاسم الأول مطلوب",
   "signUpLastNameRequired": "اسم العائلة مطلوب",
   "signUpNameTooLong": "يجب أن يكون 100 حرف أو أقل",
+  "signUpNameLettersOnly": "يجب أن يحتوي الاسم على أحرف فقط",
   "signUpPhoneTooLong": "يجب أن يكون 50 حرف أو أقل",
+  "signUpPhoneInvalid": "يجب أن يكون رقم الهاتف 11 رقماً بالضبط",
   "signUpEmailRequired": "البريد الإلكتروني مطلوب",
   "signUpEmailInvalid": "أدخل بريد إلكتروني صالح",
   "signUpPasswordRequired": "كلمة المرور مطلوبة",
   "signUpPasswordTooShort": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+  "signUpPasswordMissingUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
+  "signUpPasswordMissingNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
   "signUpConfirmPasswordRequired": "يرجى تأكيد كلمة المرور",
   "signUpConfirmPasswordMismatch": "كلمات المرور غير متطابقة",
   "signUpErrorEmailInUse": "هذا البريد الإلكتروني مسجل بالفعل",
@@ -83,7 +87,6 @@
 
   "changePasswordTitle": "تغيير كلمة المرور",
   "changePasswordDescription": "يجب أن تكون كلمة المرور الجديدة مختلفة عن كلمات المرور المستخدمة سابقاً.",
-  "changePasswordDescription2": "إذا كان هذا البريد الإلكتروني مسجّلًا، فقد تم إرسال رمز التحقق.",
   "changePasswordNewPasswordLabel": "كلمة المرور الجديدة",
   "changePasswordConfirmPasswordLabel": "تأكيد كلمة المرور",
   "changePasswordConfirm": "تأكيد",
@@ -103,5 +106,11 @@
   "signatureModalOk": "موافق",
   "signatureModalDownloadButton": "تحميل التوقيع",
   "signUpErrorMissingSignature": "التسجيل غير مكتمل. يرجى المحاولة مرة أخرى أو التواصل مع الدعم.",
-  "signatureModalCopySuccess": "تم نسخ التوقيع إلى الحافظة."
+  "signatureModalCopySuccess": "تم نسخ التوقيع إلى الحافظة.",
+
+  "forgotPasswordNotRegistered": "البريد الإلكتروني غير مسجل. يرجى إنشاء حساب أولاً.",
+  "forgotPasswordInactiveAccount": "الحساب موجود لكنه غير مفعل — يرجى التواصل مع الدعم.",
+  "forgotPasswordSignUp": "ليس لديك حساب؟ سجل الآن",
+  "forgotPasswordSignUpAction": "سجل الآن",
+  "forgotPasswordContactSupport": "تواصل مع الدعم"
 }

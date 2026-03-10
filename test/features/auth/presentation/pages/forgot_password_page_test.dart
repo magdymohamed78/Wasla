@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,6 +31,14 @@ void main() {
           GoRoute(
             path: '/otp-verification',
             builder: (_, _) => const Scaffold(body: Text('OTP Page')),
+          ),
+          GoRoute(
+            path: '/register',
+            builder: (_, _) => const Scaffold(body: Text('Register Page')),
+          ),
+          GoRoute(
+            path: '/support',
+            builder: (_, _) => const Scaffold(body: Text('Support Page')),
           ),
         ],
       );
@@ -117,6 +126,58 @@ void main() {
       await tester.pump();
 
       expect(find.text('Email is required'), findsOneWidget);
+    });
+
+    testWidgets('sign-up link is always visible on the page', (tester) async {
+      await tester.pumpWidget(buildSubject());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign Up'), findsOneWidget);
+    });
+
+    testWidgets('sign-up link navigates to register page', (tester) async {
+      await tester.pumpWidget(buildSubject());
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.text('Sign Up'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Sign Up'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Register Page'), findsOneWidget);
+    });
+
+    testWidgets('403 error shows snackbar with Contact Support action that navigates to support page', (tester) async {
+      when(() => mockAuthRepository.forgotPassword(email: any(named: 'email')))
+          .thenThrow(
+        DioException(
+          requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
+          response: Response(
+            requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
+            statusCode: 403,
+          ),
+          type: DioExceptionType.badResponse,
+        ),
+      );
+
+      await tester.pumpWidget(buildSubject());
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byType(TextField), 'inactive@example.com');
+      await tester.pump();
+
+      await tester.ensureVisible(find.byType(ElevatedButton));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
+
+      expect(find.text('Contact Support'), findsOneWidget);
+
+      await tester.tap(find.text('Contact Support'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Support Page'), findsOneWidget);
     });
   });
 }

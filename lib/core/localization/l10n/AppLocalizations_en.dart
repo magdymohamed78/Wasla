@@ -120,7 +120,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPasswordEmailRequired => 'Email is required';
 
   @override
-  String get forgotPasswordEmailInvalid => 'Please enter a valid email';
+  String get forgotPasswordEmailInvalid => 'Enter a valid email address';
 
   @override
   String get signUpTitle => 'Sign Up';
@@ -165,7 +165,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signUpNameTooLong => 'Must be 100 characters or less';
 
   @override
+  String get signUpNameLettersOnly => 'Name must contain letters only';
+
+  @override
   String get signUpPhoneTooLong => 'Must be 50 characters or less';
+
+  @override
+  String get signUpPhoneInvalid => 'Phone number must be exactly 11 digits';
 
   @override
   String get signUpEmailRequired => 'Email is required';
@@ -178,6 +184,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signUpPasswordTooShort => 'Password must be at least 6 characters';
+
+  @override
+  String get signUpPasswordMissingUppercase =>
+      'Password must contain at least one uppercase letter';
+
+  @override
+  String get signUpPasswordMissingNumber =>
+      'Password must contain at least one number';
 
   @override
   String get signUpConfirmPasswordRequired => 'Please confirm your password';
@@ -247,10 +261,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your new password must be different from previously used passwords.';
 
   @override
-  String get changePasswordDescription2 =>
-      'If that email is registered, an OTP has been sent.';
-
-  @override
   String get changePasswordNewPasswordLabel => 'New Password';
 
   @override
@@ -311,4 +321,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get signatureModalCopySuccess => 'Signature copied to clipboard.';
+
+  @override
+  String get forgotPasswordNotRegistered =>
+      'Email not registered. Please sign up first.';
+
+  @override
+  String get forgotPasswordInactiveAccount =>
+      'Account exists but is inactive — please contact support.';
+
+  @override
+  String get forgotPasswordSignUp => 'Don\'t have an account? Sign Up';
+
+  @override
+  String get forgotPasswordSignUpAction => 'Sign Up';
+
+  @override
+  String get forgotPasswordContactSupport => 'Contact Support';
 }

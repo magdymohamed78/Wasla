@@ -6,6 +6,7 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/widgets/wasla_logo.dart';
 import '../cubit/login_cubit.dart';
 import '../cubit/login_state.dart';
@@ -164,34 +165,19 @@ class LoginPage extends StatelessWidget {
     final showRetry = errorCategory == LoginErrorCategory.server || 
                       errorCategory == LoginErrorCategory.network;
     
-    ScaffoldMessenger.of(context)
-      ..clearSnackBars()
-      ..showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 4),
-          backgroundColor: AppColors.error,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-          ),
-          content: Row(
-            children: [
-              Expanded(child: Text(message)),
-              if (showRetry)
-                TextButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    context.read<LoginCubit>().login();
-                  },
-                  child:  Text(
-                    localizations.networkErrorRetry,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      );
+    ToastUtils.showError(
+      context,
+      message,
+      action: showRetry
+          ? SnackBarAction(
+              label: localizations.networkErrorRetry,
+              textColor: Colors.white,
+              onPressed: () {
+                context.read<LoginCubit>().login();
+              },
+            )
+          : null,
+    );
   }
 
   String _mapErrorCodeToMessage(LoginErrorCode? errorCode, AppLocalizations localizations) {

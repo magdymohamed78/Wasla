@@ -6,6 +6,7 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/use_cases/resend_otp_use_case.dart';
 import '../../domain/use_cases/reset_password_use_case.dart';
@@ -53,21 +54,7 @@ class ChangePasswordPage extends StatelessWidget {
                 prev.status != curr.status || prev.errorType != curr.errorType,
             listener: (context, state) {
               if (state.status == ChangePasswordStatus.success) {
-                ScaffoldMessenger.of(context)
-                  ..clearSnackBars()
-                  ..showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      duration: const Duration(seconds: 4),
-                      backgroundColor: Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.borderRadiusSm,
-                        ),
-                      ),
-                      content: Text(localizations.changePasswordSuccess),
-                    ),
-                  );
+                ToastUtils.showSuccess(context, localizations.changePasswordSuccess);
                 context.go(AppRouter.login);
               }
 
@@ -75,21 +62,7 @@ class ChangePasswordPage extends StatelessWidget {
               // forgot-password so the user can request a brand new OTP.
               if (state.status == ChangePasswordStatus.failure &&
                   state.errorType == ChangePasswordErrorType.otpExpired) {
-                ScaffoldMessenger.of(context)
-                  ..clearSnackBars()
-                  ..showSnackBar(
-                    SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      duration: const Duration(seconds: 4),
-                      backgroundColor: AppColors.error,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.borderRadiusSm,
-                        ),
-                      ),
-                      content: Text(localizations.errorExpiredOtp),
-                    ),
-                  );
+                ToastUtils.showError(context, localizations.errorExpiredOtp);
                 Future.delayed(const Duration(seconds: 3), () {
                   if (context.mounted) {
                     context.go(AppRouter.forgotPassword);
@@ -137,9 +110,7 @@ class ChangePasswordPage extends StatelessWidget {
                             const SizedBox(height: AppDimensions.spacingSm),
                             _Description(localizations: localizations),
                             const SizedBox(height: AppDimensions.spacingXl),
-                            _Description2(localizations: localizations),
-                            const SizedBox(height: AppDimensions.spacingLg),
-
+                           
                             const ChangePasswordForm(),
                           ],
                         ),
@@ -205,17 +176,3 @@ class _Description extends StatelessWidget {
   }
 }
 
-class _Description2 extends StatelessWidget {
-  const _Description2({required this.localizations});
-
-  final AppLocalizations localizations;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      localizations.changePasswordDescription2,
-      style: AppTypography.bodyMedium.copyWith(color: AppColors.textSecondary),
-      textAlign: TextAlign.center,
-    );
-  }
-}

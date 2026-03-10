@@ -34,7 +34,7 @@
   "forgotPasswordSend": "Send",
   "forgotPasswordSuccess": "Reset link sent successfully",
   "forgotPasswordEmailRequired": "Email is required",
-  "forgotPasswordEmailInvalid": "Please enter a valid email",
+  "forgotPasswordEmailInvalid": "Enter a valid email address",
   "signUpTitle": "Sign Up",
   "signUpFirstName": "First Name",
   "signUpLastName": "Last Name",
@@ -49,11 +49,15 @@
   "signUpFirstNameRequired": "First name is required",
   "signUpLastNameRequired": "Last name is required",
   "signUpNameTooLong": "Must be 100 characters or less",
+  "signUpNameLettersOnly": "Name must contain letters only",
   "signUpPhoneTooLong": "Must be 50 characters or less",
+  "signUpPhoneInvalid": "Phone number must be exactly 11 digits",
   "signUpEmailRequired": "Email is required",
   "signUpEmailInvalid": "Enter a valid email address",
   "signUpPasswordRequired": "Password is required",
   "signUpPasswordTooShort": "Password must be at least 6 characters",
+  "signUpPasswordMissingUppercase": "Password must contain at least one uppercase letter",
+  "signUpPasswordMissingNumber": "Password must contain at least one number",
   "signUpConfirmPasswordRequired": "Please confirm your password",
   "signUpConfirmPasswordMismatch": "Passwords do not match",
   "signUpErrorEmailInUse": "This email is already registered",
@@ -83,7 +87,7 @@
 
   "changePasswordTitle": "Change Password",
   "changePasswordDescription": "Your new password must be different from previously used passwords.",
-  "changePasswordDescription2": "If that email is registered, an OTP has been sent.",
+  
   "changePasswordNewPasswordLabel": "New Password",
   "changePasswordConfirmPasswordLabel": "Confirm Password",
   "changePasswordConfirm": "Confirm",
@@ -103,5 +107,11 @@
   "signatureModalOk": "OK",
   "signatureModalDownloadButton": "Download signature",
   "signUpErrorMissingSignature": "Registration incomplete. Please try again or contact support.",
-  "signatureModalCopySuccess": "Signature copied to clipboard."
+  "signatureModalCopySuccess": "Signature copied to clipboard.",
+
+  "forgotPasswordNotRegistered": "Email not registered. Please sign up first.",
+  "forgotPasswordInactiveAccount": "Account exists but is inactive — please contact support.",
+  "forgotPasswordSignUp": "Don't have an account? Sign Up",
+  "forgotPasswordSignUpAction": "Sign Up",
+  "forgotPasswordContactSupport": "Contact Support"
 }

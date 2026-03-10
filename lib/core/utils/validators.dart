@@ -3,6 +3,12 @@ class Validators {
     r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
   );
 
+  static final _uppercaseRegex = RegExp(r'[A-Z]');
+  static final _digitRegex = RegExp(r'\d');
+  static final _phoneRegex = RegExp(r'^\d{11}$');
+  // Accepts Latin letters, Arabic letters (U+0600–U+06FF), and spaces
+  static final _nameLettersOnlyRegex = RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$');
+
   static String? validateEmail(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'email_empty';
@@ -27,6 +33,9 @@ class Validators {
     if (value.trim().length > 100) {
       return 'name_too_long';
     }
+    if (!_nameLettersOnlyRegex.hasMatch(value.trim())) {
+      return 'name_letters_only';
+    }
     return null;
   }
 
@@ -34,8 +43,8 @@ class Validators {
     if (value == null || value.trim().isEmpty) {
       return null;
     }
-    if (value.trim().length > 50) {
-      return 'phone_too_long';
+    if (!_phoneRegex.hasMatch(value.trim())) {
+      return 'phone_invalid';
     }
     return null;
   }
@@ -46,6 +55,12 @@ class Validators {
     }
     if (value.trim().length < 6) {
       return 'password_too_short';
+    }
+    if (!_uppercaseRegex.hasMatch(value)) {
+      return 'password_missing_uppercase';
+    }
+    if (!_digitRegex.hasMatch(value)) {
+      return 'password_missing_number';
     }
     return null;
   }

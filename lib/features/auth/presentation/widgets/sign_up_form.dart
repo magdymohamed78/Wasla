@@ -362,6 +362,8 @@ class SignUpForm extends StatelessWidget {
         return localizations.signUpFirstNameRequired;
       case 'name_too_long':
         return localizations.signUpNameTooLong;
+      case 'name_letters_only':
+        return localizations.signUpNameLettersOnly;
       default:
         return null;
     }
@@ -372,6 +374,8 @@ class SignUpForm extends StatelessWidget {
     switch (errorKey) {
       case 'phone_too_long':
         return localizations.signUpPhoneTooLong;
+      case 'phone_invalid':
+        return localizations.signUpPhoneInvalid;
       default:
         return null;
     }
@@ -399,6 +403,10 @@ class SignUpForm extends StatelessWidget {
         return localizations.signUpPasswordRequired;
       case 'password_too_short':
         return localizations.signUpPasswordTooShort;
+      case 'password_missing_uppercase':
+        return localizations.signUpPasswordMissingUppercase;
+      case 'password_missing_number':
+        return localizations.signUpPasswordMissingNumber;
       default:
         return null;
     }

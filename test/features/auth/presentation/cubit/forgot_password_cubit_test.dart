@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:waslaapp/features/auth/domain/use_cases/forgot_password_use_case.dart';
@@ -110,6 +111,74 @@ void main() {
           'status',
           ForgotPasswordStatus.initial,
         ),
+      ],
+    );
+
+    blocTest<ForgotPasswordCubit, ForgotPasswordState>(
+      'submit emits failure with notFound when API returns 404',
+      build: () {
+        when(() => mockUseCase(email: any(named: 'email'))).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
+            response: Response(
+              requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
+              statusCode: 404,
+            ),
+            type: DioExceptionType.badResponse,
+          ),
+        );
+        return ForgotPasswordCubit(forgotPasswordUseCase: mockUseCase);
+      },
+      seed: () => const ForgotPasswordState(
+        email: 'notfound@example.com',
+        emailError: null,
+      ),
+      act: (cubit) => cubit.submit(),
+      wait: const Duration(milliseconds: 600),
+      expect: () => [
+        isA<ForgotPasswordState>().having(
+          (s) => s.status,
+          'status',
+          ForgotPasswordStatus.loading,
+        ),
+        isA<ForgotPasswordState>()
+            .having((s) => s.isSubmitting, 'isSubmitting', false)
+            .having((s) => s.status, 'status', ForgotPasswordStatus.failure)
+            .having((s) => s.errorMessage, 'errorMessage', 'notFound'),
+      ],
+    );
+
+    blocTest<ForgotPasswordCubit, ForgotPasswordState>(
+      'submit emits failure with inactive when API returns 403',
+      build: () {
+        when(() => mockUseCase(email: any(named: 'email'))).thenThrow(
+          DioException(
+            requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
+            response: Response(
+              requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
+              statusCode: 403,
+            ),
+            type: DioExceptionType.badResponse,
+          ),
+        );
+        return ForgotPasswordCubit(forgotPasswordUseCase: mockUseCase);
+      },
+      seed: () => const ForgotPasswordState(
+        email: 'inactive@example.com',
+        emailError: null,
+      ),
+      act: (cubit) => cubit.submit(),
+      wait: const Duration(milliseconds: 600),
+      expect: () => [
+        isA<ForgotPasswordState>().having(
+          (s) => s.status,
+          'status',
+          ForgotPasswordStatus.loading,
+        ),
+        isA<ForgotPasswordState>()
+            .having((s) => s.isSubmitting, 'isSubmitting', false)
+            .having((s) => s.status, 'status', ForgotPasswordStatus.failure)
+            .having((s) => s.errorMessage, 'errorMessage', 'inactive'),
       ],
     );
   });

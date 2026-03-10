@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/localization/l10n/AppLocalizations.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -18,10 +20,10 @@ class ForgotPasswordForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _EmailField(localizations: localizations),
-        const SizedBox(height: AppDimensions.spacingSm),
-        const _ErrorMessage(),
         const SizedBox(height: AppDimensions.spacingXxl),
         _SubmitButton(localizations: localizations),
+        const SizedBox(height: AppDimensions.spacingMd),
+        _SignUpLink(localizations: localizations),
         const SizedBox(height: AppDimensions.spacingLg),
       ],
     );
@@ -65,15 +67,11 @@ class _EmailField extends StatelessWidget {
     );
   }
 
-  String _mapError(String? error, AppLocalizations localizations) {
-    switch (error) {
-      case 'email_empty':
-        return localizations.forgotPasswordEmailRequired;
-      case 'email_invalid':
-        return localizations.forgotPasswordEmailInvalid;
-      default:
-        return '';
+  String? _mapError(String? error, AppLocalizations localizations) {
+    if (error == 'email_invalid') {
+      return localizations.forgotPasswordEmailInvalid;
     }
+    return null;
   }
 }
 
@@ -132,44 +130,33 @@ class _SubmitButton extends StatelessWidget {
   }
 }
 
-class _ErrorMessage extends StatelessWidget {
-  const _ErrorMessage();
+class _SignUpLink extends StatelessWidget {
+  const _SignUpLink({required this.localizations});
+
+  final AppLocalizations localizations;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
-      buildWhen: (prev, curr) =>
-          prev.errorMessage != curr.errorMessage ||
-          prev.status != curr.status,
-      builder: (context, state) {
-        if (state.status != ForgotPasswordStatus.failure ||
-            state.errorMessage == null) {
-          return const SizedBox.shrink();
-        }
-
-        final localizations = AppLocalizations.of(context);
-        final message = _mapErrorMessage(state.errorMessage!, localizations);
-
-        return Padding(
-          padding: const EdgeInsets.only(top: AppDimensions.spacingSm),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          localizations.forgotPasswordSignUp.split(
+            localizations.forgotPasswordSignUpAction,
+          )[0],
+          style: AppTypography.bodyMedium,
+        ),
+        GestureDetector(
+          onTap: () => context.push(AppRouter.register),
           child: Text(
-            message,
-            style: AppTypography.bodySmall.copyWith(color: AppColors.error),
-            textAlign: TextAlign.center,
+            localizations.forgotPasswordSignUpAction,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.brandRed,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        );
-      },
+        ),
+      ],
     );
-  }
-
-  String _mapErrorMessage(String errorKey, AppLocalizations localizations) {
-    switch (errorKey) {
-      case 'rateLimit':
-        return localizations.errorRateLimit;
-      case 'network':
-        return localizations.errorNetwork;
-      default:
-        return localizations.errorServer;
-    }
   }
 }
