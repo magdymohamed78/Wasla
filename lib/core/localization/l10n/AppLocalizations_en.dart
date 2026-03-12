@@ -180,18 +180,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signUpEmailInvalid => 'Enter a valid email address';
 
   @override
-  String get signUpPasswordRequired => 'Password is required';
+  String get signUpPasswordRequired => 'Enter a password';
 
   @override
-  String get signUpPasswordTooShort => 'Password must be at least 6 characters';
+  String get signUpPasswordTooShort => 'Use 8+ characters';
 
   @override
-  String get signUpPasswordMissingUppercase =>
-      'Password must contain at least one uppercase letter';
+  String get signUpPasswordMissingUppercase => 'Add an uppercase letter';
 
   @override
-  String get signUpPasswordMissingNumber =>
-      'Password must contain at least one number';
+  String get signUpPasswordMissingNumber => 'Add a number';
+
+  @override
+  String get signUpPasswordMissingSpecial => 'Add a special character';
 
   @override
   String get signUpConfirmPasswordRequired => 'Please confirm your password';
@@ -338,4 +339,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordContactSupport => 'Contact Support';
+
+  @override
+  String forgotPasswordRateLimitWait(int seconds) {
+    return 'Try again in ${seconds}s';
+  }
 }

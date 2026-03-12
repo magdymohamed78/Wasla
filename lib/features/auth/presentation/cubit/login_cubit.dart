@@ -23,24 +23,34 @@ class LoginCubit extends Cubit<LoginState> {
   void emailChanged(String email) {
     emit(state.copyWith(
       email: email,
-      emailError: state.hasSubmitted ? _validateEmail(email) : null,
+      emailError: (state.hasSubmitted || state.emailTouched) ? _validateEmail(email) : null,
       status: LoginStatus.initial,
       errorCategory: null,
       errorCode: null,
-      isRateLimited: false,
-      rateLimitRemainingSeconds: 0,
+    ));
+  }
+
+  void emailBlurred() {
+    emit(state.copyWith(
+      emailTouched: true,
+      emailError: _validateEmail(state.email),
     ));
   }
 
   void passwordChanged(String password) {
     emit(state.copyWith(
       password: password,
-      passwordError: state.hasSubmitted ? _validatePassword(password) : null,
+      passwordError: (state.hasSubmitted || state.passwordTouched) ? _validatePassword(password) : null,
       status: LoginStatus.initial,
       errorCategory: null,
       errorCode: null,
-      isRateLimited: false,
-      rateLimitRemainingSeconds: 0,
+    ));
+  }
+
+  void passwordBlurred() {
+    emit(state.copyWith(
+      passwordTouched: true,
+      passwordError: _validatePassword(state.password),
     ));
   }
 
@@ -162,12 +172,18 @@ class LoginCubit extends Cubit<LoginState> {
 
   void _startRateLimitCooldown() {
     _cooldownTimer?.cancel();
+    const totalSeconds = 60;
     emit(state.copyWith(
       isRateLimited: true,
-      rateLimitRemainingSeconds: 30,
+      rateLimitRemainingSeconds: totalSeconds,
     ));
+    var remaining = totalSeconds;
     _cooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final remaining = state.rateLimitRemainingSeconds - 1;
+      remaining--;
+      if (isClosed) {
+        timer.cancel();
+        return;
+      }
       if (remaining <= 0) {
         timer.cancel();
         emit(state.copyWith(

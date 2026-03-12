@@ -181,19 +181,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signUpEmailInvalid => 'أدخل بريد إلكتروني صالح';
 
   @override
-  String get signUpPasswordRequired => 'كلمة المرور مطلوبة';
+  String get signUpPasswordRequired => 'أدخل كلمة مرور';
 
   @override
-  String get signUpPasswordTooShort =>
-      'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+  String get signUpPasswordTooShort => 'استخدم 8 أحرف أو أكثر';
 
   @override
-  String get signUpPasswordMissingUppercase =>
-      'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل';
+  String get signUpPasswordMissingUppercase => 'أضف حرفاً كبيراً';
 
   @override
-  String get signUpPasswordMissingNumber =>
-      'يجب أن تحتوي كلمة المرور على رقم واحد على الأقل';
+  String get signUpPasswordMissingNumber => 'أضف رقماً';
+
+  @override
+  String get signUpPasswordMissingSpecial => 'أضف رمزاً خاصاً';
 
   @override
   String get signUpConfirmPasswordRequired => 'يرجى تأكيد كلمة المرور';
@@ -337,4 +337,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get forgotPasswordContactSupport => 'تواصل مع الدعم';
+
+  @override
+  String forgotPasswordRateLimitWait(int seconds) {
+    return 'أعد المحاولة بعد $seconds ثانية';
+  }
 }

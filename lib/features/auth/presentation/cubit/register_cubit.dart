@@ -22,40 +22,61 @@ class RegisterCubit extends Cubit<RegisterState> {
   void firstNameChanged(String firstName) {
     emit(state.copyWith(
       firstName: firstName,
-      firstNameError: state.hasSubmitted ? _validateName(firstName) : null,
+      firstNameError: (state.hasSubmitted || state.firstNameTouched) ? _validateName(firstName) : null,
       status: RegisterStatus.initial,
       errorCode: null,
       errorCategory: null,
       serverErrorMessage: null,
+    ));
+  }
+
+  void firstNameBlurred() {
+    emit(state.copyWith(
+      firstNameTouched: true,
+      firstNameError: _validateName(state.firstName),
     ));
   }
 
   void lastNameChanged(String lastName) {
     emit(state.copyWith(
       lastName: lastName,
-      lastNameError: state.hasSubmitted ? _validateName(lastName) : null,
+      lastNameError: (state.hasSubmitted || state.lastNameTouched) ? _validateName(lastName) : null,
       status: RegisterStatus.initial,
       errorCode: null,
       errorCategory: null,
       serverErrorMessage: null,
+    ));
+  }
+
+  void lastNameBlurred() {
+    emit(state.copyWith(
+      lastNameTouched: true,
+      lastNameError: _validateName(state.lastName),
     ));
   }
 
   void phoneChanged(String phoneNumber) {
     emit(state.copyWith(
       phoneNumber: phoneNumber,
-      phoneError: state.hasSubmitted ? _validatePhone(phoneNumber) : null,
+      phoneError: (state.hasSubmitted || state.phoneTouched) ? _validatePhone(phoneNumber) : null,
       status: RegisterStatus.initial,
       errorCode: null,
       errorCategory: null,
       serverErrorMessage: null,
+    ));
+  }
+
+  void phoneBlurred() {
+    emit(state.copyWith(
+      phoneTouched: true,
+      phoneError: _validatePhone(state.phoneNumber),
     ));
   }
 
   void emailChanged(String email) {
     emit(state.copyWith(
       email: email,
-      emailError: state.hasSubmitted ? _validateEmail(email) : null,
+      emailError: (state.hasSubmitted || state.emailTouched) ? _validateEmail(email) : null,
       status: RegisterStatus.initial,
       errorCode: null,
       errorCategory: null,
@@ -63,11 +84,18 @@ class RegisterCubit extends Cubit<RegisterState> {
     ));
   }
 
+  void emailBlurred() {
+    emit(state.copyWith(
+      emailTouched: true,
+      emailError: _validateEmail(state.email),
+    ));
+  }
+
   void passwordChanged(String password) {
     emit(state.copyWith(
       password: password,
-      passwordError: state.hasSubmitted ? _validatePassword(password) : null,
-      confirmPasswordError: state.hasSubmitted && state.confirmPassword.isNotEmpty
+      passwordError: (state.hasSubmitted || state.passwordTouched) ? _validatePassword(password) : null,
+      confirmPasswordError: (state.hasSubmitted || state.confirmPasswordTouched) && state.confirmPassword.isNotEmpty
           ? _validateConfirmPassword(state.confirmPassword, password)
           : null,
       status: RegisterStatus.initial,
@@ -77,16 +105,30 @@ class RegisterCubit extends Cubit<RegisterState> {
     ));
   }
 
+  void passwordBlurred() {
+    emit(state.copyWith(
+      passwordTouched: true,
+      passwordError: _validatePassword(state.password),
+    ));
+  }
+
   void confirmPasswordChanged(String confirmPassword) {
     emit(state.copyWith(
       confirmPassword: confirmPassword,
-      confirmPasswordError: state.hasSubmitted
+      confirmPasswordError: (state.hasSubmitted || state.confirmPasswordTouched)
           ? _validateConfirmPassword(confirmPassword, state.password)
           : null,
       status: RegisterStatus.initial,
       errorCode: null,
       errorCategory: null,
       serverErrorMessage: null,
+    ));
+  }
+
+  void confirmPasswordBlurred() {
+    emit(state.copyWith(
+      confirmPasswordTouched: true,
+      confirmPasswordError: _validateConfirmPassword(state.confirmPassword, state.password),
     ));
   }
 

@@ -14,7 +14,7 @@ class OtpVerificationState {
     this.otp = '',
     this.otpDigits = const ['', '', '', '', '', ''],
     this.status = OtpVerificationStatus.initial,
-    this.timerRemainingSeconds = 60,
+    this.timerRemainingSeconds = 120,
     this.isResending = false,
     this.errorMessage,
   });

@@ -8,8 +8,54 @@ import '../../../../core/widgets/primary_button.dart';
 import '../cubit/register_cubit.dart';
 import '../cubit/register_state.dart';
 
-class SignUpForm extends StatelessWidget {
+class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
+
+  @override
+  State<SignUpForm> createState() => _SignUpFormState();
+}
+
+class _SignUpFormState extends State<SignUpForm> {
+  final _firstNameFocus = FocusNode();
+  final _lastNameFocus = FocusNode();
+  final _phoneFocus = FocusNode();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _confirmPasswordFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _firstNameFocus.addListener(() {
+      if (!_firstNameFocus.hasFocus) context.read<RegisterCubit>().firstNameBlurred();
+    });
+    _lastNameFocus.addListener(() {
+      if (!_lastNameFocus.hasFocus) context.read<RegisterCubit>().lastNameBlurred();
+    });
+    _phoneFocus.addListener(() {
+      if (!_phoneFocus.hasFocus) context.read<RegisterCubit>().phoneBlurred();
+    });
+    _emailFocus.addListener(() {
+      if (!_emailFocus.hasFocus) context.read<RegisterCubit>().emailBlurred();
+    });
+    _passwordFocus.addListener(() {
+      if (!_passwordFocus.hasFocus) context.read<RegisterCubit>().passwordBlurred();
+    });
+    _confirmPasswordFocus.addListener(() {
+      if (!_confirmPasswordFocus.hasFocus) context.read<RegisterCubit>().confirmPasswordBlurred();
+    });
+  }
+
+  @override
+  void dispose() {
+    _firstNameFocus.dispose();
+    _lastNameFocus.dispose();
+    _phoneFocus.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _confirmPasswordFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +70,7 @@ class SignUpForm extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
+                focusNode: _firstNameFocus,
                 onChanged: cubit.firstNameChanged,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
@@ -67,6 +114,7 @@ class SignUpForm extends StatelessWidget {
               const SizedBox(height: AppDimensions.spacingMd),
 
               TextFormField(
+                focusNode: _lastNameFocus,
                 onChanged: cubit.lastNameChanged,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
@@ -110,6 +158,7 @@ class SignUpForm extends StatelessWidget {
               const SizedBox(height: AppDimensions.spacingMd),
 
               TextFormField(
+                focusNode: _phoneFocus,
                 onChanged: cubit.phoneChanged,
                 keyboardType: TextInputType.phone,
                 textInputAction: TextInputAction.next,
@@ -154,6 +203,7 @@ class SignUpForm extends StatelessWidget {
               const SizedBox(height: AppDimensions.spacingMd),
 
               TextFormField(
+                focusNode: _emailFocus,
                 onChanged: cubit.emailChanged,
                 keyboardType: TextInputType.emailAddress,
                 autofillHints: const [AutofillHints.email],
@@ -199,6 +249,7 @@ class SignUpForm extends StatelessWidget {
               const SizedBox(height: AppDimensions.spacingMd),
 
               TextFormField(
+                focusNode: _passwordFocus,
                 onChanged: cubit.passwordChanged,
                 obscureText: state.obscurePassword,
                 keyboardType: TextInputType.visiblePassword,
@@ -255,6 +306,7 @@ class SignUpForm extends StatelessWidget {
               const SizedBox(height: AppDimensions.spacingMd),
 
               TextFormField(
+                focusNode: _confirmPasswordFocus,
                 onChanged: cubit.confirmPasswordChanged,
                 obscureText: state.obscureConfirmPassword,
                 keyboardType: TextInputType.visiblePassword,
@@ -407,6 +459,8 @@ class SignUpForm extends StatelessWidget {
         return localizations.signUpPasswordMissingUppercase;
       case 'password_missing_number':
         return localizations.signUpPasswordMissingNumber;
+      case 'password_missing_special':
+        return localizations.signUpPasswordMissingSpecial;
       default:
         return null;
     }

@@ -28,7 +28,9 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   }
 
   void newPasswordChanged(String value) {
-    final error = Validators.validatePasswordLength(value);
+    final error = (state.hasSubmitted || state.newPasswordTouched)
+        ? Validators.validatePasswordLength(value)
+        : null;
     final confirmError = state.confirmPassword.isNotEmpty
         ? Validators.validatePasswordMatch(value, state.confirmPassword)
         : state.confirmPasswordError;
@@ -46,8 +48,17 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
     );
   }
 
+  void newPasswordBlurred() {
+    emit(state.copyWith(
+      newPasswordTouched: true,
+      newPasswordError: Validators.validatePasswordLength(state.newPassword),
+    ));
+  }
+
   void confirmPasswordChanged(String value) {
-    final error = Validators.validatePasswordMatch(state.newPassword, value);
+    final error = (state.hasSubmitted || state.confirmPasswordTouched)
+        ? Validators.validatePasswordMatch(state.newPassword, value)
+        : null;
 
     emit(
       state.copyWith(
@@ -59,6 +70,16 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
         errorType: null,
       ),
     );
+  }
+
+  void confirmPasswordBlurred() {
+    emit(state.copyWith(
+      confirmPasswordTouched: true,
+      confirmPasswordError: Validators.validatePasswordMatch(
+        state.newPassword,
+        state.confirmPassword,
+      ),
+    ));
   }
 
   void toggleNewPasswordVisibility() {

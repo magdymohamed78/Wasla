@@ -117,10 +117,31 @@ class _TimerAndResend extends StatelessWidget {
   }
 }
 
-class _NewPasswordField extends StatelessWidget {
+class _NewPasswordField extends StatefulWidget {
   const _NewPasswordField({required this.localizations});
 
   final AppLocalizations localizations;
+
+  @override
+  State<_NewPasswordField> createState() => _NewPasswordFieldState();
+}
+
+class _NewPasswordFieldState extends State<_NewPasswordField> {
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) context.read<ChangePasswordCubit>().newPasswordBlurred();
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,18 +150,20 @@ class _NewPasswordField extends StatelessWidget {
           prev.newPassword != curr.newPassword ||
           prev.newPasswordError != curr.newPasswordError ||
           prev.obscureNewPassword != curr.obscureNewPassword ||
-          prev.hasSubmitted != curr.hasSubmitted,
+          prev.hasSubmitted != curr.hasSubmitted ||
+          prev.newPasswordTouched != curr.newPasswordTouched,
       builder: (context, state) {
         return TextField(
+          focusNode: _focusNode,
           onChanged: context.read<ChangePasswordCubit>().newPasswordChanged,
           obscureText: state.obscureNewPassword,
           keyboardType: TextInputType.visiblePassword,
           textInputAction: TextInputAction.next,
           autofillHints: const [AutofillHints.newPassword],
           decoration: InputDecoration(
-            labelText: localizations.changePasswordNewPasswordLabel,
-            errorText: state.hasSubmitted && state.newPasswordError != null
-                ? _mapError(state.newPasswordError!, localizations)
+            labelText: widget.localizations.changePasswordNewPasswordLabel,
+            errorText: (state.hasSubmitted || state.newPasswordTouched) && state.newPasswordError != null
+                ? _mapError(state.newPasswordError!, widget.localizations)
                 : null,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
@@ -164,19 +187,46 @@ class _NewPasswordField extends StatelessWidget {
   String _mapError(String error, AppLocalizations localizations) {
     switch (error) {
       case 'password_empty':
-        return localizations.changePasswordNewPasswordLabel;
+        return localizations.signUpPasswordRequired;
       case 'password_too_short':
-        return localizations.changePasswordMinLength;
+        return localizations.signUpPasswordTooShort;
+      case 'password_missing_uppercase':
+        return localizations.signUpPasswordMissingUppercase;
+      case 'password_missing_number':
+        return localizations.signUpPasswordMissingNumber;
+      case 'password_missing_special':
+        return localizations.signUpPasswordMissingSpecial;
       default:
         return '';
     }
   }
 }
 
-class _ConfirmPasswordField extends StatelessWidget {
+class _ConfirmPasswordField extends StatefulWidget {
   const _ConfirmPasswordField({required this.localizations});
 
   final AppLocalizations localizations;
+
+  @override
+  State<_ConfirmPasswordField> createState() => _ConfirmPasswordFieldState();
+}
+
+class _ConfirmPasswordFieldState extends State<_ConfirmPasswordField> {
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) context.read<ChangePasswordCubit>().confirmPasswordBlurred();
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,9 +235,11 @@ class _ConfirmPasswordField extends StatelessWidget {
           prev.confirmPassword != curr.confirmPassword ||
           prev.confirmPasswordError != curr.confirmPasswordError ||
           prev.obscureConfirmPassword != curr.obscureConfirmPassword ||
-          prev.hasSubmitted != curr.hasSubmitted,
+          prev.hasSubmitted != curr.hasSubmitted ||
+          prev.confirmPasswordTouched != curr.confirmPasswordTouched,
       builder: (context, state) {
         return TextField(
+          focusNode: _focusNode,
           onChanged: context.read<ChangePasswordCubit>().confirmPasswordChanged,
           obscureText: state.obscureConfirmPassword,
           keyboardType: TextInputType.visiblePassword,
@@ -199,9 +251,9 @@ class _ConfirmPasswordField extends StatelessWidget {
             }
           },
           decoration: InputDecoration(
-            labelText: localizations.changePasswordConfirmPasswordLabel,
-            errorText: state.hasSubmitted && state.confirmPasswordError != null
-                ? _mapError(state.confirmPasswordError!, localizations)
+            labelText: widget.localizations.changePasswordConfirmPasswordLabel,
+            errorText: (state.hasSubmitted || state.confirmPasswordTouched) && state.confirmPasswordError != null
+                ? _mapError(state.confirmPasswordError!, widget.localizations)
                 : null,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),

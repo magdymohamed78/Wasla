@@ -54,10 +54,11 @@
   "signUpPhoneInvalid": "Phone number must be exactly 11 digits",
   "signUpEmailRequired": "Email is required",
   "signUpEmailInvalid": "Enter a valid email address",
-  "signUpPasswordRequired": "Password is required",
-  "signUpPasswordTooShort": "Password must be at least 6 characters",
-  "signUpPasswordMissingUppercase": "Password must contain at least one uppercase letter",
-  "signUpPasswordMissingNumber": "Password must contain at least one number",
+  "signUpPasswordRequired": "Enter a password",
+  "signUpPasswordTooShort": "Use 8+ characters",
+  "signUpPasswordMissingUppercase": "Add an uppercase letter",
+  "signUpPasswordMissingNumber": "Add a number",
+  "signUpPasswordMissingSpecial": "Add a special character",
   "signUpConfirmPasswordRequired": "Please confirm your password",
   "signUpConfirmPasswordMismatch": "Passwords do not match",
   "signUpErrorEmailInUse": "This email is already registered",
@@ -113,5 +114,13 @@
   "forgotPasswordInactiveAccount": "Account exists but is inactive — please contact support.",
   "forgotPasswordSignUp": "Don't have an account? Sign Up",
   "forgotPasswordSignUpAction": "Sign Up",
-  "forgotPasswordContactSupport": "Contact Support"
+  "forgotPasswordContactSupport": "Contact Support",
+  "forgotPasswordRateLimitWait": "Try again in {seconds}s",
+  "@forgotPasswordRateLimitWait": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  }
 }

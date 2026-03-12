@@ -26,6 +26,8 @@ class ChangePasswordState {
   final String? serverMessage;
   final ChangePasswordErrorType? errorType;
   final bool hasSubmitted;
+  final bool newPasswordTouched;
+  final bool confirmPasswordTouched;
 
   const ChangePasswordState({
     this.email = '',
@@ -41,6 +43,8 @@ class ChangePasswordState {
     this.serverMessage,
     this.errorType,
     this.hasSubmitted = false,
+    this.newPasswordTouched = false,
+    this.confirmPasswordTouched = false,
   });
 
   bool get isValid =>
@@ -64,6 +68,8 @@ class ChangePasswordState {
     String? serverMessage,
     ChangePasswordErrorType? errorType,
     bool? hasSubmitted,
+    bool? newPasswordTouched,
+    bool? confirmPasswordTouched,
   }) {
     return ChangePasswordState(
       email: email ?? this.email,
@@ -80,6 +86,8 @@ class ChangePasswordState {
       serverMessage: serverMessage,
       errorType: errorType,
       hasSubmitted: hasSubmitted ?? this.hasSubmitted,
+      newPasswordTouched: newPasswordTouched ?? this.newPasswordTouched,
+      confirmPasswordTouched: confirmPasswordTouched ?? this.confirmPasswordTouched,
     );
   }
 }

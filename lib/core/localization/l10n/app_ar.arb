@@ -54,10 +54,11 @@
   "signUpPhoneInvalid": "يجب أن يكون رقم الهاتف 11 رقماً بالضبط",
   "signUpEmailRequired": "البريد الإلكتروني مطلوب",
   "signUpEmailInvalid": "أدخل بريد إلكتروني صالح",
-  "signUpPasswordRequired": "كلمة المرور مطلوبة",
-  "signUpPasswordTooShort": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
-  "signUpPasswordMissingUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
-  "signUpPasswordMissingNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
+  "signUpPasswordRequired": "أدخل كلمة مرور",
+  "signUpPasswordTooShort": "استخدم 8 أحرف أو أكثر",
+  "signUpPasswordMissingUppercase": "أضف حرفاً كبيراً",
+  "signUpPasswordMissingNumber": "أضف رقماً",
+  "signUpPasswordMissingSpecial": "أضف رمزاً خاصاً",
   "signUpConfirmPasswordRequired": "يرجى تأكيد كلمة المرور",
   "signUpConfirmPasswordMismatch": "كلمات المرور غير متطابقة",
   "signUpErrorEmailInUse": "هذا البريد الإلكتروني مسجل بالفعل",
@@ -112,5 +113,6 @@
   "forgotPasswordInactiveAccount": "الحساب موجود لكنه غير مفعل — يرجى التواصل مع الدعم.",
   "forgotPasswordSignUp": "ليس لديك حساب؟ سجل الآن",
   "forgotPasswordSignUpAction": "سجل الآن",
-  "forgotPasswordContactSupport": "تواصل مع الدعم"
+  "forgotPasswordContactSupport": "تواصل مع الدعم",
+  "forgotPasswordRateLimitWait": "أعد المحاولة بعد {seconds} ثانية"
 }

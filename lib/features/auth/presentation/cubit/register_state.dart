@@ -34,6 +34,12 @@ class RegisterState {
   final String? confirmPasswordError;
   final String? phoneError;
   final bool hasSubmitted;
+  final bool firstNameTouched;
+  final bool lastNameTouched;
+  final bool phoneTouched;
+  final bool emailTouched;
+  final bool passwordTouched;
+  final bool confirmPasswordTouched;
   final String? serverErrorMessage;
   final String? digitalSignature;
 
@@ -57,6 +63,12 @@ class RegisterState {
     this.confirmPasswordError,
     this.phoneError,
     this.hasSubmitted = false,
+    this.firstNameTouched = false,
+    this.lastNameTouched = false,
+    this.phoneTouched = false,
+    this.emailTouched = false,
+    this.passwordTouched = false,
+    this.confirmPasswordTouched = false,
     this.serverErrorMessage,
     this.digitalSignature,
   });
@@ -81,6 +93,12 @@ class RegisterState {
     String? confirmPasswordError,
     String? phoneError,
     bool? hasSubmitted,
+    bool? firstNameTouched,
+    bool? lastNameTouched,
+    bool? phoneTouched,
+    bool? emailTouched,
+    bool? passwordTouched,
+    bool? confirmPasswordTouched,
     String? serverErrorMessage,
     String? digitalSignature,
   }) {
@@ -104,6 +122,12 @@ class RegisterState {
       confirmPasswordError: confirmPasswordError,
       phoneError: phoneError,
       hasSubmitted: hasSubmitted ?? this.hasSubmitted,
+      firstNameTouched: firstNameTouched ?? this.firstNameTouched,
+      lastNameTouched: lastNameTouched ?? this.lastNameTouched,
+      phoneTouched: phoneTouched ?? this.phoneTouched,
+      emailTouched: emailTouched ?? this.emailTouched,
+      passwordTouched: passwordTouched ?? this.passwordTouched,
+      confirmPasswordTouched: confirmPasswordTouched ?? this.confirmPasswordTouched,
       serverErrorMessage: serverErrorMessage,
       digitalSignature: digitalSignature ?? this.digitalSignature,
     );

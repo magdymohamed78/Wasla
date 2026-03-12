@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +9,7 @@ import 'forgot_password_state.dart';
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final ForgotPasswordUseCase _forgotPasswordUseCase;
+  Timer? _rateLimitTimer;
 
   ForgotPasswordCubit({
     required ForgotPasswordUseCase forgotPasswordUseCase,
@@ -14,13 +17,21 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
         super(const ForgotPasswordState());
 
   void emailChanged(String value) {
-    final error = Validators.validateEmail(value);
     emit(
       state.copyWith(
         email: value,
-        emailError: error,
+        emailError: Validators.validateEmail(value),
         status: ForgotPasswordStatus.initial,
         errorMessage: null,
+      ),
+    );
+  }
+
+  void emailBlurred() {
+    emit(
+      state.copyWith(
+        emailTouched: true,
+        emailError: Validators.validateEmail(state.email),
       ),
     );
   }
@@ -45,6 +56,9 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     } on DioException catch (e) {
       _logError('DioException during forgot password', e);
       final errorMsg = _mapDioError(e);
+      if (e.response?.statusCode == 429) {
+        _startRateLimitTimer();
+      }
       emit(state.copyWith(
         isSubmitting: false,
         status: ForgotPasswordStatus.failure,
@@ -65,6 +79,31 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
       status: ForgotPasswordStatus.initial,
       errorMessage: null,
     ));
+  }
+
+  void _startRateLimitTimer() {
+    _rateLimitTimer?.cancel();
+    const totalSeconds = 60;
+    emit(state.copyWith(rateLimitSecondsRemaining: totalSeconds));
+    var remaining = totalSeconds;
+    _rateLimitTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      remaining--;
+      if (isClosed) {
+        timer.cancel();
+        return;
+      }
+      emit(state.copyWith(rateLimitSecondsRemaining: remaining));
+      if (remaining <= 0) {
+        timer.cancel();
+        _rateLimitTimer = null;
+      }
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _rateLimitTimer?.cancel();
+    return super.close();
   }
 
   String _mapDioError(DioException e) {

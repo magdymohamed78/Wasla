@@ -425,26 +425,32 @@ abstract class AppLocalizations {
   /// No description provided for @signUpPasswordRequired.
   ///
   /// In en, this message translates to:
-  /// **'Password is required'**
+  /// **'Enter a password'**
   String get signUpPasswordRequired;
 
   /// No description provided for @signUpPasswordTooShort.
   ///
   /// In en, this message translates to:
-  /// **'Password must be at least 6 characters'**
+  /// **'Use 8+ characters'**
   String get signUpPasswordTooShort;
 
   /// No description provided for @signUpPasswordMissingUppercase.
   ///
   /// In en, this message translates to:
-  /// **'Password must contain at least one uppercase letter'**
+  /// **'Add an uppercase letter'**
   String get signUpPasswordMissingUppercase;
 
   /// No description provided for @signUpPasswordMissingNumber.
   ///
   /// In en, this message translates to:
-  /// **'Password must contain at least one number'**
+  /// **'Add a number'**
   String get signUpPasswordMissingNumber;
+
+  /// No description provided for @signUpPasswordMissingSpecial.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a special character'**
+  String get signUpPasswordMissingSpecial;
 
   /// No description provided for @signUpConfirmPasswordRequired.
   ///
@@ -703,6 +709,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Contact Support'**
   String get forgotPasswordContactSupport;
+
+  /// No description provided for @forgotPasswordRateLimitWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again in {seconds}s'**
+  String forgotPasswordRateLimitWait(int seconds);
 }
 
 class _AppLocalizationsDelegate

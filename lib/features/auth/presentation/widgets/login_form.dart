@@ -12,10 +12,36 @@ import '../cubit/login_state.dart';
 ///
 /// Reads state from [LoginCubit] and dispatches user interactions.
 /// Pure presentation — no business logic or navigation.
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
   final VoidCallback? onForgotPasswordTap;
 
   const LoginForm({super.key, this.onForgotPasswordTap});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailFocus.addListener(() {
+      if (!_emailFocus.hasFocus) context.read<LoginCubit>().emailBlurred();
+    });
+    _passwordFocus.addListener(() {
+      if (!_passwordFocus.hasFocus) context.read<LoginCubit>().passwordBlurred();
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +57,7 @@ class LoginForm extends StatelessWidget {
             children: [
               // Email field
               TextFormField(
+                focusNode: _emailFocus,
                 onChanged: cubit.emailChanged,
                 keyboardType: TextInputType.emailAddress,
                 autofillHints: const [AutofillHints.email],
@@ -78,6 +105,7 @@ class LoginForm extends StatelessWidget {
 
               // Password field
               TextFormField(
+                focusNode: _passwordFocus,
                 onChanged: cubit.passwordChanged,
                 obscureText: state.obscurePassword,
                 keyboardType: TextInputType.visiblePassword,
@@ -167,7 +195,7 @@ class LoginForm extends StatelessWidget {
 
                   // Forgot password
                   TextButton(
-                    onPressed: onForgotPasswordTap,
+                    onPressed: widget.onForgotPasswordTap,
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       minimumSize: Size.zero,
@@ -196,13 +224,34 @@ class LoginForm extends StatelessWidget {
                         ),
                       ),
                     )
-                  : PrimaryButton(
-                      label: localizations.loginSignIn,
-                      icon: Icons.arrow_forward_rounded,
-                      onPressed: state.status == LoginStatus.loading || state.isRateLimited
-                          ? null
-                          : () => _onSubmit(state, cubit),
-                    ),
+                  : state.isRateLimited
+                      ? SizedBox(
+                          height: AppDimensions.buttonHeight,
+                          child: ElevatedButton(
+                            onPressed: null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.buttonPrimary,
+                              disabledBackgroundColor: AppColors.buttonSecondary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.borderRadiusMd,
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              localizations.forgotPasswordRateLimitWait(
+                                  state.rateLimitRemainingSeconds),
+                              style: AppTypography.buttonLabel.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        )
+                      : PrimaryButton(
+                          label: localizations.loginSignIn,
+                          icon: Icons.arrow_forward_rounded,
+                          onPressed: () => _onSubmit(state, cubit),
+                        ),
             ],
           ),
         );

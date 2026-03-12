@@ -30,18 +30,42 @@ class ForgotPasswordForm extends StatelessWidget {
   }
 }
 
-class _EmailField extends StatelessWidget {
+class _EmailField extends StatefulWidget {
   const _EmailField({required this.localizations});
 
   final AppLocalizations localizations;
 
   @override
+  State<_EmailField> createState() => _EmailFieldState();
+}
+
+class _EmailFieldState extends State<_EmailField> {
+  final _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) context.read<ForgotPasswordCubit>().emailBlurred();
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
       buildWhen: (prev, curr) =>
-          prev.email != curr.email || prev.emailError != curr.emailError,
+          prev.email != curr.email ||
+          prev.emailError != curr.emailError ||
+          prev.emailTouched != curr.emailTouched,
       builder: (context, state) {
         return TextField(
+          focusNode: _focusNode,
           onChanged: context.read<ForgotPasswordCubit>().emailChanged,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
@@ -53,10 +77,10 @@ class _EmailField extends StatelessWidget {
             }
           },
           decoration: InputDecoration(
-            labelText: localizations.forgotPasswordEmailLabel,
-            hintText: localizations.forgotPasswordEmailPlaceholder,
-            errorText: state.emailError != null
-                ? _mapError(state.emailError, localizations)
+            labelText: widget.localizations.forgotPasswordEmailLabel,
+            hintText: widget.localizations.forgotPasswordEmailPlaceholder,
+            errorText: state.emailTouched && state.emailError != null
+                ? _mapError(state.emailError, widget.localizations)
                 : null,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
@@ -68,10 +92,14 @@ class _EmailField extends StatelessWidget {
   }
 
   String? _mapError(String? error, AppLocalizations localizations) {
-    if (error == 'email_invalid') {
-      return localizations.forgotPasswordEmailInvalid;
+    switch (error) {
+      case 'email_empty':
+        return localizations.forgotPasswordEmailRequired;
+      case 'email_invalid':
+        return localizations.forgotPasswordEmailInvalid;
+      default:
+        return null;
     }
-    return null;
   }
 }
 
@@ -86,10 +114,11 @@ class _SubmitButton extends StatelessWidget {
       buildWhen: (prev, curr) =>
           prev.isValid != curr.isValid ||
           prev.isSubmitting != curr.isSubmitting ||
-          prev.status != curr.status,
+          prev.status != curr.status ||
+          prev.rateLimitSecondsRemaining != curr.rateLimitSecondsRemaining,
       builder: (context, state) {
         final isLoading = state.status == ForgotPasswordStatus.loading;
-        final isEnabled = state.isValid && !isLoading;
+        final isEnabled = state.isValid && !isLoading && !state.isRateLimited;
 
         return SizedBox(
           height: AppDimensions.buttonHeight,
@@ -116,7 +145,10 @@ class _SubmitButton extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    localizations.forgotPasswordSend,
+                    state.isRateLimited
+                        ? localizations.forgotPasswordRateLimitWait(
+                            state.rateLimitSecondsRemaining)
+                        : localizations.forgotPasswordSend,
                     style: isEnabled
                         ? AppTypography.buttonLabel
                         : AppTypography.buttonLabel.copyWith(

@@ -25,6 +25,8 @@ class LoginState {
   final String? emailError;
   final String? passwordError;
   final bool hasSubmitted;
+  final bool emailTouched;
+  final bool passwordTouched;
   final LoginErrorCategory? errorCategory;
   final bool isRateLimited;
   final int rateLimitRemainingSeconds;
@@ -40,6 +42,8 @@ class LoginState {
     this.emailError,
     this.passwordError,
     this.hasSubmitted = false,
+    this.emailTouched = false,
+    this.passwordTouched = false,
     this.errorCategory,
     this.isRateLimited = false,
     this.rateLimitRemainingSeconds = 0,
@@ -56,6 +60,8 @@ class LoginState {
     String? emailError,
     String? passwordError,
     bool? hasSubmitted,
+    bool? emailTouched,
+    bool? passwordTouched,
     LoginErrorCategory? errorCategory,
     bool? isRateLimited,
     int? rateLimitRemainingSeconds,
@@ -71,6 +77,8 @@ class LoginState {
       emailError: emailError,
       passwordError: passwordError,
       hasSubmitted: hasSubmitted ?? this.hasSubmitted,
+      emailTouched: emailTouched ?? this.emailTouched,
+      passwordTouched: passwordTouched ?? this.passwordTouched,
       errorCategory: errorCategory ?? this.errorCategory,
       isRateLimited: isRateLimited ?? this.isRateLimited,
       rateLimitRemainingSeconds: rateLimitRemainingSeconds ?? this.rateLimitRemainingSeconds,
