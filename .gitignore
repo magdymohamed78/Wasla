@@ -1,25 +1,35 @@
+# =========================
 # Miscellaneous
+# =========================
 *.class
 *.log
 *.pyc
 *.swp
 .DS_Store
+Thumbs.db
 .atom/
 .buildlog/
 .history
 .svn/
 migrate_working_dir/
+logs/
 
-# IntelliJ related
+# =========================
+# IntelliJ / Android Studio
+# =========================
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# VS Code related
+# =========================
+# VS Code
+# =========================
 .vscode/
 
-# Flutter/Dart/Pub related
+# =========================
+# Flutter / Dart
+# =========================
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
@@ -27,36 +37,60 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-/build/
+build/
 .packages
 
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
+# =========================
+# Android build outputs
+# =========================
 /android/app/debug
 /android/app/profile
 /android/app/release
 
-# Web related
+# =========================
+# Generated files
+# =========================
 lib/generated_plugin_registrant.dart
 
-# Platform specific
-
+# =========================
+# Platform folders (optional)
+# =========================
 /web/
 /windows/
 /linux/
 /macos/
 
-# Coverage
+# =========================
+# Coverage & test results
+# =========================
 coverage/
-
-# Test results
 test_results/
 
+# =========================
+# ❌ Ignore test folder بالكامل
+# =========================
+test/
+
+# =========================
 # Environment files
+# =========================
 .env*
 !.env.example
+
+# =========================
+# 🔥 Speckit / AI Agents
+# =========================
+.agent/
+.kilocode/
+.specify/
+.specify-cache/
+.specify-temp/
+telemetry-id
+*.tmp
+*.cache
+
+# =========================
+# ✅ Allow ONLY specs
+# =========================
+!specs/
+!specs/**
