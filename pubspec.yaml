@@ -23,6 +23,7 @@ dependencies:
   pinput: ^5.0.0
   path_provider: ^2.1.0
   flutter_file_dialog: ^3.0.2
+  flutter_password_strength_meter: ^1.0.1
 
 dev_dependencies:
   flutter_test:

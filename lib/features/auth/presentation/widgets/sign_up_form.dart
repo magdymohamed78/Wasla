@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:waslaapp/features/auth/presentation/cubit/register_cubit.dart';
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/primary_button.dart';
-import '../cubit/register_cubit.dart';
 import '../cubit/register_state.dart';
+
+import 'password_feedback_section.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -27,10 +29,12 @@ class _SignUpFormState extends State<SignUpForm> {
   void initState() {
     super.initState();
     _firstNameFocus.addListener(() {
-      if (!_firstNameFocus.hasFocus) context.read<RegisterCubit>().firstNameBlurred();
+      if (!_firstNameFocus.hasFocus)
+        context.read<RegisterCubit>().firstNameBlurred();
     });
     _lastNameFocus.addListener(() {
-      if (!_lastNameFocus.hasFocus) context.read<RegisterCubit>().lastNameBlurred();
+      if (!_lastNameFocus.hasFocus)
+        context.read<RegisterCubit>().lastNameBlurred();
     });
     _phoneFocus.addListener(() {
       if (!_phoneFocus.hasFocus) context.read<RegisterCubit>().phoneBlurred();
@@ -39,10 +43,13 @@ class _SignUpFormState extends State<SignUpForm> {
       if (!_emailFocus.hasFocus) context.read<RegisterCubit>().emailBlurred();
     });
     _passwordFocus.addListener(() {
-      if (!_passwordFocus.hasFocus) context.read<RegisterCubit>().passwordBlurred();
+      setState(() {});
+      if (!_passwordFocus.hasFocus)
+        context.read<RegisterCubit>().passwordBlurred();
     });
     _confirmPasswordFocus.addListener(() {
-      if (!_confirmPasswordFocus.hasFocus) context.read<RegisterCubit>().confirmPasswordBlurred();
+      if (!_confirmPasswordFocus.hasFocus)
+        context.read<RegisterCubit>().confirmPasswordBlurred();
     });
   }
 
@@ -211,7 +218,11 @@ class _SignUpFormState extends State<SignUpForm> {
                 decoration: InputDecoration(
                   labelText: localizations.signUpEmail,
                   hintText: localizations.signUpEmailHint,
-                  errorText: _mapEmailError(state.emailError, localizations, state),
+                  errorText: _mapEmailError(
+                    state.emailError,
+                    localizations,
+                    state,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(
                       AppDimensions.borderRadiusMd,
@@ -259,7 +270,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 decoration: InputDecoration(
                   labelText: localizations.signUpPassword,
                   hintText: localizations.signUpPassword,
-                  errorText: _mapPasswordError(state.passwordError, localizations),
+                  // errorText: _mapPasswordError(
+                  //   state.passwordError,
+                  //   localizations,
+                  // ),
                   suffixIcon: IconButton(
                     icon: Icon(
                       state.obscurePassword
@@ -303,6 +317,13 @@ class _SignUpFormState extends State<SignUpForm> {
                 style: AppTypography.bodyLarge,
               ),
 
+              const SizedBox(height: AppDimensions.spacingSm),
+
+              PasswordFeedbackSection(
+                password: state.password,
+                hasFocus: _passwordFocus.hasFocus,
+              ),
+
               const SizedBox(height: AppDimensions.spacingMd),
 
               TextFormField(
@@ -317,7 +338,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 decoration: InputDecoration(
                   labelText: localizations.signUpConfirmPassword,
                   hintText: localizations.signUpConfirmPassword,
-                  errorText: _mapConfirmPasswordError(state.confirmPasswordError, localizations),
+                  errorText: _mapConfirmPasswordError(
+                    state.confirmPasswordError,
+                    localizations,
+                  ),
                   suffixIcon: IconButton(
                     icon: Icon(
                       state.obscureConfirmPassword
@@ -433,7 +457,11 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  String? _mapEmailError(String? errorKey, AppLocalizations localizations, RegisterState state) {
+  String? _mapEmailError(
+    String? errorKey,
+    AppLocalizations localizations,
+    RegisterState state,
+  ) {
     if (state.errorCode == RegisterErrorCode.emailAlreadyRegistered) {
       return localizations.signUpErrorEmailInUse;
     }
@@ -466,7 +494,10 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  String? _mapConfirmPasswordError(String? errorKey, AppLocalizations localizations) {
+  String? _mapConfirmPasswordError(
+    String? errorKey,
+    AppLocalizations localizations,
+  ) {
     if (errorKey == null) return null;
     switch (errorKey) {
       case 'confirm_password_empty':

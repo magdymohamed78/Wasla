@@ -342,4 +342,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String forgotPasswordRateLimitWait(int seconds) {
     return 'أعد المحاولة بعد $seconds ثانية';
   }
+
+  @override
+  String get passwordRuleMinLength => '8 أحرف أو أكثر';
+
+  @override
+  String get passwordRuleNumber => 'رقم واحد على الأقل';
+
+  @override
+  String get passwordRuleUppercase => 'حرف كبير واحد على الأقل';
+
+  @override
+  String get passwordRuleSpecial => 'رمز خاص واحد (!@#\$%^&*) على الأقل';
+
+  @override
+  String get passwordStrengthWeak => 'ضعيفة';
+
+  @override
+  String get passwordStrengthMedium => 'متوسطة';
+
+  @override
+  String get passwordStrengthStrong => 'قوية';
+
+  @override
+  String get passwordStrengthHelperFeedback => 'يرجى اختيار كلمة مرور أقوى.';
 }

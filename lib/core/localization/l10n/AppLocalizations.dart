@@ -715,6 +715,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try again in {seconds}s'**
   String forgotPasswordRateLimitWait(int seconds);
+
+  /// No description provided for @passwordRuleMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'8+ characters'**
+  String get passwordRuleMinLength;
+
+  /// No description provided for @passwordRuleNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'1+ number'**
+  String get passwordRuleNumber;
+
+  /// No description provided for @passwordRuleUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'1+ uppercase letter'**
+  String get passwordRuleUppercase;
+
+  /// No description provided for @passwordRuleSpecial.
+  ///
+  /// In en, this message translates to:
+  /// **'1+ special character (!@#\$%^&*)'**
+  String get passwordRuleSpecial;
+
+  /// No description provided for @passwordStrengthWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get passwordStrengthWeak;
+
+  /// No description provided for @passwordStrengthMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get passwordStrengthMedium;
+
+  /// No description provided for @passwordStrengthStrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get passwordStrengthStrong;
+
+  /// No description provided for @passwordStrengthHelperFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a stronger password.'**
+  String get passwordStrengthHelperFeedback;
 }
 
 class _AppLocalizationsDelegate

@@ -122,5 +122,13 @@
         "type": "int"
       }
     }
-  }
+  },
+  "passwordRuleMinLength": "8+ characters",
+  "passwordRuleNumber": "1+ number",
+  "passwordRuleUppercase": "1+ uppercase letter",
+  "passwordRuleSpecial": "1+ special character (!@#$%^&*)",
+  "passwordStrengthWeak": "Weak",
+  "passwordStrengthMedium": "Medium",
+  "passwordStrengthStrong": "Strong",
+  "passwordStrengthHelperFeedback": "Please choose a stronger password."
 }
