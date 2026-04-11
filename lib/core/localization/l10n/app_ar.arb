@@ -114,5 +114,13 @@
   "forgotPasswordSignUp": "ليس لديك حساب؟ سجل الآن",
   "forgotPasswordSignUpAction": "سجل الآن",
   "forgotPasswordContactSupport": "تواصل مع الدعم",
-  "forgotPasswordRateLimitWait": "أعد المحاولة بعد {seconds} ثانية"
+  "forgotPasswordRateLimitWait": "أعد المحاولة بعد {seconds} ثانية",
+  "passwordRuleMinLength": "8 أحرف أو أكثر",
+  "passwordRuleNumber": "رقم واحد على الأقل",
+  "passwordRuleUppercase": "حرف كبير واحد على الأقل",
+  "passwordRuleSpecial": "رمز خاص واحد (!@#$%^&*) على الأقل",
+  "passwordStrengthWeak": "ضعيفة",
+  "passwordStrengthMedium": "متوسطة",
+  "passwordStrengthStrong": "قوية",
+  "passwordStrengthHelperFeedback": "يرجى اختيار كلمة مرور أقوى."
 }

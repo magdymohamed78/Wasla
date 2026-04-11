@@ -211,6 +211,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_password_strength_meter:
+    dependency: "direct main"
+    description:
+      name: flutter_password_strength_meter
+      sha256: "92d41af110c923a67f735c0ddcb607f6591490b9377a27cd38c865a473fee1d2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_secure_storage:
     dependency: "direct main"
     description:

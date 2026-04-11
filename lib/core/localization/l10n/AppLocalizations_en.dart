@@ -344,4 +344,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String forgotPasswordRateLimitWait(int seconds) {
     return 'Try again in ${seconds}s';
   }
+
+  @override
+  String get passwordRuleMinLength => '8+ characters';
+
+  @override
+  String get passwordRuleNumber => '1+ number';
+
+  @override
+  String get passwordRuleUppercase => '1+ uppercase letter';
+
+  @override
+  String get passwordRuleSpecial => '1+ special character (!@#\$%^&*)';
+
+  @override
+  String get passwordStrengthWeak => 'Weak';
+
+  @override
+  String get passwordStrengthMedium => 'Medium';
+
+  @override
+  String get passwordStrengthStrong => 'Strong';
+
+  @override
+  String get passwordStrengthHelperFeedback =>
+      'Please choose a stronger password.';
 }

@@ -6,6 +6,7 @@ class Validators {
   static final _uppercaseRegex = RegExp(r'[A-Z]');
   static final _digitRegex = RegExp(r'\d');
   static final _specialCharRegex = RegExp(r'[^a-zA-Z0-9\s]');
+  static final _strictSpecialCharRegex = RegExp(r'[!@#\$%\^&\*]');
   static final _phoneRegex = RegExp(r'^\d{11}$');
   // Accepts Latin letters, Arabic letters (U+0600–U+06FF), and spaces
   static final _nameLettersOnlyRegex = RegExp(r'^[a-zA-Z\u0600-\u06FF\s]+$');
@@ -63,7 +64,7 @@ class Validators {
     if (!_digitRegex.hasMatch(value)) {
       return 'password_missing_number';
     }
-    if (!_specialCharRegex.hasMatch(value)) {
+    if (!_strictSpecialCharRegex.hasMatch(value)) {
       return 'password_missing_special';
     }
     return null;
@@ -90,4 +91,9 @@ class Validators {
     }
     return null;
   }
+
+  static bool hasMinLength(String password) => password.length >= 8;
+  static bool hasUppercase(String password) => _uppercaseRegex.hasMatch(password);
+  static bool hasNumber(String password) => _digitRegex.hasMatch(password);
+  static bool hasSpecialChar(String password) => _strictSpecialCharRegex.hasMatch(password);
 }
