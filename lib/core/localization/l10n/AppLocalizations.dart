@@ -763,6 +763,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please choose a stronger password.'**
   String get passwordStrengthHelperFeedback;
+
+  /// No description provided for @homeSearchForServicesOrCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for services or companies'**
+  String get homeSearchForServicesOrCompanies;
+
+  /// No description provided for @homeRecommendedCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Companies'**
+  String get homeRecommendedCompanies;
+
+  /// No description provided for @homeTrendingCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending Companies'**
+  String get homeTrendingCompanies;
+
+  /// No description provided for @homeAllCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'All Companies'**
+  String get homeAllCompanies;
+
+  /// No description provided for @navigationHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navigationHome;
+
+  /// No description provided for @navigationRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests'**
+  String get navigationRequests;
+
+  /// No description provided for @navigationOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get navigationOffers;
+
+  /// No description provided for @navigationProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navigationProfile;
+
+  /// No description provided for @exploreSearchCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'Search companies...'**
+  String get exploreSearchCompanies;
+
+  /// No description provided for @exploreSearchCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City...'**
+  String get exploreSearchCity;
+
+  /// No description provided for @exploreAllServices.
+  ///
+  /// In en, this message translates to:
+  /// **'All Services'**
+  String get exploreAllServices;
+
+  /// No description provided for @exploreMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Move'**
+  String get exploreMove;
+
+  /// No description provided for @exploreCleaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning'**
+  String get exploreCleaning;
+
+  /// No description provided for @exploreDisposal.
+  ///
+  /// In en, this message translates to:
+  /// **'Disposal'**
+  String get exploreDisposal;
+
+  /// No description provided for @explorePacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Packing'**
+  String get explorePacking;
+
+  /// No description provided for @exploreUnpacking.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpacking'**
+  String get exploreUnpacking;
+
+  /// No description provided for @exploreStorage.
+  ///
+  /// In en, this message translates to:
+  /// **'Storage'**
+  String get exploreStorage;
+
+  /// No description provided for @exploreTransport.
+  ///
+  /// In en, this message translates to:
+  /// **'Transport'**
+  String get exploreTransport;
+
+  /// No description provided for @exploreNoCompaniesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No companies found'**
+  String get exploreNoCompaniesFound;
+
+  /// No description provided for @exploreTryAdjustingFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search filters'**
+  String get exploreTryAdjustingFilters;
+
+  /// No description provided for @exploreClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get exploreClearFilters;
+
+  /// No description provided for @restrictionLoginOrRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Please log in or register to continue.'**
+  String get restrictionLoginOrRegister;
+
+  /// No description provided for @restrictionContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get restrictionContinue;
+
+  /// No description provided for @restrictionBrowseCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse Companies'**
+  String get restrictionBrowseCompanies;
+
+  /// No description provided for @restrictionRequestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests are currently unavailable'**
+  String get restrictionRequestsTitle;
+
+  /// No description provided for @restrictionOffersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers are currently unavailable'**
+  String get restrictionOffersTitle;
+
+  /// No description provided for @restrictionProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile is currently unavailable'**
+  String get restrictionProfileTitle;
+
+  /// No description provided for @homeNoReviewsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet'**
+  String get homeNoReviewsYet;
+
+  /// No description provided for @homeRecommendedLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load recommended companies.'**
+  String get homeRecommendedLoadFailed;
+
+  /// No description provided for @homeTrendingLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load trending companies.'**
+  String get homeTrendingLoadFailed;
+
+  /// No description provided for @homeAllCompaniesLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load companies.'**
+  String get homeAllCompaniesLoadFailed;
+
+  /// No description provided for @explorePageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get explorePageTitle;
+
+  /// No description provided for @explorePagePlaceholderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore content is coming soon.'**
+  String get explorePagePlaceholderMessage;
+
+  /// No description provided for @companyDetailsPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Company Details'**
+  String get companyDetailsPageTitle;
+
+  /// No description provided for @companyDetailsContactInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Information'**
+  String get companyDetailsContactInfo;
+
+  /// No description provided for @companyDetailsServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get companyDetailsServices;
+
+  /// No description provided for @companyDetailsRecentReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Reviews'**
+  String get companyDetailsRecentReviews;
+
+  /// No description provided for @companyDetailsNoContactInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'No contact information available.'**
+  String get companyDetailsNoContactInfo;
+
+  /// No description provided for @companyDetailsNoServicesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No services listed.'**
+  String get companyDetailsNoServicesAvailable;
+
+  /// No description provided for @companyDetailsNoReviewsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews available yet.'**
+  String get companyDetailsNoReviewsYet;
+
+  /// No description provided for @companyDetailsRequestService.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Service'**
+  String get companyDetailsRequestService;
+
+  /// No description provided for @companyDetailsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load company details.'**
+  String get companyDetailsLoadFailed;
+
+  /// No description provided for @companyDetailsLoadMoreReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more reviews'**
+  String get companyDetailsLoadMoreReviews;
+
+  /// No description provided for @companyDetailsAnonymousReviewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Anonymous'**
+  String get companyDetailsAnonymousReviewer;
+
+  /// No description provided for @companyDetailsNoComment.
+  ///
+  /// In en, this message translates to:
+  /// **'No comment provided.'**
+  String get companyDetailsNoComment;
+
+  /// No description provided for @companyDetailsUnknownCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown company'**
+  String get companyDetailsUnknownCompany;
+
+  /// No description provided for @companyDetailsUnnamedService.
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get companyDetailsUnnamedService;
+
+  /// No description provided for @companyDetailsInvalidCompanyId.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid company ID.'**
+  String get companyDetailsInvalidCompanyId;
+
+  /// No description provided for @companyDetailsPlaceholderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Company details for ID: {companyId}'**
+  String companyDetailsPlaceholderBody(String companyId);
 }
 
 class _AppLocalizationsDelegate

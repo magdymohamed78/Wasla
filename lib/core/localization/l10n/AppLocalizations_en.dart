@@ -369,4 +369,156 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get passwordStrengthHelperFeedback =>
       'Please choose a stronger password.';
+
+  @override
+  String get homeSearchForServicesOrCompanies =>
+      'Search for services or companies';
+
+  @override
+  String get homeRecommendedCompanies => 'Recommended Companies';
+
+  @override
+  String get homeTrendingCompanies => 'Trending Companies';
+
+  @override
+  String get homeAllCompanies => 'All Companies';
+
+  @override
+  String get navigationHome => 'Home';
+
+  @override
+  String get navigationRequests => 'Requests';
+
+  @override
+  String get navigationOffers => 'Offers';
+
+  @override
+  String get navigationProfile => 'Profile';
+
+  @override
+  String get exploreSearchCompanies => 'Search companies...';
+
+  @override
+  String get exploreSearchCity => 'City...';
+
+  @override
+  String get exploreAllServices => 'All Services';
+
+  @override
+  String get exploreMove => 'Move';
+
+  @override
+  String get exploreCleaning => 'Cleaning';
+
+  @override
+  String get exploreDisposal => 'Disposal';
+
+  @override
+  String get explorePacking => 'Packing';
+
+  @override
+  String get exploreUnpacking => 'Unpacking';
+
+  @override
+  String get exploreStorage => 'Storage';
+
+  @override
+  String get exploreTransport => 'Transport';
+
+  @override
+  String get exploreNoCompaniesFound => 'No companies found';
+
+  @override
+  String get exploreTryAdjustingFilters => 'Try adjusting your search filters';
+
+  @override
+  String get exploreClearFilters => 'Clear filters';
+
+  @override
+  String get restrictionLoginOrRegister =>
+      'Please log in or register to continue.';
+
+  @override
+  String get restrictionContinue => 'Continue';
+
+  @override
+  String get restrictionBrowseCompanies => 'Browse Companies';
+
+  @override
+  String get restrictionRequestsTitle => 'Requests are currently unavailable';
+
+  @override
+  String get restrictionOffersTitle => 'Offers are currently unavailable';
+
+  @override
+  String get restrictionProfileTitle => 'Profile is currently unavailable';
+
+  @override
+  String get homeNoReviewsYet => 'No reviews yet';
+
+  @override
+  String get homeRecommendedLoadFailed =>
+      'Failed to load recommended companies.';
+
+  @override
+  String get homeTrendingLoadFailed => 'Failed to load trending companies.';
+
+  @override
+  String get homeAllCompaniesLoadFailed => 'Failed to load companies.';
+
+  @override
+  String get explorePageTitle => 'Explore';
+
+  @override
+  String get explorePagePlaceholderMessage => 'Explore content is coming soon.';
+
+  @override
+  String get companyDetailsPageTitle => 'Company Details';
+
+  @override
+  String get companyDetailsContactInfo => 'Contact Information';
+
+  @override
+  String get companyDetailsServices => 'Services';
+
+  @override
+  String get companyDetailsRecentReviews => 'Recent Reviews';
+
+  @override
+  String get companyDetailsNoContactInfo => 'No contact information available.';
+
+  @override
+  String get companyDetailsNoServicesAvailable => 'No services listed.';
+
+  @override
+  String get companyDetailsNoReviewsYet => 'No reviews available yet.';
+
+  @override
+  String get companyDetailsRequestService => 'Request Service';
+
+  @override
+  String get companyDetailsLoadFailed => 'Unable to load company details.';
+
+  @override
+  String get companyDetailsLoadMoreReviews => 'Load more reviews';
+
+  @override
+  String get companyDetailsAnonymousReviewer => 'Anonymous';
+
+  @override
+  String get companyDetailsNoComment => 'No comment provided.';
+
+  @override
+  String get companyDetailsUnknownCompany => 'Unknown company';
+
+  @override
+  String get companyDetailsUnnamedService => 'Service';
+
+  @override
+  String get companyDetailsInvalidCompanyId => 'Invalid company ID.';
+
+  @override
+  String companyDetailsPlaceholderBody(String companyId) {
+    return 'Company details for ID: $companyId';
+  }
 }

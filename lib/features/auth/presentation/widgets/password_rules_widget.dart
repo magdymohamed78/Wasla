@@ -67,7 +67,7 @@ class PasswordRulesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
+    final loc = AppLocalizations.of(context);
 
     final hasMinLength = Validators.hasMinLength(password);
     final hasNumber = Validators.hasNumber(password);

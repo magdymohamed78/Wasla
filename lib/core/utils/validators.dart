@@ -5,7 +5,7 @@ class Validators {
 
   static final _uppercaseRegex = RegExp(r'[A-Z]');
   static final _digitRegex = RegExp(r'\d');
-  static final _specialCharRegex = RegExp(r'[^a-zA-Z0-9\s]');
+ // static final _specialCharRegex = RegExp(r'[^a-zA-Z0-9\s]');
   static final _strictSpecialCharRegex = RegExp(r'[!@#\$%\^&\*]');
   static final _phoneRegex = RegExp(r'^\d{11}$');
   // Accepts Latin letters, Arabic letters (U+0600–U+06FF), and spaces

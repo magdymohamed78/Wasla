@@ -29,12 +29,14 @@ class _SignUpFormState extends State<SignUpForm> {
   void initState() {
     super.initState();
     _firstNameFocus.addListener(() {
-      if (!_firstNameFocus.hasFocus)
+      if (!_firstNameFocus.hasFocus) {
         context.read<RegisterCubit>().firstNameBlurred();
+      }
     });
     _lastNameFocus.addListener(() {
-      if (!_lastNameFocus.hasFocus)
+      if (!_lastNameFocus.hasFocus) {
         context.read<RegisterCubit>().lastNameBlurred();
+      }
     });
     _phoneFocus.addListener(() {
       if (!_phoneFocus.hasFocus) context.read<RegisterCubit>().phoneBlurred();
@@ -44,12 +46,14 @@ class _SignUpFormState extends State<SignUpForm> {
     });
     _passwordFocus.addListener(() {
       setState(() {});
-      if (!_passwordFocus.hasFocus)
+      if (!_passwordFocus.hasFocus) {
         context.read<RegisterCubit>().passwordBlurred();
+      }
     });
     _confirmPasswordFocus.addListener(() {
-      if (!_confirmPasswordFocus.hasFocus)
+      if (!_confirmPasswordFocus.hasFocus) {
         context.read<RegisterCubit>().confirmPasswordBlurred();
+      }
     });
   }
 
@@ -476,23 +480,23 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  String? _mapPasswordError(String? errorKey, AppLocalizations localizations) {
-    if (errorKey == null) return null;
-    switch (errorKey) {
-      case 'password_empty':
-        return localizations.signUpPasswordRequired;
-      case 'password_too_short':
-        return localizations.signUpPasswordTooShort;
-      case 'password_missing_uppercase':
-        return localizations.signUpPasswordMissingUppercase;
-      case 'password_missing_number':
-        return localizations.signUpPasswordMissingNumber;
-      case 'password_missing_special':
-        return localizations.signUpPasswordMissingSpecial;
-      default:
-        return null;
-    }
-  }
+  // String? _mapPasswordError(String? errorKey, AppLocalizations localizations) {
+  //   if (errorKey == null) return null;
+  //   switch (errorKey) {
+  //     case 'password_empty':
+  //       return localizations.signUpPasswordRequired;
+  //     case 'password_too_short':
+  //       return localizations.signUpPasswordTooShort;
+  //     case 'password_missing_uppercase':
+  //       return localizations.signUpPasswordMissingUppercase;
+  //     case 'password_missing_number':
+  //       return localizations.signUpPasswordMissingNumber;
+  //     case 'password_missing_special':
+  //       return localizations.signUpPasswordMissingSpecial;
+  //     default:
+  //       return null;
+  //   }
+  // }
 
   String? _mapConfirmPasswordError(
     String? errorKey,

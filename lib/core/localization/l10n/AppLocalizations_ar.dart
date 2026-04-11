@@ -366,4 +366,154 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get passwordStrengthHelperFeedback => 'يرجى اختيار كلمة مرور أقوى.';
+
+  @override
+  String get homeSearchForServicesOrCompanies => 'ابحث عن الخدمات أو الشركات';
+
+  @override
+  String get homeRecommendedCompanies => 'الشركات الموصى بها';
+
+  @override
+  String get homeTrendingCompanies => 'الشركات الرائجة';
+
+  @override
+  String get homeAllCompanies => 'كل الشركات';
+
+  @override
+  String get navigationHome => 'الرئيسية';
+
+  @override
+  String get navigationRequests => 'الطلبات';
+
+  @override
+  String get navigationOffers => 'العروض';
+
+  @override
+  String get navigationProfile => 'الملف الشخصي';
+
+  @override
+  String get exploreSearchCompanies => 'ابحث عن الشركات...';
+
+  @override
+  String get exploreSearchCity => 'المدينة...';
+
+  @override
+  String get exploreAllServices => 'كل الخدمات';
+
+  @override
+  String get exploreMove => 'نقل';
+
+  @override
+  String get exploreCleaning => 'تنظيف';
+
+  @override
+  String get exploreDisposal => 'تخلص';
+
+  @override
+  String get explorePacking => 'تغليف';
+
+  @override
+  String get exploreUnpacking => 'فك التغليف';
+
+  @override
+  String get exploreStorage => 'تخزين';
+
+  @override
+  String get exploreTransport => 'شحن';
+
+  @override
+  String get exploreNoCompaniesFound => 'لم يتم العثور على شركات';
+
+  @override
+  String get exploreTryAdjustingFilters => 'حاول تعديل فلاتر البحث';
+
+  @override
+  String get exploreClearFilters => 'مسح الفلاتر';
+
+  @override
+  String get restrictionLoginOrRegister =>
+      'يرجى تسجيل الدخول أو إنشاء حساب للمتابعة.';
+
+  @override
+  String get restrictionContinue => 'متابعة';
+
+  @override
+  String get restrictionBrowseCompanies => 'تصفح الشركات';
+
+  @override
+  String get restrictionRequestsTitle => 'الطلبات غير متاحة حالياً';
+
+  @override
+  String get restrictionOffersTitle => 'العروض غير متاحة حالياً';
+
+  @override
+  String get restrictionProfileTitle => 'الملف الشخصي غير متاح حالياً';
+
+  @override
+  String get homeNoReviewsYet => 'لا توجد مراجعات بعد';
+
+  @override
+  String get homeRecommendedLoadFailed => 'تعذر تحميل الشركات الموصى بها.';
+
+  @override
+  String get homeTrendingLoadFailed => 'تعذر تحميل الشركات الرائجة.';
+
+  @override
+  String get homeAllCompaniesLoadFailed => 'تعذر تحميل الشركات.';
+
+  @override
+  String get explorePageTitle => 'استكشاف';
+
+  @override
+  String get explorePagePlaceholderMessage => 'محتوى الاستكشاف قادم قريباً.';
+
+  @override
+  String get companyDetailsPageTitle => 'تفاصيل الشركة';
+
+  @override
+  String get companyDetailsContactInfo => 'معلومات التواصل';
+
+  @override
+  String get companyDetailsServices => 'الخدمات';
+
+  @override
+  String get companyDetailsRecentReviews => 'أحدث المراجعات';
+
+  @override
+  String get companyDetailsNoContactInfo => 'لا توجد معلومات تواصل متاحة.';
+
+  @override
+  String get companyDetailsNoServicesAvailable => 'لا توجد خدمات مدرجة.';
+
+  @override
+  String get companyDetailsNoReviewsYet => 'لا توجد مراجعات متاحة بعد.';
+
+  @override
+  String get companyDetailsRequestService => 'طلب خدمة';
+
+  @override
+  String get companyDetailsLoadFailed => 'تعذر تحميل تفاصيل الشركة.';
+
+  @override
+  String get companyDetailsLoadMoreReviews => 'تحميل المزيد من المراجعات';
+
+  @override
+  String get companyDetailsAnonymousReviewer => 'مستخدم مجهول';
+
+  @override
+  String get companyDetailsNoComment => 'لا يوجد تعليق.';
+
+  @override
+  String get companyDetailsUnknownCompany => 'شركة غير معروفة';
+
+  @override
+  String get companyDetailsUnnamedService => 'خدمة';
+
+  @override
+  String get companyDetailsInvalidCompanyId => 'معرف الشركة غير صالح.';
+
+  @override
+  String companyDetailsPlaceholderBody(String companyId) {
+    return 'تفاصيل الشركة للمعرف: $companyId';
+  }
 }

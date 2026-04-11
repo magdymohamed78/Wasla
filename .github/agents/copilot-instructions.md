@@ -1,6 +1,6 @@
 ﻿# Wasla Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-04-09
+Auto-generated from all feature plans. Last updated: 2026-04-11
 
 ## Active Technologies
 - Dart (null-safe), SDK ^3.11.0 + flutter_bloc ^8.1.6, go_router ^14.8.1, dio ^5.7.0, shared_preferences ^2.3.3 (010-customer-login)
@@ -21,6 +21,8 @@ Auto-generated from all feature plans. Last updated: 2026-04-09
 - N/A (no new persistence) (026-forgot-password-errors)
 - Dart 3.11 (Flutter stable, null-safe) + `flutter_bloc`, `go_router`, `flutter_password_strength_meter` (new), app theme tokens in `core/theme` (027-improve-password-ux)
 - N/A (UI/state-only enhancement; no persistence change) (027-improve-password-ux)
+- Dart 3.11 (Flutter stable, null-safe) + `flutter_bloc`, `go_router`, `dio`, `flutter_localizations`, `infinite_scroll_pagination` (planned), `easy_debounce` (planned), `cached_network_image` (planned) (028-discover-companies)
+- Session and lightweight local state via existing secure/local auth storage; no new persistent domain storage for discovery (028-discover-companies)
 
 - Dart (null-safe), SDK ^3.11.0 + flutter_bloc (Cubit), go_router, flutter_localizations, intl (006-fix-logo-rtl)
 
@@ -40,9 +42,9 @@ tests/
 Dart (null-safe), SDK ^3.11.0: Follow standard conventions
 
 ## Recent Changes
+- 028-discover-companies: Added Dart 3.11 (Flutter stable, null-safe) + `flutter_bloc`, `go_router`, `dio`, `flutter_localizations`, `infinite_scroll_pagination` (planned), `easy_debounce` (planned), `cached_network_image` (planned)
 - 027-improve-password-ux: Added Dart 3.11 (Flutter stable, null-safe) + `flutter_bloc`, `go_router`, `flutter_password_strength_meter` (new), app theme tokens in `core/theme`
 - 026-forgot-password-errors: Added Dart (SDK ^3.11.0) / Flutter + flutter_bloc 8.1.6, go_router 14.8.1, dio 5.7.0, intl (any)
-- 025-signup-signature-modal: Added Dart (SDK ^3.11.0), Flutter + flutter_bloc ^8.1.6, go_router ^14.8.1, dio ^5.7.0, path_provider (transitive  promote to direct dependency)
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -15,7 +15,7 @@ class SplashState {
 
   String get destination {
     if (!readyToNavigate) return '';
-    return authStatus == SplashAuthStatus.authenticated ? '/home' : '/onboarding';
+    return '/home';
   }
 
   SplashState copyWith({
