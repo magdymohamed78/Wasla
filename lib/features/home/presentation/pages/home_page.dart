@@ -6,13 +6,13 @@ import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
-import '../../../../core/theme/app_typography.dart';
 import '../../domain/entities/discovery_types.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
 import '../cubit/home_discovery_cubit.dart';
 import '../cubit/home_discovery_state.dart';
 import '../widgets/company_section_carousel.dart';
 import '../widgets/home_section_skeleton.dart';
+import '../widgets/view_all_search_entry.dart';
 
 class HomePlaceholderPage extends StatelessWidget {
   const HomePlaceholderPage({super.key});
@@ -51,7 +51,7 @@ class _HomeDiscoveryView extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(AppDimensions.paddingMd),
                 children: [
-                  _ExploreSearchEntry(
+                  ViewAllSearchEntry(
                     hintText: localizations.homeSearchForServicesOrCompanies,
                     onTap: () => context.push(AppRouter.explore),
                   ),
@@ -63,6 +63,8 @@ class _HomeDiscoveryView extends StatelessWidget {
                     onRetry: cubit.retryRecommended,
                     showTrendIndicator: false,
                     errorFallback: localizations.homeRecommendedLoadFailed,
+                    onViewAll: () =>
+                        context.push(AppRouter.recommendedCompanies),
                   ),
                   const SizedBox(height: AppDimensions.spacingLg),
                   _buildSection(
@@ -72,6 +74,7 @@ class _HomeDiscoveryView extends StatelessWidget {
                     onRetry: cubit.retryTrending,
                     showTrendIndicator: true,
                     errorFallback: localizations.homeTrendingLoadFailed,
+                    onViewAll: () => context.push(AppRouter.trendingCompanies),
                   ),
                   const SizedBox(height: AppDimensions.spacingLg),
                   _buildSection(
@@ -81,6 +84,7 @@ class _HomeDiscoveryView extends StatelessWidget {
                     onRetry: cubit.retryAllCompanies,
                     showTrendIndicator: false,
                     errorFallback: localizations.homeAllCompaniesLoadFailed,
+                    onViewAll: () => context.push(AppRouter.allCompanies),
                   ),
                 ],
               );
@@ -98,6 +102,7 @@ class _HomeDiscoveryView extends StatelessWidget {
     required Future<void> Function() onRetry,
     required bool showTrendIndicator,
     required String errorFallback,
+    required VoidCallback onViewAll,
   }) {
     switch (section.status) {
       case LoadStatus.initial:
@@ -108,6 +113,8 @@ class _HomeDiscoveryView extends StatelessWidget {
           title: title,
           companies: section.items,
           showTrendIndicator: showTrendIndicator,
+          viewAllLabel: localizations.homeViewAll,
+          onViewAll: onViewAll,
         );
       case LoadStatus.empty:
         return HomeSectionEmpty(
@@ -121,57 +128,5 @@ class _HomeDiscoveryView extends StatelessWidget {
           onRetry: () => onRetry(),
         );
     }
-  }
-}
-
-class _ExploreSearchEntry extends StatelessWidget {
-  final String hintText;
-  final VoidCallback onTap;
-
-  const _ExploreSearchEntry({required this.hintText, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
-        onTap: onTap,
-        child: Ink(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.paddingMd,
-            vertical: 14,
-          ),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(
-              AppDimensions.borderRadiusRound,
-            ), // Makes it pill shaped
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.cardShadow.withValues(alpha: 0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.search_rounded, color: AppColors.textSecondary),
-              const SizedBox(width: AppDimensions.spacingSm),
-              Expanded(
-                child: Text(
-                  hintText,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ),
-              const Icon(Icons.tune_rounded, color: AppColors.textSecondary),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

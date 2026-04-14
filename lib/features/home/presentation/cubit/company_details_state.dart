@@ -17,6 +17,7 @@ class CompanyDetailsState {
   final List<CompanyServiceItem> services;
   final List<CompanyReviewItem> reviews;
   final bool isRestrictionPromptVisible;
+  final int? pendingRequestServiceCompanyId;
   final bool hasMoreReviews;
   final bool isLoadingMoreReviews;
   final int nextReviewsPage;
@@ -37,6 +38,7 @@ class CompanyDetailsState {
     this.services = const <CompanyServiceItem>[],
     this.reviews = const <CompanyReviewItem>[],
     this.isRestrictionPromptVisible = false,
+    this.pendingRequestServiceCompanyId,
     this.hasMoreReviews = false,
     this.isLoadingMoreReviews = false,
     this.nextReviewsPage = 2,
@@ -70,6 +72,7 @@ class CompanyDetailsState {
     List<CompanyServiceItem>? services,
     List<CompanyReviewItem>? reviews,
     bool? isRestrictionPromptVisible,
+    Object? pendingRequestServiceCompanyId = _unset,
     bool? hasMoreReviews,
     bool? isLoadingMoreReviews,
     int? nextReviewsPage,
@@ -95,6 +98,10 @@ class CompanyDetailsState {
       reviews: reviews ?? this.reviews,
       isRestrictionPromptVisible:
           isRestrictionPromptVisible ?? this.isRestrictionPromptVisible,
+      pendingRequestServiceCompanyId:
+          identical(pendingRequestServiceCompanyId, _unset)
+          ? this.pendingRequestServiceCompanyId
+          : pendingRequestServiceCompanyId as int?,
       hasMoreReviews: hasMoreReviews ?? this.hasMoreReviews,
       isLoadingMoreReviews: isLoadingMoreReviews ?? this.isLoadingMoreReviews,
       nextReviewsPage: nextReviewsPage ?? this.nextReviewsPage,

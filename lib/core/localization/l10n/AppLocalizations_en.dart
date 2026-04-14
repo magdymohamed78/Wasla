@@ -384,7 +384,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAllCompanies => 'All Companies';
 
   @override
+  String get homeViewAll => 'View All';
+
+  @override
   String get navigationHome => 'Home';
+
+  @override
+  String get navigationCompanies => 'Companies';
+
+  @override
+  String get navigationSignIn => 'Sign In';
 
   @override
   String get navigationRequests => 'Requests';
@@ -394,6 +403,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navigationProfile => 'Profile';
+
+  @override
+  String get navigationSettings => 'Settings';
+
+  @override
+  String get navigationAllCompanies => 'All Companies';
+
+  @override
+  String get navigationRecommended => 'Recommended';
+
+  @override
+  String get navigationTrending => 'Trending';
+
+  @override
+  String get a11yCompaniesDropdownButton => 'Open companies options';
+
+  @override
+  String get a11ySettingsTabButton => 'Open settings';
+
+  @override
+  String get a11yViewAllButton => 'View all companies in this section';
 
   @override
   String get exploreSearchCompanies => 'Search companies...';
@@ -436,22 +466,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restrictionLoginOrRegister =>
-      'Please log in or register to continue.';
+      'Sign in to unlock this destination.';
 
   @override
   String get restrictionContinue => 'Continue';
 
   @override
-  String get restrictionBrowseCompanies => 'Browse Companies';
+  String get restrictionCancel => 'Cancel';
 
   @override
-  String get restrictionRequestsTitle => 'Requests are currently unavailable';
+  String get restrictionBrowseCompanies => 'Back to Companies';
 
   @override
-  String get restrictionOffersTitle => 'Offers are currently unavailable';
+  String get restrictionRequestsTitle => 'Requests require sign in';
 
   @override
-  String get restrictionProfileTitle => 'Profile is currently unavailable';
+  String get restrictionOffersTitle => 'Offers require sign in';
+
+  @override
+  String get restrictionProfileTitle => 'Profile requires sign in';
+
+  @override
+  String get restrictionRequestsMessage =>
+      'Sign in to track and manage your requests.';
+
+  @override
+  String get restrictionOffersMessage =>
+      'Sign in to view and compare your offers.';
+
+  @override
+  String get restrictionProfileMessage =>
+      'Sign in to access your profile and settings.';
+
+  @override
+  String get requestFlowContinuePromptTitle =>
+      'Sign in to request this service';
+
+  @override
+  String get requestFlowContinuePromptMessage =>
+      'Continue to sign in so you can request service from this company.';
+
+  @override
+  String get requestFlowLeadReloginPromptTitle => 'Finish setup to continue';
+
+  @override
+  String get requestFlowLeadReloginPromptMessage =>
+      'Please sign in again to continue and unlock your full customer access.';
+
+  @override
+  String get requestFlowSuccessGoToRequests => 'Go to Requests';
+
+  @override
+  String get requestFlowMissingCompany =>
+      'Please choose a company before submitting your request.';
 
   @override
   String get homeNoReviewsYet => 'No reviews yet';

@@ -788,11 +788,29 @@ abstract class AppLocalizations {
   /// **'All Companies'**
   String get homeAllCompanies;
 
+  /// CTA button label that opens the full companies list for a home section.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get homeViewAll;
+
   /// No description provided for @navigationHome.
   ///
   /// In en, this message translates to:
   /// **'Home'**
   String get navigationHome;
+
+  /// Bottom navigation item label that opens the Companies dropdown menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Companies'**
+  String get navigationCompanies;
+
+  /// No description provided for @navigationSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get navigationSignIn;
 
   /// No description provided for @navigationRequests.
   ///
@@ -811,6 +829,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get navigationProfile;
+
+  /// Bottom navigation item label for role-specific settings destination.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get navigationSettings;
+
+  /// No description provided for @navigationAllCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'All Companies'**
+  String get navigationAllCompanies;
+
+  /// No description provided for @navigationRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended'**
+  String get navigationRecommended;
+
+  /// No description provided for @navigationTrending.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending'**
+  String get navigationTrending;
+
+  /// No description provided for @a11yCompaniesDropdownButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open companies options'**
+  String get a11yCompaniesDropdownButton;
+
+  /// No description provided for @a11ySettingsTabButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get a11ySettingsTabButton;
+
+  /// No description provided for @a11yViewAllButton.
+  ///
+  /// In en, this message translates to:
+  /// **'View all companies in this section'**
+  String get a11yViewAllButton;
 
   /// No description provided for @exploreSearchCompanies.
   ///
@@ -893,7 +953,7 @@ abstract class AppLocalizations {
   /// No description provided for @restrictionLoginOrRegister.
   ///
   /// In en, this message translates to:
-  /// **'Please log in or register to continue.'**
+  /// **'Sign in to unlock this destination.'**
   String get restrictionLoginOrRegister;
 
   /// No description provided for @restrictionContinue.
@@ -902,29 +962,89 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get restrictionContinue;
 
+  /// No description provided for @restrictionCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get restrictionCancel;
+
   /// No description provided for @restrictionBrowseCompanies.
   ///
   /// In en, this message translates to:
-  /// **'Browse Companies'**
+  /// **'Back to Companies'**
   String get restrictionBrowseCompanies;
 
   /// No description provided for @restrictionRequestsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Requests are currently unavailable'**
+  /// **'Requests require sign in'**
   String get restrictionRequestsTitle;
 
   /// No description provided for @restrictionOffersTitle.
   ///
   /// In en, this message translates to:
-  /// **'Offers are currently unavailable'**
+  /// **'Offers require sign in'**
   String get restrictionOffersTitle;
 
   /// No description provided for @restrictionProfileTitle.
   ///
   /// In en, this message translates to:
-  /// **'Profile is currently unavailable'**
+  /// **'Profile requires sign in'**
   String get restrictionProfileTitle;
+
+  /// No description provided for @restrictionRequestsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to track and manage your requests.'**
+  String get restrictionRequestsMessage;
+
+  /// No description provided for @restrictionOffersMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to view and compare your offers.'**
+  String get restrictionOffersMessage;
+
+  /// No description provided for @restrictionProfileMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to access your profile and settings.'**
+  String get restrictionProfileMessage;
+
+  /// No description provided for @requestFlowContinuePromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to request this service'**
+  String get requestFlowContinuePromptTitle;
+
+  /// No description provided for @requestFlowContinuePromptMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to sign in so you can request service from this company.'**
+  String get requestFlowContinuePromptMessage;
+
+  /// No description provided for @requestFlowLeadReloginPromptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish setup to continue'**
+  String get requestFlowLeadReloginPromptTitle;
+
+  /// No description provided for @requestFlowLeadReloginPromptMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again to continue and unlock your full customer access.'**
+  String get requestFlowLeadReloginPromptMessage;
+
+  /// No description provided for @requestFlowSuccessGoToRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Requests'**
+  String get requestFlowSuccessGoToRequests;
+
+  /// No description provided for @requestFlowMissingCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Please choose a company before submitting your request.'**
+  String get requestFlowMissingCompany;
 
   /// No description provided for @homeNoReviewsYet.
   ///

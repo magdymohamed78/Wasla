@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:waslaapp/core/localization/l10n/AppLocalizations.dart';
 import 'package:waslaapp/features/auth/domain/repositories/auth_repository.dart';
+import 'package:waslaapp/features/auth/presentation/cubit/forgot_password_cubit.dart';
 import 'package:waslaapp/features/auth/presentation/pages/forgot_password_page.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -16,8 +17,9 @@ void main() {
 
     setUp(() {
       mockAuthRepository = MockAuthRepository();
-      when(() => mockAuthRepository.forgotPassword(email: any(named: 'email')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockAuthRepository.forgotPassword(email: any(named: 'email')),
+      ).thenAnswer((_) async {});
     });
 
     Widget buildSubject() {
@@ -50,6 +52,12 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           routerConfig: router,
         ),
+      );
+    }
+
+    AppLocalizations localizations(WidgetTester tester) {
+      return AppLocalizations.of(
+        tester.element(find.byType(ForgotPasswordPage)),
       );
     }
 
@@ -88,7 +96,9 @@ void main() {
       expect(button.onPressed, isNotNull);
     });
 
-    testWidgets('calls forgotPassword API when send is clicked', (tester) async {
+    testWidgets('calls forgotPassword API when send is clicked', (
+      tester,
+    ) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
@@ -101,23 +111,34 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 600));
 
-      verify(() => mockAuthRepository.forgotPassword(email: 'test@example.com'))
-          .called(1);
+      verify(
+        () => mockAuthRepository.forgotPassword(email: 'test@example.com'),
+      ).called(1);
     });
 
     testWidgets('shows error for invalid email', (tester) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
 
+      final l10n = localizations(tester);
+
       await tester.enterText(find.byType(TextField), 'invalid-email');
       await tester.pump();
 
-      expect(find.text('Please enter a valid email'), findsOneWidget);
+      tester
+          .element(find.byType(TextField))
+          .read<ForgotPasswordCubit>()
+          .emailBlurred();
+      await tester.pump();
+
+      expect(find.text(l10n.forgotPasswordEmailInvalid), findsOneWidget);
     });
 
     testWidgets('shows error for empty email', (tester) async {
       await tester.pumpWidget(buildSubject());
       await tester.pumpAndSettle();
+
+      final l10n = localizations(tester);
 
       await tester.enterText(find.byType(TextField), 'test@test.com');
       await tester.pump();
@@ -125,7 +146,13 @@ void main() {
       await tester.enterText(find.byType(TextField), '');
       await tester.pump();
 
-      expect(find.text('Email is required'), findsOneWidget);
+      tester
+          .element(find.byType(TextField))
+          .read<ForgotPasswordCubit>()
+          .emailBlurred();
+      await tester.pump();
+
+      expect(find.text(l10n.forgotPasswordEmailRequired), findsOneWidget);
     });
 
     testWidgets('sign-up link is always visible on the page', (tester) async {
@@ -147,37 +174,41 @@ void main() {
       expect(find.text('Register Page'), findsOneWidget);
     });
 
-    testWidgets('403 error shows snackbar with Contact Support action that navigates to support page', (tester) async {
-      when(() => mockAuthRepository.forgotPassword(email: any(named: 'email')))
-          .thenThrow(
-        DioException(
-          requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
-          response: Response(
+    testWidgets(
+      '403 error shows snackbar with Contact Support action that navigates to support page',
+      (tester) async {
+        when(
+          () => mockAuthRepository.forgotPassword(email: any(named: 'email')),
+        ).thenThrow(
+          DioException(
             requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
-            statusCode: 403,
+            response: Response(
+              requestOptions: RequestOptions(path: '/api/Auth/forgot-password'),
+              statusCode: 403,
+            ),
+            type: DioExceptionType.badResponse,
           ),
-          type: DioExceptionType.badResponse,
-        ),
-      );
+        );
 
-      await tester.pumpWidget(buildSubject());
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(buildSubject());
+        await tester.pumpAndSettle();
 
-      await tester.enterText(find.byType(TextField), 'inactive@example.com');
-      await tester.pump();
+        await tester.enterText(find.byType(TextField), 'inactive@example.com');
+        await tester.pump();
 
-      await tester.ensureVisible(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
+        await tester.ensureVisible(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 600));
 
-      expect(find.text('Contact Support'), findsOneWidget);
+        expect(find.text('Contact Support'), findsOneWidget);
 
-      await tester.tap(find.text('Contact Support'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('Contact Support'));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Support Page'), findsOneWidget);
-    });
+        expect(find.text('Support Page'), findsOneWidget);
+      },
+    );
   });
 }

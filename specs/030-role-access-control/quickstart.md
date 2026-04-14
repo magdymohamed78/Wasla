@@ -77,3 +77,19 @@
    - Lead Request Service submit -> re-login -> Customer
    - Customer accesses Requests/Offers/Profile/Settings
 4. Confirm SC-001 through SC-012 scenarios from spec are reproducible.
+
+## 11) Validation Record (2026-04-14)
+1. Automated validation completed:
+   - `flutter analyze` passed with no issues.
+   - `flutter test` passed with all tests.
+2. End-to-end role and continuation checks reviewed against implementation:
+   - Guest shell navigation resolves to Companies dropdown + Sign In.
+   - Lead shell navigation resolves to Companies dropdown + Profile + Settings and settings routes to `/my/lead-settings`.
+   - Customer shell navigation resolves to Companies dropdown + Requests + Offers + Profile + Settings and settings routes to `/my/settings`.
+   - Home section cards show limited previews and route View All actions to dedicated listing pages.
+   - Listing-page search entry always routes to Explore.
+   - Pending Request Service continuation is resumed after login when stored context is valid.
+3. Device smoke checklist to run before release:
+   - Guest -> Sign In -> Lead transition.
+   - Lead request submit -> re-login -> Customer transition.
+   - Customer access to Requests, Offers, Profile, and Settings.

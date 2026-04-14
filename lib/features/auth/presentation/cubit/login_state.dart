@@ -15,6 +15,8 @@ enum LoginErrorCode {
 }
 
 class LoginState {
+  static const Object _unset = Object();
+
   final String email;
   final String password;
   final bool obscurePassword;
@@ -30,6 +32,7 @@ class LoginState {
   final LoginErrorCategory? errorCategory;
   final bool isRateLimited;
   final int rateLimitRemainingSeconds;
+  final String? postLoginRoute;
 
   const LoginState({
     this.email = '',
@@ -47,6 +50,7 @@ class LoginState {
     this.errorCategory,
     this.isRateLimited = false,
     this.rateLimitRemainingSeconds = 0,
+    this.postLoginRoute,
   });
 
   LoginState copyWith({
@@ -65,6 +69,7 @@ class LoginState {
     LoginErrorCategory? errorCategory,
     bool? isRateLimited,
     int? rateLimitRemainingSeconds,
+    Object? postLoginRoute = _unset,
   }) {
     return LoginState(
       email: email ?? this.email,
@@ -81,7 +86,11 @@ class LoginState {
       passwordTouched: passwordTouched ?? this.passwordTouched,
       errorCategory: errorCategory ?? this.errorCategory,
       isRateLimited: isRateLimited ?? this.isRateLimited,
-      rateLimitRemainingSeconds: rateLimitRemainingSeconds ?? this.rateLimitRemainingSeconds,
+      rateLimitRemainingSeconds:
+          rateLimitRemainingSeconds ?? this.rateLimitRemainingSeconds,
+      postLoginRoute: identical(postLoginRoute, _unset)
+          ? this.postLoginRoute
+          : postLoginRoute as String?,
     );
   }
 }

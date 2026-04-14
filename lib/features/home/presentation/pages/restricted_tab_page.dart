@@ -8,15 +8,19 @@ import '../../../../core/widgets/primary_button.dart';
 class RestrictedTabPage extends StatelessWidget {
   final String title;
   final String message;
-  final String browseCompaniesLabel;
-  final VoidCallback onBrowseCompanies;
+  final String primaryActionLabel;
+  final VoidCallback onPrimaryAction;
+  final String? secondaryActionLabel;
+  final VoidCallback? onSecondaryAction;
 
   const RestrictedTabPage({
     super.key,
     required this.title,
     required this.message,
-    required this.browseCompaniesLabel,
-    required this.onBrowseCompanies,
+    required this.primaryActionLabel,
+    required this.onPrimaryAction,
+    this.secondaryActionLabel,
+    this.onSecondaryAction,
   });
 
   @override
@@ -76,9 +80,19 @@ class RestrictedTabPage extends StatelessWidget {
                   ),
                   const SizedBox(height: AppDimensions.spacingLg),
                   PrimaryButton(
-                    label: browseCompaniesLabel,
-                    onPressed: onBrowseCompanies,
+                    label: primaryActionLabel,
+                    onPressed: onPrimaryAction,
                   ),
+                  if (secondaryActionLabel != null && onSecondaryAction != null)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: AppDimensions.spacingSm,
+                      ),
+                      child: TextButton(
+                        onPressed: onSecondaryAction,
+                        child: Text(secondaryActionLabel!),
+                      ),
+                    ),
                 ],
               ),
             ),

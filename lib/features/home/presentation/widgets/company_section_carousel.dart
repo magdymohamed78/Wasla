@@ -10,6 +10,8 @@ class CompanySectionCarousel extends StatelessWidget {
   final List<CompanySummary> companies;
   final bool showTrendIndicator;
   final ValueChanged<CompanySummary>? onCompanyTap;
+  final String? viewAllLabel;
+  final VoidCallback? onViewAll;
 
   const CompanySectionCarousel({
     super.key,
@@ -17,6 +19,8 @@ class CompanySectionCarousel extends StatelessWidget {
     required this.companies,
     this.showTrendIndicator = false,
     this.onCompanyTap,
+    this.viewAllLabel,
+    this.onViewAll,
   });
 
   @override
@@ -24,7 +28,13 @@ class CompanySectionCarousel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppTypography.heading3),
+        Row(
+          children: [
+            Expanded(child: Text(title, style: AppTypography.heading3)),
+            if (onViewAll != null && viewAllLabel != null)
+              TextButton(onPressed: onViewAll, child: Text(viewAllLabel!)),
+          ],
+        ),
         const SizedBox(height: AppDimensions.spacingSm),
         SizedBox(
           height: 260,

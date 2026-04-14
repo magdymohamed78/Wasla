@@ -113,3 +113,21 @@ No constitutional violations requiring justification.
 - Gate 4 - API contract integrity: PASS. Contracts reference concrete Swagger endpoints and DTO contracts.
 - Gate 5 - UX consistency: PASS. Shared modal/empty-state models remain canonical.
 - Gate 6 - Testability: PASS. Quickstart validation includes role transition, refresh, and continuation scenarios.
+
+## Implementation Notes (2026-04-14)
+
+- Completed phases 1 through 7 for feature `030-role-access-control`.
+- Finalized role-aware navigation surfaces:
+  - Companies dropdown destinations (all/recommended/trending)
+  - Role-specific settings destinations (`/my/lead-settings`, `/my/settings`)
+  - Home section limited-preview + View All behavior
+- Finalized localization copy for role restrictions and continuation prompts, including accessibility-oriented labels in ARB resources.
+- Validation evidence:
+  - `flutter analyze` passes.
+  - `flutter test` passes.
+  - Quickstart validation record updated in `quickstart.md`.
+
+## Residual Risks
+
+- Settings pages are scaffold implementations and still require full product content and interaction behavior.
+- Manual device-level smoke validation remains required before release sign-off to confirm UX parity across Android and iOS runtimes.

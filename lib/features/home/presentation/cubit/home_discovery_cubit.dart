@@ -1,9 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/entities/company_summary.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
 import 'home_discovery_state.dart';
 
 class HomeDiscoveryCubit extends Cubit<HomeDiscoveryState> {
+  static const int _homePreviewLimit = 3;
+
   final GetRecommendedCompaniesUseCase _getRecommendedCompaniesUseCase;
   final GetTrendingCompaniesUseCase _getTrendingCompaniesUseCase;
   final GetAllCompaniesUseCase _getAllCompaniesUseCase;
@@ -45,7 +48,7 @@ class HomeDiscoveryCubit extends Cubit<HomeDiscoveryState> {
         state.copyWith(
           recommendedSection: page.items.isEmpty
               ? const HomeSectionState.empty()
-              : HomeSectionState.success(page.items),
+              : HomeSectionState.success(_limitedPreview(page.items)),
         ),
       );
     } catch (_) {
@@ -73,7 +76,7 @@ class HomeDiscoveryCubit extends Cubit<HomeDiscoveryState> {
         state.copyWith(
           trendingSection: page.items.isEmpty
               ? const HomeSectionState.empty()
-              : HomeSectionState.success(page.items),
+              : HomeSectionState.success(_limitedPreview(page.items)),
         ),
       );
     } catch (_) {
@@ -101,7 +104,7 @@ class HomeDiscoveryCubit extends Cubit<HomeDiscoveryState> {
         state.copyWith(
           allCompaniesSection: page.items.isEmpty
               ? const HomeSectionState.empty()
-              : HomeSectionState.success(page.items),
+              : HomeSectionState.success(_limitedPreview(page.items)),
         ),
       );
     } catch (_) {
@@ -113,5 +116,13 @@ class HomeDiscoveryCubit extends Cubit<HomeDiscoveryState> {
         ),
       );
     }
+  }
+
+  List<CompanySummary> _limitedPreview(List<CompanySummary> items) {
+    if (items.length <= _homePreviewLimit) {
+      return items;
+    }
+
+    return items.take(_homePreviewLimit).toList(growable: false);
   }
 }

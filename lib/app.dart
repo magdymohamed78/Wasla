@@ -11,6 +11,9 @@ import 'core/localization/locale_repository_impl.dart';
 import 'core/localization/locale_cubit/locale_cubit.dart';
 import 'core/localization/locale_cubit/locale_state.dart';
 import 'core/networking/auth_interceptor.dart';
+import 'core/session/pending_intent_store.dart';
+import 'core/session/role_resolver.dart';
+import 'core/session/session_cubit.dart';
 import 'features/auth/data/data_sources/auth_remote_data_source.dart';
 import 'features/auth/data/data_sources/auth_local_data_source.dart';
 import 'features/auth/data/data_sources/secure_auth_local_data_source.dart';
@@ -22,9 +25,18 @@ import 'features/auth/domain/use_cases/register_use_case.dart';
 import 'features/auth/presentation/cubit/login_cubit.dart';
 import 'features/auth/presentation/cubit/register_cubit.dart';
 import 'features/home/data/data_sources/discovery_remote_data_source.dart';
+import 'features/home/data/data_sources/customer_portal_remote_data_source.dart';
+import 'features/home/data/data_sources/service_request_remote_data_source.dart';
+import 'features/home/data/repositories/customer_portal_repository_impl.dart';
 import 'features/home/data/repositories/discovery_repository_impl.dart';
+import 'features/home/data/repositories/service_request_repository_impl.dart';
+import 'features/home/domain/repositories/customer_portal_repository.dart';
 import 'features/home/domain/repositories/discovery_repository.dart';
+import 'features/home/domain/repositories/service_request_repository.dart';
+import 'features/home/domain/use_cases/customer_portal_use_cases.dart';
 import 'features/home/domain/use_cases/discovery_use_cases.dart';
+import 'features/home/domain/use_cases/role_guard_use_cases.dart';
+import 'features/home/domain/use_cases/service_request_use_cases.dart';
 import 'features/splash/presentation/cubit/splash_cubit.dart';
 
 class App extends StatefulWidget {
@@ -49,12 +61,26 @@ class _AppState extends State<App> {
   late final LoginUseCase _loginUseCase;
   late final RegisterUseCase _registerUseCase;
   late final DiscoveryRemoteDataSource _discoveryRemoteDataSource;
+  late final CustomerPortalRemoteDataSource _customerPortalRemoteDataSource;
   late final DiscoveryRepository _discoveryRepository;
+  late final CustomerPortalRepository _customerPortalRepository;
+  late final ServiceRequestRemoteDataSource _serviceRequestRemoteDataSource;
+  late final ServiceRequestRepository _serviceRequestRepository;
   late final GetAllCompaniesUseCase _getAllCompaniesUseCase;
   late final GetRecommendedCompaniesUseCase _getRecommendedCompaniesUseCase;
   late final GetTrendingCompaniesUseCase _getTrendingCompaniesUseCase;
   late final GetCompanyDetailsUseCase _getCompanyDetailsUseCase;
   late final GetCompanyReviewsUseCase _getCompanyReviewsUseCase;
+  late final GetCustomerServiceRequestsUseCase
+  _getCustomerServiceRequestsUseCase;
+  late final GetCustomerOffersUseCase _getCustomerOffersUseCase;
+  late final GetCustomerProfileUseCase _getCustomerProfileUseCase;
+  late final GetLeadProfileUseCase _getLeadProfileUseCase;
+  late final SubmitServiceRequestUseCase _submitServiceRequestUseCase;
+  late final RoleResolver _roleResolver;
+  late final PendingIntentStore _pendingIntentStore;
+  late final SessionCubit _sessionCubit;
+  late final RoleGuardUseCases _roleGuardUseCases;
   late final LoginCubit _loginCubit;
   late final RegisterCubit _registerCubit;
   late final SplashCubit _splashCubit;
@@ -91,9 +117,24 @@ class _AppState extends State<App> {
       inMemoryLocalDataSource: _inMemoryAuthLocalDataSource,
     );
 
+    _roleResolver = const RoleResolver();
+    _pendingIntentStore = SharedPrefsPendingIntentStore(
+      widget.sharedPreferences,
+    );
+    _sessionCubit = SessionCubit(
+      authRepository: _authRepository,
+      pendingIntentStore: _pendingIntentStore,
+      roleResolver: _roleResolver,
+    )..initialize();
+    _roleGuardUseCases = const RoleGuardUseCases();
+
     _discoveryRemoteDataSource = DiscoveryRemoteDataSourceImpl(_dio);
+    _customerPortalRemoteDataSource = CustomerPortalRemoteDataSourceImpl(_dio);
     _discoveryRepository = DiscoveryRepositoryImpl(
       remote: _discoveryRemoteDataSource,
+    );
+    _customerPortalRepository = CustomerPortalRepositoryImpl(
+      remote: _customerPortalRemoteDataSource,
     );
     _getAllCompaniesUseCase = GetAllCompaniesUseCase(_discoveryRepository);
     _getRecommendedCompaniesUseCase = GetRecommendedCompaniesUseCase(
@@ -104,6 +145,24 @@ class _AppState extends State<App> {
     );
     _getCompanyDetailsUseCase = GetCompanyDetailsUseCase(_discoveryRepository);
     _getCompanyReviewsUseCase = GetCompanyReviewsUseCase(_discoveryRepository);
+    _getCustomerServiceRequestsUseCase = GetCustomerServiceRequestsUseCase(
+      _customerPortalRepository,
+    );
+    _getCustomerOffersUseCase = GetCustomerOffersUseCase(
+      _customerPortalRepository,
+    );
+    _getCustomerProfileUseCase = GetCustomerProfileUseCase(
+      _customerPortalRepository,
+    );
+    _getLeadProfileUseCase = GetLeadProfileUseCase(_customerPortalRepository);
+
+    _serviceRequestRemoteDataSource = ServiceRequestRemoteDataSourceImpl(_dio);
+    _serviceRequestRepository = ServiceRequestRepositoryImpl(
+      remote: _serviceRequestRemoteDataSource,
+    );
+    _submitServiceRequestUseCase = SubmitServiceRequestUseCase(
+      _serviceRequestRepository,
+    );
 
     _authInterceptor.setAuthRepository(_authRepository);
 
@@ -112,6 +171,7 @@ class _AppState extends State<App> {
     _loginCubit = LoginCubit(
       loginUseCase: _loginUseCase,
       authRepository: _authRepository,
+      sessionCubit: _sessionCubit,
     );
     _registerCubit = RegisterCubit(
       registerUseCase: _registerUseCase,
@@ -127,6 +187,7 @@ class _AppState extends State<App> {
     _loginCubit.close();
     _registerCubit.close();
     _splashCubit.close();
+    _sessionCubit.close();
     _dio.close();
     super.dispose();
   }
@@ -139,6 +200,11 @@ class _AppState extends State<App> {
           create: (_) => LocaleRepositoryImpl(widget.sharedPreferences),
         ),
         RepositoryProvider<AuthRepository>.value(value: _authRepository),
+        RepositoryProvider<RoleResolver>.value(value: _roleResolver),
+        RepositoryProvider<PendingIntentStore>.value(
+          value: _pendingIntentStore,
+        ),
+        RepositoryProvider<RoleGuardUseCases>.value(value: _roleGuardUseCases),
         RepositoryProvider<DiscoveryRepository>.value(
           value: _discoveryRepository,
         ),
@@ -157,6 +223,27 @@ class _AppState extends State<App> {
         RepositoryProvider<GetCompanyReviewsUseCase>.value(
           value: _getCompanyReviewsUseCase,
         ),
+        RepositoryProvider<ServiceRequestRepository>.value(
+          value: _serviceRequestRepository,
+        ),
+        RepositoryProvider<CustomerPortalRepository>.value(
+          value: _customerPortalRepository,
+        ),
+        RepositoryProvider<SubmitServiceRequestUseCase>.value(
+          value: _submitServiceRequestUseCase,
+        ),
+        RepositoryProvider<GetCustomerServiceRequestsUseCase>.value(
+          value: _getCustomerServiceRequestsUseCase,
+        ),
+        RepositoryProvider<GetCustomerOffersUseCase>.value(
+          value: _getCustomerOffersUseCase,
+        ),
+        RepositoryProvider<GetCustomerProfileUseCase>.value(
+          value: _getCustomerProfileUseCase,
+        ),
+        RepositoryProvider<GetLeadProfileUseCase>.value(
+          value: _getLeadProfileUseCase,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -164,6 +251,7 @@ class _AppState extends State<App> {
           BlocProvider<LoginCubit>.value(value: _loginCubit),
           BlocProvider<RegisterCubit>.value(value: _registerCubit),
           BlocProvider<SplashCubit>.value(value: _splashCubit),
+          BlocProvider<SessionCubit>.value(value: _sessionCubit),
         ],
         child: BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, localeState) {

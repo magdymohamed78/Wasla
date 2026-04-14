@@ -7,12 +7,14 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/session/session_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../domain/entities/discovery_types.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
+import '../../domain/use_cases/role_guard_use_cases.dart';
 import '../cubit/company_details_cubit.dart';
 import '../cubit/company_details_state.dart';
 import '../widgets/company_details_sections.dart';
@@ -29,6 +31,8 @@ class CompanyDetailsPage extends StatelessWidget {
       create: (context) => CompanyDetailsCubit(
         companyId: companyId,
         getCompanyDetailsUseCase: context.read<GetCompanyDetailsUseCase>(),
+        sessionCubit: context.read<SessionCubit>(),
+        roleGuardUseCases: context.read<RoleGuardUseCases>(),
       )..loadDetails(),
       child: const _CompanyDetailsView(),
     );
@@ -42,21 +46,45 @@ class _CompanyDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
 
-    return BlocListener<CompanyDetailsCubit, CompanyDetailsState>(
-      listenWhen: (previous, current) =>
-          previous.isRestrictionPromptVisible !=
-          current.isRestrictionPromptVisible,
-      listener: (context, state) {
-        if (!state.isRestrictionPromptVisible) {
-          return;
-        }
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<CompanyDetailsCubit, CompanyDetailsState>(
+          listenWhen: (previous, current) =>
+              previous.isRestrictionPromptVisible !=
+              current.isRestrictionPromptVisible,
+          listener: (context, state) {
+            if (!state.isRestrictionPromptVisible) {
+              return;
+            }
 
-        _showRestrictionPromptModal(
-          context,
-          message: localizations.restrictionLoginOrRegister,
-          continueLabel: localizations.restrictionContinue,
-        );
-      },
+            _showRestrictionPromptModal(
+              context,
+              companyId: state.companyId,
+              message: localizations.requestFlowContinuePromptMessage,
+              continueLabel: localizations.restrictionContinue,
+              cancelLabel: localizations.restrictionCancel,
+            );
+          },
+        ),
+        BlocListener<CompanyDetailsCubit, CompanyDetailsState>(
+          listenWhen: (previous, current) =>
+              previous.pendingRequestServiceCompanyId !=
+              current.pendingRequestServiceCompanyId,
+          listener: (context, state) {
+            final companyId = state.pendingRequestServiceCompanyId;
+            if (companyId == null) {
+              return;
+            }
+
+            context
+                .read<CompanyDetailsCubit>()
+                .consumeRequestServiceNavigation();
+            context.push(
+              AppRouter.newServiceRequestLocation(companyId: companyId),
+            );
+          },
+        ),
+      ],
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
@@ -157,11 +185,13 @@ class _CompanyDetailsView extends StatelessWidget {
 
   Future<void> _showRestrictionPromptModal(
     BuildContext context, {
+    required int companyId,
     required String message,
     required String continueLabel,
+    required String cancelLabel,
   }) async {
     final cubit = context.read<CompanyDetailsCubit>();
-    final cancelLabel = MaterialLocalizations.of(context).cancelButtonLabel;
+    final sessionCubit = context.read<SessionCubit>();
 
     await showGeneralDialog<void>(
       context: context,
@@ -186,9 +216,16 @@ class _CompanyDetailsView extends StatelessWidget {
                       message: message,
                       continueLabel: continueLabel,
                       cancelLabel: cancelLabel,
-                      onContinue: () {
+                      onContinue: () async {
+                        await sessionCubit.saveRequestServicePendingIntent(
+                          companyId: companyId,
+                          sourceRoute: AppRouter.companyLocation(companyId),
+                        );
+                        if (!dialogContext.mounted) {
+                          return;
+                        }
                         Navigator.of(dialogContext).pop();
-                        context.push(AppRouter.onboarding);
+                        context.push(AppRouter.signIn);
                       },
                       onCancel: () => Navigator.of(dialogContext).pop(),
                     ),

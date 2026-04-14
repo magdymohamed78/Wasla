@@ -1,4 +1,12 @@
+import 'dart:async';
+
 import '../entities/login_entity.dart';
+
+typedef SessionUpdatedHook =
+    FutureOr<void> Function(LoginEntity user, bool isRefresh);
+
+typedef SessionClearedHook =
+    FutureOr<void> Function(bool preservePendingIntent);
 
 abstract class AuthRepository {
   Future<LoginEntity> login({
@@ -21,7 +29,14 @@ abstract class AuthRepository {
 
   Future<void> saveSession(LoginEntity user, {required bool rememberMe});
 
-  Future<void> clearSession();
+  Future<void> updateStoredSession(LoginEntity user, {required bool isRefresh});
+
+  Future<void> clearSession({bool preservePendingIntent = false});
+
+  void registerSessionHooks({
+    SessionUpdatedHook? onSessionUpdated,
+    SessionClearedHook? onSessionCleared,
+  });
 
   Future<LoginEntity> refreshToken({required String refreshToken});
 

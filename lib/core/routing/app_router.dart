@@ -9,9 +9,13 @@ import '../../features/auth/presentation/pages/sign_up_page.dart';
 import '../../features/auth/presentation/pages/sign_up_success_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/change_password_page.dart';
+import '../../features/home/presentation/pages/all_companies_page.dart';
 import '../../features/home/presentation/pages/company_details_page.dart';
 import '../../features/home/presentation/pages/discovery_shell_page.dart';
 import '../../features/home/presentation/pages/explore_page.dart';
+import '../../features/home/presentation/pages/new_service_request_page.dart';
+import '../../features/home/presentation/pages/recommended_companies_page.dart';
+import '../../features/home/presentation/pages/trending_companies_page.dart';
 import '../../features/home/presentation/cubit/lead_access_state.dart';
 
 class AppRouter {
@@ -22,6 +26,7 @@ class AppRouter {
 
   static const String splash = '/';
   static const String onboarding = '/onboarding';
+  static const String signIn = '/sign-in';
   static const String support = '/support';
   static const String login = '/login';
   static const String register = '/register';
@@ -36,11 +41,43 @@ class AppRouter {
   static const String requests = '/requests';
   static const String offers = '/offers';
   static const String profile = '/profile';
+  static const String customerRequests = '/my/service-requests';
+  static const String customerOffers = '/my/offers';
+  static const String customerProfile = '/my/profile';
+  static const String leadProfile = '/my/lead-profile';
   static const String requestActions = '/request-actions';
+  static const String newServiceRequest = '/new-service-request';
+  static const String leadSettings = '/my/lead-settings';
+  static const String customerSettings = '/my/settings';
+  static const String allCompanies = '/companies/all';
+  static const String recommendedCompanies = '/companies/recommended';
+  static const String trendingCompanies = '/companies/trending';
 
   static const List<String> _protectedRoutePrefixes = <String>[requestActions];
 
+  static const List<String> _browseRoutePrefixes = <String>[
+    home,
+    explore,
+    company,
+    allCompanies,
+    recommendedCompanies,
+    trendingCompanies,
+    requests,
+    offers,
+    profile,
+    customerRequests,
+    customerOffers,
+    customerProfile,
+    leadProfile,
+    leadSettings,
+    customerSettings,
+  ];
+
   static String companyLocation(int companyId) => '$company/$companyId';
+
+  static String newServiceRequestLocation({required int companyId}) {
+    return '$newServiceRequest?companyId=$companyId';
+  }
 
   static GoRouter router(AuthRepository authRepository) {
     return GoRouter(
@@ -48,6 +85,10 @@ class AppRouter {
       initialLocation: splash,
       redirect: (context, state) async {
         final location = state.matchedLocation;
+        if (_isBrowseLocation(location)) {
+          return null;
+        }
+
         if (!_isProtectedLocation(location)) {
           return null;
         }
@@ -72,6 +113,7 @@ class AppRouter {
                 },
           ),
         ),
+        GoRoute(path: signIn, redirect: (context, state) => onboarding),
         GoRoute(
           path: support,
           builder: (context, state) => const SupportPage(),
@@ -116,7 +158,17 @@ class AppRouter {
               const DiscoveryShellPage(currentTab: DiscoveryTab.requests),
         ),
         GoRoute(
+          path: customerRequests,
+          builder: (context, state) =>
+              const DiscoveryShellPage(currentTab: DiscoveryTab.requests),
+        ),
+        GoRoute(
           path: offers,
+          builder: (context, state) =>
+              const DiscoveryShellPage(currentTab: DiscoveryTab.offers),
+        ),
+        GoRoute(
+          path: customerOffers,
           builder: (context, state) =>
               const DiscoveryShellPage(currentTab: DiscoveryTab.offers),
         ),
@@ -124,6 +176,46 @@ class AppRouter {
           path: profile,
           builder: (context, state) =>
               const DiscoveryShellPage(currentTab: DiscoveryTab.profile),
+        ),
+        GoRoute(
+          path: customerProfile,
+          builder: (context, state) =>
+              const DiscoveryShellPage(currentTab: DiscoveryTab.profile),
+        ),
+        GoRoute(
+          path: leadProfile,
+          builder: (context, state) =>
+              const DiscoveryShellPage(currentTab: DiscoveryTab.profile),
+        ),
+        GoRoute(
+          path: newServiceRequest,
+          builder: (context, state) {
+            final companyIdRaw = state.uri.queryParameters['companyId'];
+            final companyId = int.tryParse(companyIdRaw ?? '') ?? -1;
+            return NewServiceRequestPage(companyId: companyId);
+          },
+        ),
+        GoRoute(
+          path: leadSettings,
+          builder: (context, state) =>
+              const DiscoveryShellPage(currentTab: DiscoveryTab.settings),
+        ),
+        GoRoute(
+          path: customerSettings,
+          builder: (context, state) =>
+              const DiscoveryShellPage(currentTab: DiscoveryTab.settings),
+        ),
+        GoRoute(
+          path: allCompanies,
+          builder: (context, state) => const AllCompaniesPage(),
+        ),
+        GoRoute(
+          path: recommendedCompanies,
+          builder: (context, state) => const RecommendedCompaniesPage(),
+        ),
+        GoRoute(
+          path: trendingCompanies,
+          builder: (context, state) => const TrendingCompaniesPage(),
         ),
         GoRoute(
           path: explore,
@@ -143,6 +235,12 @@ class AppRouter {
 
   static bool _isProtectedLocation(String location) {
     return _protectedRoutePrefixes.any(
+      (prefix) => location == prefix || location.startsWith('$prefix/'),
+    );
+  }
+
+  static bool _isBrowseLocation(String location) {
+    return _browseRoutePrefixes.any(
       (prefix) => location == prefix || location.startsWith('$prefix/'),
     );
   }

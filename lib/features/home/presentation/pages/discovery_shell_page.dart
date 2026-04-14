@@ -4,12 +4,19 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/session/session_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_typography.dart';
-import '../../../auth/domain/repositories/auth_repository.dart';
+import '../../domain/use_cases/role_guard_use_cases.dart';
 import '../cubit/lead_access_cubit.dart';
 import '../cubit/lead_access_state.dart';
-import 'home_placeholder_page.dart';
+import '../widgets/companies_nav_dropdown.dart';
+import 'customer_offers_page.dart';
+import 'customer_profile_page.dart';
+import 'customer_requests_page.dart';
+import 'customer_settings_page.dart';
+import 'home_page.dart';
+import 'lead_profile_page.dart';
+import 'lead_settings_page.dart';
 import 'restricted_tab_page.dart';
 
 class DiscoveryShellPage extends StatelessWidget {
@@ -22,11 +29,18 @@ class DiscoveryShellPage extends StatelessWidget {
     final localizations = AppLocalizations.of(context);
 
     return BlocProvider<LeadAccessCubit>(
-      create: (context) =>
-          LeadAccessCubit(authRepository: context.read<AuthRepository>())
-            ..resolveAccessContext(),
+      create: (context) => LeadAccessCubit(
+        sessionCubit: context.read<SessionCubit>(),
+        roleGuardUseCases: context.read<RoleGuardUseCases>(),
+      )..resolveAccessContext(),
       child: BlocBuilder<LeadAccessCubit, LeadAccessState>(
         builder: (context, state) {
+          final navItems = _navigationItems(
+            context: context,
+            localizations: localizations,
+            state: state,
+          );
+
           return Scaffold(
             backgroundColor: AppColors.background,
             body: _tabBody(
@@ -39,49 +53,22 @@ class DiscoveryShellPage extends StatelessWidget {
               indicatorColor: AppColors.brandRed.withValues(alpha: 0.1),
               elevation: 8,
               shadowColor: AppColors.cardShadow.withValues(alpha: 0.1),
-              selectedIndex: currentTab.index,
+              selectedIndex: _selectedIndex(state),
               onDestinationSelected: (index) {
-                final selectedTab = DiscoveryTab.values[index];
-                if (selectedTab == currentTab) {
-                  return;
-                }
-
-                context.go(_routeForTab(selectedTab));
+                navItems[index].onTap();
               },
-              destinations: [
-                NavigationDestination(
-                  icon: const Icon(Icons.grid_view_rounded),
-                  selectedIcon: const Icon(
-                    Icons.grid_view_rounded,
-                    color: AppColors.brandRed,
-                  ),
-                  label: localizations.navigationHome,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.assignment_outlined),
-                  selectedIcon: const Icon(
-                    Icons.assignment_rounded,
-                    color: AppColors.brandRed,
-                  ),
-                  label: localizations.navigationRequests,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.local_shipping_outlined),
-                  selectedIcon: const Icon(
-                    Icons.local_shipping_rounded,
-                    color: AppColors.brandRed,
-                  ),
-                  label: localizations.navigationOffers,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.person_outline_rounded),
-                  selectedIcon: const Icon(
-                    Icons.person_rounded,
-                    color: AppColors.brandRed,
-                  ),
-                  label: localizations.navigationProfile,
-                ),
-              ],
+              destinations: navItems
+                  .map(
+                    (item) => NavigationDestination(
+                      icon: Icon(item.icon),
+                      selectedIcon: Icon(
+                        item.selectedIcon,
+                        color: AppColors.brandRed,
+                      ),
+                      label: item.label,
+                    ),
+                  )
+                  .toList(growable: false),
             ),
           );
         },
@@ -103,15 +90,53 @@ class DiscoveryShellPage extends StatelessWidget {
     }
 
     if (state.isTabRestricted(currentTab)) {
+      final isGuestRestriction = state.shouldShowGuestOnboardingCta(currentTab);
+
       return RestrictedTabPage(
         title: _restrictedTitle(localizations),
-        message: localizations.restrictionLoginOrRegister,
-        browseCompaniesLabel: localizations.restrictionBrowseCompanies,
-        onBrowseCompanies: () => context.go(AppRouter.home),
+        message: _restrictedMessage(localizations),
+        primaryActionLabel: isGuestRestriction
+            ? localizations.navigationSignIn
+            : localizations.restrictionBrowseCompanies,
+        onPrimaryAction: isGuestRestriction
+            ? () => context.push(AppRouter.signIn)
+            : () => context.go(AppRouter.home),
+        secondaryActionLabel: state.shouldShowBrowseSecondaryAction(currentTab)
+            ? localizations.restrictionBrowseCompanies
+            : null,
+        onSecondaryAction: state.shouldShowBrowseSecondaryAction(currentTab)
+            ? () => context.go(AppRouter.home)
+            : null,
       );
     }
 
-    return _UnrestrictedTabPlaceholder(title: _tabLabel(localizations));
+    switch (currentTab) {
+      case DiscoveryTab.home:
+        return const HomePlaceholderPage();
+      case DiscoveryTab.requests:
+        return const CustomerRequestsPage();
+      case DiscoveryTab.offers:
+        return const CustomerOffersPage();
+      case DiscoveryTab.profile:
+        if (state.isLead) {
+          return const LeadProfilePage();
+        }
+        return const CustomerProfilePage();
+      case DiscoveryTab.settings:
+        switch (state.settingsDestination) {
+          case SettingsDestination.lead:
+            return const LeadSettingsPage();
+          case SettingsDestination.customer:
+            return const CustomerSettingsPage();
+          case SettingsDestination.unavailable:
+            return RestrictedTabPage(
+              title: localizations.navigationSettings,
+              message: localizations.restrictionProfileMessage,
+              primaryActionLabel: localizations.navigationSignIn,
+              onPrimaryAction: () => context.push(AppRouter.signIn),
+            );
+        }
+    }
   }
 
   String _restrictedTitle(AppLocalizations localizations) {
@@ -124,48 +149,248 @@ class DiscoveryShellPage extends StatelessWidget {
         return localizations.restrictionOffersTitle;
       case DiscoveryTab.profile:
         return localizations.restrictionProfileTitle;
+      case DiscoveryTab.settings:
+        return localizations.navigationSettings;
     }
   }
 
-  String _tabLabel(AppLocalizations localizations) {
+  String _restrictedMessage(AppLocalizations localizations) {
     switch (currentTab) {
       case DiscoveryTab.home:
-        return localizations.navigationHome;
+        return localizations.restrictionLoginOrRegister;
       case DiscoveryTab.requests:
-        return localizations.navigationRequests;
+        return localizations.restrictionRequestsMessage;
       case DiscoveryTab.offers:
-        return localizations.navigationOffers;
+        return localizations.restrictionOffersMessage;
       case DiscoveryTab.profile:
-        return localizations.navigationProfile;
+        return localizations.restrictionProfileMessage;
+      case DiscoveryTab.settings:
+        return localizations.restrictionProfileMessage;
     }
   }
 
-  String _routeForTab(DiscoveryTab tab) {
+  String _routeForTab(DiscoveryTab tab, LeadAccessState state) {
     switch (tab) {
       case DiscoveryTab.home:
         return AppRouter.home;
       case DiscoveryTab.requests:
-        return AppRouter.requests;
+        return state.isCustomer
+            ? AppRouter.customerRequests
+            : AppRouter.requests;
       case DiscoveryTab.offers:
-        return AppRouter.offers;
+        return state.isCustomer ? AppRouter.customerOffers : AppRouter.offers;
       case DiscoveryTab.profile:
-        return AppRouter.profile;
+        if (state.isLead) {
+          return AppRouter.leadProfile;
+        }
+        return state.isCustomer ? AppRouter.customerProfile : AppRouter.profile;
+      case DiscoveryTab.settings:
+        return _settingsRoute(state) ?? AppRouter.home;
+    }
+  }
+
+  int _selectedIndex(LeadAccessState state) {
+    if (state.isGuest) {
+      return currentTab == DiscoveryTab.home ? 0 : 1;
+    }
+
+    if (state.isLead) {
+      switch (currentTab) {
+        case DiscoveryTab.home:
+          return 0;
+        case DiscoveryTab.profile:
+          return 1;
+        case DiscoveryTab.settings:
+          return 2;
+        case DiscoveryTab.requests:
+        case DiscoveryTab.offers:
+          return 0;
+      }
+    }
+
+    switch (currentTab) {
+      case DiscoveryTab.home:
+        return 0;
+      case DiscoveryTab.requests:
+        return 1;
+      case DiscoveryTab.offers:
+        return 2;
+      case DiscoveryTab.profile:
+        return 3;
+      case DiscoveryTab.settings:
+        return 4;
+    }
+  }
+
+  List<_ShellNavItem> _navigationItems({
+    required BuildContext context,
+    required AppLocalizations localizations,
+    required LeadAccessState state,
+  }) {
+    if (state.isGuest) {
+      return <_ShellNavItem>[
+        _ShellNavItem(
+          label: localizations.navigationCompanies,
+          icon: Icons.grid_view_rounded,
+          selectedIcon: Icons.grid_view_rounded,
+          onTap: () {
+            _openCompaniesDropdown(
+              context: context,
+              localizations: localizations,
+              navigationItemCount: 2,
+            );
+          },
+        ),
+        _ShellNavItem(
+          label: localizations.navigationSignIn,
+          icon: Icons.login_rounded,
+          selectedIcon: Icons.login_rounded,
+          onTap: () => context.push(AppRouter.signIn),
+        ),
+      ];
+    }
+
+    if (state.isLead) {
+      return <_ShellNavItem>[
+        _ShellNavItem(
+          label: localizations.navigationCompanies,
+          icon: Icons.grid_view_rounded,
+          selectedIcon: Icons.grid_view_rounded,
+          onTap: () {
+            _openCompaniesDropdown(
+              context: context,
+              localizations: localizations,
+              navigationItemCount: 3,
+            );
+          },
+        ),
+        _ShellNavItem(
+          label: localizations.navigationProfile,
+          icon: Icons.person_outline_rounded,
+          selectedIcon: Icons.person_rounded,
+          onTap: () {
+            if (currentTab != DiscoveryTab.profile) {
+              context.go(_routeForTab(DiscoveryTab.profile, state));
+            }
+          },
+        ),
+        _ShellNavItem(
+          label: localizations.navigationSettings,
+          icon: Icons.settings_outlined,
+          selectedIcon: Icons.settings,
+          onTap: () {
+            if (currentTab != DiscoveryTab.settings) {
+              final route = _settingsRoute(state);
+              if (route != null) {
+                context.go(route);
+              }
+            }
+          },
+        ),
+      ];
+    }
+
+    return <_ShellNavItem>[
+      _ShellNavItem(
+        label: localizations.navigationCompanies,
+        icon: Icons.grid_view_rounded,
+        selectedIcon: Icons.grid_view_rounded,
+        onTap: () {
+          _openCompaniesDropdown(
+            context: context,
+            localizations: localizations,
+            navigationItemCount: 5,
+          );
+        },
+      ),
+      _ShellNavItem(
+        label: localizations.navigationRequests,
+        icon: Icons.assignment_outlined,
+        selectedIcon: Icons.assignment_rounded,
+        onTap: () {
+          if (currentTab != DiscoveryTab.requests) {
+            context.go(_routeForTab(DiscoveryTab.requests, state));
+          }
+        },
+      ),
+      _ShellNavItem(
+        label: localizations.navigationOffers,
+        icon: Icons.local_shipping_outlined,
+        selectedIcon: Icons.local_shipping_rounded,
+        onTap: () {
+          if (currentTab != DiscoveryTab.offers) {
+            context.go(_routeForTab(DiscoveryTab.offers, state));
+          }
+        },
+      ),
+      _ShellNavItem(
+        label: localizations.navigationProfile,
+        icon: Icons.person_outline_rounded,
+        selectedIcon: Icons.person_rounded,
+        onTap: () {
+          if (currentTab != DiscoveryTab.profile) {
+            context.go(_routeForTab(DiscoveryTab.profile, state));
+          }
+        },
+      ),
+      _ShellNavItem(
+        label: localizations.navigationSettings,
+        icon: Icons.settings_outlined,
+        selectedIcon: Icons.settings,
+        onTap: () {
+          if (currentTab != DiscoveryTab.settings) {
+            final route = _settingsRoute(state);
+            if (route != null) {
+              context.go(route);
+            }
+          }
+        },
+      ),
+    ];
+  }
+
+  Future<void> _openCompaniesDropdown({
+    required BuildContext context,
+    required AppLocalizations localizations,
+    required int navigationItemCount,
+  }) async {
+    final selectedRoute = await CompaniesNavDropdown.show(
+      context: context,
+      localizations: localizations,
+      navigationItemCount: navigationItemCount,
+    );
+
+    if (selectedRoute == null || !context.mounted) {
+      return;
+    }
+
+    context.go(selectedRoute);
+  }
+
+  String? _settingsRoute(LeadAccessState state) {
+    switch (state.settingsDestination) {
+      case SettingsDestination.lead:
+        return AppRouter.leadSettings;
+      case SettingsDestination.customer:
+        return AppRouter.customerSettings;
+      case SettingsDestination.unavailable:
+        return null;
     }
   }
 }
 
-class _UnrestrictedTabPlaceholder extends StatelessWidget {
-  final String title;
+class _ShellNavItem {
+  final String label;
+  final IconData icon;
+  final IconData selectedIcon;
+  final VoidCallback onTap;
 
-  const _UnrestrictedTabPlaceholder({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.background,
-      child: Center(child: Text(title, style: AppTypography.heading2)),
-    );
-  }
+  const _ShellNavItem({
+    required this.label,
+    required this.icon,
+    required this.selectedIcon,
+    required this.onTap,
+  });
 }
 
 class _AccessContextLoadingView extends StatelessWidget {

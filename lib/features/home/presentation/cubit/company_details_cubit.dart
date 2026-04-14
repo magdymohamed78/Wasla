@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/session/session_cubit.dart';
 import '../../domain/entities/company_details.dart';
 import '../../domain/entities/discovery_types.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
+import '../../domain/use_cases/role_guard_use_cases.dart';
 import 'company_details_state.dart';
 
 class CompanyDetailsCubit extends Cubit<CompanyDetailsState> {
@@ -10,11 +12,17 @@ class CompanyDetailsCubit extends Cubit<CompanyDetailsState> {
   static const String loadDetailsFailedError = 'load_company_details_failed';
 
   final GetCompanyDetailsUseCase _getCompanyDetailsUseCase;
+  final SessionCubit _sessionCubit;
+  final RoleGuardUseCases _roleGuardUseCases;
 
   CompanyDetailsCubit({
     required int companyId,
     required GetCompanyDetailsUseCase getCompanyDetailsUseCase,
+    required SessionCubit sessionCubit,
+    required RoleGuardUseCases roleGuardUseCases,
   }) : _getCompanyDetailsUseCase = getCompanyDetailsUseCase,
+       _sessionCubit = sessionCubit,
+       _roleGuardUseCases = roleGuardUseCases,
        super(CompanyDetailsState(companyId: companyId));
 
   Future<void> loadDetails() async {
@@ -35,6 +43,7 @@ class CompanyDetailsCubit extends Cubit<CompanyDetailsState> {
         reviewsErrorMessage: null,
         isLoadingMoreReviews: false,
         isRestrictionPromptVisible: false,
+        pendingRequestServiceCompanyId: null,
       ),
     );
 
@@ -89,7 +98,28 @@ class CompanyDetailsCubit extends Cubit<CompanyDetailsState> {
       return;
     }
 
-    emit(state.copyWith(isRestrictionPromptVisible: true));
+    final guardDecision = _roleGuardUseCases.guardRequestServiceAction(
+      role: _sessionCubit.state.role,
+      companyId: state.companyId,
+    );
+
+    if (!guardDecision.allowed) {
+      if (guardDecision.reason == GuardReason.unauthenticated) {
+        emit(state.copyWith(isRestrictionPromptVisible: true));
+      }
+
+      return;
+    }
+
+    emit(state.copyWith(pendingRequestServiceCompanyId: state.companyId));
+  }
+
+  void consumeRequestServiceNavigation() {
+    if (state.pendingRequestServiceCompanyId == null) {
+      return;
+    }
+
+    emit(state.copyWith(pendingRequestServiceCompanyId: null));
   }
 
   void hideRestrictionPrompt() {

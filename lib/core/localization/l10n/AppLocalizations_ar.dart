@@ -380,7 +380,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeAllCompanies => 'كل الشركات';
 
   @override
+  String get homeViewAll => 'عرض الكل';
+
+  @override
   String get navigationHome => 'الرئيسية';
+
+  @override
+  String get navigationCompanies => 'الشركات';
+
+  @override
+  String get navigationSignIn => 'تسجيل الدخول';
 
   @override
   String get navigationRequests => 'الطلبات';
@@ -390,6 +399,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get navigationProfile => 'الملف الشخصي';
+
+  @override
+  String get navigationSettings => 'الإعدادات';
+
+  @override
+  String get navigationAllCompanies => 'كل الشركات';
+
+  @override
+  String get navigationRecommended => 'موصى بها';
+
+  @override
+  String get navigationTrending => 'الرائجة';
+
+  @override
+  String get a11yCompaniesDropdownButton => 'افتح خيارات الشركات';
+
+  @override
+  String get a11ySettingsTabButton => 'افتح الإعدادات';
+
+  @override
+  String get a11yViewAllButton => 'اعرض كل الشركات في هذا القسم';
 
   @override
   String get exploreSearchCompanies => 'ابحث عن الشركات...';
@@ -431,23 +461,56 @@ class AppLocalizationsAr extends AppLocalizations {
   String get exploreClearFilters => 'مسح الفلاتر';
 
   @override
-  String get restrictionLoginOrRegister =>
-      'يرجى تسجيل الدخول أو إنشاء حساب للمتابعة.';
+  String get restrictionLoginOrRegister => 'سجّل الدخول لفتح هذه الوجهة.';
 
   @override
   String get restrictionContinue => 'متابعة';
 
   @override
-  String get restrictionBrowseCompanies => 'تصفح الشركات';
+  String get restrictionCancel => 'إلغاء';
 
   @override
-  String get restrictionRequestsTitle => 'الطلبات غير متاحة حالياً';
+  String get restrictionBrowseCompanies => 'العودة إلى الشركات';
 
   @override
-  String get restrictionOffersTitle => 'العروض غير متاحة حالياً';
+  String get restrictionRequestsTitle => 'الطلبات تتطلب تسجيل الدخول';
 
   @override
-  String get restrictionProfileTitle => 'الملف الشخصي غير متاح حالياً';
+  String get restrictionOffersTitle => 'العروض تتطلب تسجيل الدخول';
+
+  @override
+  String get restrictionProfileTitle => 'الملف الشخصي يتطلب تسجيل الدخول';
+
+  @override
+  String get restrictionRequestsMessage =>
+      'سجّل الدخول لمتابعة طلباتك وإدارتها.';
+
+  @override
+  String get restrictionOffersMessage => 'سجّل الدخول لعرض العروض ومقارنتها.';
+
+  @override
+  String get restrictionProfileMessage =>
+      'سجّل الدخول للوصول إلى ملفك الشخصي وإعداداتك.';
+
+  @override
+  String get requestFlowContinuePromptTitle => 'سجّل الدخول لطلب هذه الخدمة';
+
+  @override
+  String get requestFlowContinuePromptMessage =>
+      'تابع إلى تسجيل الدخول حتى تتمكن من طلب الخدمة من هذه الشركة.';
+
+  @override
+  String get requestFlowLeadReloginPromptTitle => 'أكمل الإعداد للمتابعة';
+
+  @override
+  String get requestFlowLeadReloginPromptMessage =>
+      'يرجى تسجيل الدخول مرة أخرى للمتابعة وتفعيل صلاحيات العميل الكاملة.';
+
+  @override
+  String get requestFlowSuccessGoToRequests => 'الانتقال إلى الطلبات';
+
+  @override
+  String get requestFlowMissingCompany => 'يرجى اختيار شركة قبل إرسال الطلب.';
 
   @override
   String get homeNoReviewsYet => 'لا توجد مراجعات بعد';

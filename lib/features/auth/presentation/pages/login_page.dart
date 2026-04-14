@@ -30,14 +30,20 @@ class LoginPage extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listenWhen: (previous, current) =>
           previous.status != current.status &&
-          (current.status == LoginStatus.failure || current.status == LoginStatus.success),
+          (current.status == LoginStatus.failure ||
+              current.status == LoginStatus.success),
       listener: (context, state) {
         if (state.status == LoginStatus.failure) {
-          _showErrorSnackBar(context, state.errorCode, localizations, state.errorCategory);
+          _showErrorSnackBar(
+            context,
+            state.errorCode,
+            localizations,
+            state.errorCategory,
+          );
         }
 
         if (state.status == LoginStatus.success) {
-          context.go(AppRouter.home);
+          context.go(state.postLoginRoute ?? AppRouter.home);
         }
       },
       child: Scaffold(
@@ -102,10 +108,13 @@ class LoginPage extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                 ),
 
-                                const SizedBox(height: AppDimensions.spacingXxl),
+                                const SizedBox(
+                                  height: AppDimensions.spacingXxl,
+                                ),
 
                                 LoginForm(
-                                  onForgotPasswordTap: () => context.push(AppRouter.forgotPassword),
+                                  onForgotPasswordTap: () =>
+                                      context.push(AppRouter.forgotPassword),
                                 ),
 
                                 const SizedBox(height: AppDimensions.spacingMd),
@@ -161,10 +170,11 @@ class LoginPage extends StatelessWidget {
     LoginErrorCategory? errorCategory,
   ) {
     final message = _mapErrorCodeToMessage(errorCode, localizations);
-    
-    final showRetry = errorCategory == LoginErrorCategory.server || 
-                      errorCategory == LoginErrorCategory.network;
-    
+
+    final showRetry =
+        errorCategory == LoginErrorCategory.server ||
+        errorCategory == LoginErrorCategory.network;
+
     ToastUtils.showError(
       context,
       message,
@@ -180,7 +190,10 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  String _mapErrorCodeToMessage(LoginErrorCode? errorCode, AppLocalizations localizations) {
+  String _mapErrorCodeToMessage(
+    LoginErrorCode? errorCode,
+    AppLocalizations localizations,
+  ) {
     switch (errorCode) {
       case LoginErrorCode.invalidCredentials:
         return localizations.loginErrorInvalidCredentials;

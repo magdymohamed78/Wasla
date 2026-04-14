@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
 import '../routing/app_router.dart';
@@ -7,17 +9,26 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   final String _baseUrl;
   AuthRepository? _authRepository;
   late final Dio _refreshDio;
-  
-  int _consecutive401Count = 0;
-  bool _isRefreshing = false;
+
+  Future<bool>? _refreshInFlight;
+
+  static const String _refreshAttemptedKey = 'auth_refresh_attempted';
+  static const List<String> _noRefreshEndpoints = <String>[
+    '/api/customer-portal/login',
+    '/api/customer-portal/register',
+    '/api/customer-portal/refresh-token',
+    '/api/customer-portal/logout',
+  ];
 
   AuthInterceptor({required String baseUrl}) : _baseUrl = baseUrl {
-    _refreshDio = Dio(BaseOptions(
-      baseUrl: _baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-      headers: {'Content-Type': 'application/json'},
-    ));
+    _refreshDio = Dio(
+      BaseOptions(
+        baseUrl: _baseUrl,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+        headers: {'Content-Type': 'application/json'},
+      ),
+    );
   }
 
   void setAuthRepository(AuthRepository authRepository) {
@@ -39,20 +50,18 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   }
 
   @override
-  void onResponse(
-    Response response,
-    ResponseInterceptorHandler handler,
-  ) {
-    _consecutive401Count = 0;
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
     handler.next(response);
   }
 
   @override
-  void onError(
-    DioException err,
-    ErrorInterceptorHandler handler,
-  ) async {
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode != 401) {
+      handler.next(err);
+      return;
+    }
+
+    if (_shouldSkipRefresh(err.requestOptions)) {
       handler.next(err);
       return;
     }
@@ -62,73 +71,94 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
       return;
     }
 
-    _consecutive401Count++;
-
-    if (_consecutive401Count <= 3) {
-      try {
-        final retryResponse = await _retry(err.requestOptions);
-        handler.resolve(retryResponse);
-        return;
-      } catch (e) {
-        handler.next(err);
-        return;
-      }
-    }
-
-    if (_isRefreshing) {
+    final alreadyAttempted =
+        err.requestOptions.extra[_refreshAttemptedKey] == true;
+    if (alreadyAttempted) {
+      await _fallbackToGuest();
       handler.next(err);
       return;
     }
 
-    _isRefreshing = true;
+    final refreshSucceeded = await _refreshAccessToken();
+    if (!refreshSucceeded) {
+      await _fallbackToGuest();
+      handler.next(err);
+      return;
+    }
 
     try {
-      final refreshToken = await _authRepository!.getStoredRefreshToken();
-      
-      if (refreshToken == null || refreshToken.isEmpty) {
-        await _forceLogout();
-        handler.next(err);
-        return;
-      }
-
-      final newSession = await _authRepository!.refreshToken(
-        refreshToken: refreshToken,
-      );
-
-      await _authRepository!.saveAccessToken(newSession.token);
-      await _authRepository!.saveRefreshTokenData(
-        newSession.refreshToken,
-        newSession.refreshTokenExpiry,
-      );
-
-      _consecutive401Count = 0;
-      _isRefreshing = false;
-
-      final retryResponse = await _retry(err.requestOptions);
+      final retryResponse = await _retryWithFreshToken(err.requestOptions);
       handler.resolve(retryResponse);
-    } on DioException catch (e) {
-      _isRefreshing = false;
-      
-      if (_isAuthError(e)) {
-        await _forceLogout();
-      }
-      handler.next(err);
-    } catch (e) {
-      _isRefreshing = false;
+    } catch (_) {
+      await _fallbackToGuest();
       handler.next(err);
     }
   }
 
-  Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
+  bool _shouldSkipRefresh(RequestOptions requestOptions) {
+    final path = requestOptions.path.toLowerCase();
+    return _noRefreshEndpoints.any(path.contains);
+  }
+
+  Future<bool> _refreshAccessToken() {
+    final inFlight = _refreshInFlight;
+    if (inFlight != null) {
+      return inFlight;
+    }
+
+    final completer = Completer<bool>();
+    _refreshInFlight = completer.future;
+    _performRefresh(completer);
+    return _refreshInFlight!;
+  }
+
+  Future<void> _performRefresh(Completer<bool> completer) async {
+    try {
+      final refreshToken = await _authRepository!.getStoredRefreshToken();
+      if (refreshToken == null || refreshToken.isEmpty) {
+        completer.complete(false);
+        return;
+      }
+
+      final refreshedSession = await _authRepository!.refreshToken(
+        refreshToken: refreshToken,
+      );
+
+      await _authRepository!.updateStoredSession(
+        refreshedSession,
+        isRefresh: true,
+      );
+
+      completer.complete(true);
+    } catch (_) {
+      completer.complete(false);
+    } finally {
+      _refreshInFlight = null;
+    }
+  }
+
+  Future<Response<dynamic>> _retryWithFreshToken(
+    RequestOptions requestOptions,
+  ) async {
     final token = await _authRepository?.getStoredAccessToken();
-    
+
+    final headers = Map<String, dynamic>.from(requestOptions.headers);
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    final extra = Map<String, dynamic>.from(requestOptions.extra);
+    extra[_refreshAttemptedKey] = true;
+
     final options = Options(
       method: requestOptions.method,
-      headers: {
-        ...requestOptions.headers,
-        if (token != null && token.isNotEmpty)
-          'Authorization': 'Bearer $token',
-      },
+      headers: headers,
+      responseType: requestOptions.responseType,
+      contentType: requestOptions.contentType,
+      followRedirects: requestOptions.followRedirects,
+      validateStatus: requestOptions.validateStatus,
+      receiveDataWhenStatusError: requestOptions.receiveDataWhenStatusError,
+      extra: extra,
     );
 
     return _refreshDio.request(
@@ -136,20 +166,18 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
       data: requestOptions.data,
       queryParameters: requestOptions.queryParameters,
       options: options,
+      cancelToken: requestOptions.cancelToken,
+      onReceiveProgress: requestOptions.onReceiveProgress,
+      onSendProgress: requestOptions.onSendProgress,
     );
   }
 
-  bool _isAuthError(DioException e) {
-    final statusCode = e.response?.statusCode;
-    return statusCode == 401 || statusCode == 403;
-  }
+  Future<void> _fallbackToGuest() async {
+    await _authRepository?.clearSession(preservePendingIntent: true);
 
-  Future<void> _forceLogout() async {
-    await _authRepository?.clearSession();
-    
     final context = AppRouter.navigatorKey.currentContext;
     if (context != null && context.mounted) {
-      context.go('/login');
+      context.go(AppRouter.login);
     }
   }
 }
