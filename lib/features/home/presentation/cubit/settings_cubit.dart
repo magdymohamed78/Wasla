@@ -37,13 +37,12 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   String _buildInitials(String firstName, String lastName) {
-    final buffer = StringBuffer();
     if (firstName.isNotEmpty) {
-      buffer.write(firstName[0].toUpperCase());
+      return firstName[0].toUpperCase();
     }
     if (lastName.isNotEmpty) {
-      buffer.write(lastName[0].toUpperCase());
+      return lastName[0].toUpperCase();
     }
-    return buffer.toString();
+    return '';
   }
 }

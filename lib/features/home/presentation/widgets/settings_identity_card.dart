@@ -49,11 +49,12 @@ class _Avatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 72,
-      height: 72,
+      width: 80,
+      height: 80,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.brandRed,
         shape: BoxShape.circle,
+        border: Border.all(color: AppColors.surface, width: 2),
         boxShadow: [
           BoxShadow(
             color: AppColors.cardShadow.withValues(alpha: 0.1),
@@ -61,16 +62,15 @@ class _Avatar extends StatelessWidget {
             offset: const Offset(0, 4),
           ),
         ],
-        image: const DecorationImage(
-          image: NetworkImage(
-            'https://i.pravatar.cc/150?img=11',
-          ), // Placeholder mimicking the image
-          fit: BoxFit.cover,
-        ),
       ),
       alignment: Alignment.center,
-      // If image fails or isn't available, we'd show initials, but for matching the UI exactly:
-      // child: Text(initials),
+      child: Text(
+        initials,
+        style: AppTypography.heading2.copyWith(
+          color: AppColors.surface,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }

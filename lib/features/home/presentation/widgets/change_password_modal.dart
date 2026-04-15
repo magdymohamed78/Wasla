@@ -5,6 +5,7 @@ import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../features/auth/presentation/cubit/settings_change_password_cubit.dart';
 import '../../../../features/auth/presentation/cubit/settings_change_password_state.dart';
 import '../../../../features/auth/presentation/widgets/password_rules_widget.dart';
@@ -51,12 +52,9 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
       listener: (context, state) {
         if (state.isSuccess) {
           Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(localizations.settingsChangePasswordSuccess),
-              duration: const Duration(seconds: 2),
-              behavior: SnackBarBehavior.floating,
-            ),
+          ToastUtils.showSuccess(
+            context,
+            localizations.settingsChangePasswordSuccess,
           );
         }
       },
