@@ -16,6 +16,7 @@ class RecommendedCompaniesPage extends StatelessWidget {
 
     return CompaniesListingView(
       title: localizations.homeRecommendedCompanies,
+      
       loadPage: (pageIndex) =>
           getRecommendedCompaniesUseCase(pageIndex: pageIndex),
     );

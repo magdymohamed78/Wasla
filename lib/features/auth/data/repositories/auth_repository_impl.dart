@@ -211,6 +211,19 @@ class AuthRepositoryImpl implements AuthRepository {
     await _remoteDataSource.resetPassword(request);
   }
 
+  @override
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    await _remoteDataSource.changePassword(
+      currentPassword: currentPassword,
+      newPassword: newPassword,
+      confirmNewPassword: confirmNewPassword,
+    );
+  }
+
   Future<AuthLocalDataSource> _resolveReadableDataSource() async {
     final activeToken = await _activeLocalDataSource.getToken();
     if (activeToken != null && activeToken.isNotEmpty) {

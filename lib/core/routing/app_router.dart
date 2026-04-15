@@ -14,6 +14,7 @@ import '../../features/home/presentation/pages/company_details_page.dart';
 import '../../features/home/presentation/pages/discovery_shell_page.dart';
 import '../../features/home/presentation/pages/explore_page.dart';
 import '../../features/home/presentation/pages/new_service_request_page.dart';
+import '../../features/home/presentation/pages/notifications_page.dart';
 import '../../features/home/presentation/pages/recommended_companies_page.dart';
 import '../../features/home/presentation/pages/trending_companies_page.dart';
 import '../../features/home/presentation/cubit/lead_access_state.dart';
@@ -52,6 +53,7 @@ class AppRouter {
   static const String allCompanies = '/companies/all';
   static const String recommendedCompanies = '/companies/recommended';
   static const String trendingCompanies = '/companies/trending';
+  static const String notifications = '/notifications';
 
   static const List<String> _protectedRoutePrefixes = <String>[requestActions];
 
@@ -62,6 +64,7 @@ class AppRouter {
     allCompanies,
     recommendedCompanies,
     trendingCompanies,
+    notifications,
     requests,
     offers,
     profile,
@@ -220,6 +223,10 @@ class AppRouter {
         GoRoute(
           path: explore,
           builder: (context, state) => const ExplorePage(),
+        ),
+        GoRoute(
+          path: notifications,
+          builder: (context, state) => const NotificationsPage(),
         ),
         GoRoute(
           path: '$company/:companyId',

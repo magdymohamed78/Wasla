@@ -277,3 +277,15 @@ class LeadProfileDto {
     );
   }
 }
+
+class SignatureRevealResponseDto {
+  final String? digitalSignature;
+
+  const SignatureRevealResponseDto({this.digitalSignature});
+
+  factory SignatureRevealResponseDto.fromJson(Map<String, dynamic> json) {
+    return SignatureRevealResponseDto(
+      digitalSignature: _asString(json['digitalSignature']),
+    );
+  }
+}

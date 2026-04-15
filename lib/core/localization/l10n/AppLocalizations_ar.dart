@@ -579,4 +579,109 @@ class AppLocalizationsAr extends AppLocalizations {
   String companyDetailsPlaceholderBody(String companyId) {
     return 'تفاصيل الشركة للمعرف: $companyId';
   }
+
+  @override
+  String get homeGreeting => 'مرحباً';
+
+  @override
+  String homeGreetingWithName(String firstName) {
+    return 'مرحباً، $firstName';
+  }
+
+  @override
+  String get notificationsPageTitle => 'الإشعارات';
+
+  @override
+  String get notificationsPagePlaceholderMessage =>
+      'محتوى الإشعارات قادم قريباً.';
+
+  @override
+  String get settingsEditProfileTitle => 'تعديل الملف الشخصي';
+
+  @override
+  String get settingsEditProfileSubtitle => 'تحديث معلوماتك الشخصية';
+
+  @override
+  String get settingsDigitalSignatureTitle => 'التوقيع الرقمي';
+
+  @override
+  String get settingsDigitalSignatureMasked => '*************';
+
+  @override
+  String get settingsSignaturePasswordTitle => 'تأكيد كلمة المرور';
+
+  @override
+  String get settingsSignaturePasswordHint => 'أدخل كلمة المرور';
+
+  @override
+  String get settingsSignaturePasswordSubmit => 'تأكيد';
+
+  @override
+  String get settingsSignatureCopied => 'تم النسخ إلى الحافظة';
+
+  @override
+  String get settingsSignatureLocked =>
+      'محاولات فاشلة كثيرة. يرجى المحاولة مرة أخرى بعد 15 دقيقة.';
+
+  @override
+  String get settingsChangePasswordTitle => 'تغيير كلمة المرور';
+
+  @override
+  String get settingsCurrentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get settingsNewPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get settingsConfirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get settingsChangePasswordSubmit => 'تغيير كلمة المرور';
+
+  @override
+  String get settingsChangePasswordSuccess => 'تم تغيير كلمة المرور بنجاح';
+
+  @override
+  String get settingsSectionAccountManagement => 'إدارة الحساب';
+
+  @override
+  String get settingsSectionDigitalSignature => 'التوقيع الرقمي';
+
+  @override
+  String get settingsSectionSecurity => 'الأمان والمصادقة';
+
+  @override
+  String get settingsSectionPreferences => 'تفضيلات التطبيق';
+
+  @override
+  String get settingsSecuritySectionTitle => 'الأمان والمصادقة';
+
+  @override
+  String get settingsLogoutCurrent => 'تسجيل الخروج';
+
+  @override
+  String get settingsLogoutCurrentSubtitle => 'تسجيل الخروج من هذا الجهاز';
+
+  @override
+  String get settingsLogoutAll => 'تسجيل الخروج من جميع الأجهزة';
+
+  @override
+  String get settingsLogoutAllSubtitle =>
+      'تسجيل الخروج من جميع الأجهزة التي سجلت الدخول منها';
+
+  @override
+  String get settingsLogoutAllConfirmTitle => 'تسجيل الخروج من جميع الأجهزة؟';
+
+  @override
+  String get settingsLogoutAllConfirmMessage =>
+      'سيتم تسجيل خروجك من جميع الأجهزة.';
+
+  @override
+  String get settingsLogoutAllConfirm => 'تأكيد';
+
+  @override
+  String get settingsLogoutAllCancel => 'إلغاء';
+
+  @override
+  String get settingsLanguageTitle => 'اللغة';
 }

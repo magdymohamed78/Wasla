@@ -22,6 +22,7 @@ import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/domain/use_cases/login_use_case.dart';
 import 'features/auth/domain/use_cases/register_use_case.dart';
+import 'features/auth/domain/use_cases/change_password_use_case.dart';
 import 'features/auth/presentation/cubit/login_cubit.dart';
 import 'features/auth/presentation/cubit/register_cubit.dart';
 import 'features/home/data/data_sources/discovery_remote_data_source.dart';
@@ -36,6 +37,9 @@ import 'features/home/domain/repositories/service_request_repository.dart';
 import 'features/home/domain/use_cases/customer_portal_use_cases.dart';
 import 'features/home/domain/use_cases/discovery_use_cases.dart';
 import 'features/home/domain/use_cases/role_guard_use_cases.dart';
+import 'features/home/domain/use_cases/reveal_signature_use_case.dart';
+import 'features/home/domain/use_cases/logout_use_case.dart';
+import 'features/home/domain/use_cases/logout_all_use_case.dart';
 import 'features/home/domain/use_cases/service_request_use_cases.dart';
 import 'features/splash/presentation/cubit/splash_cubit.dart';
 
@@ -77,6 +81,10 @@ class _AppState extends State<App> {
   late final GetCustomerProfileUseCase _getCustomerProfileUseCase;
   late final GetLeadProfileUseCase _getLeadProfileUseCase;
   late final SubmitServiceRequestUseCase _submitServiceRequestUseCase;
+  late final RevealDigitalSignatureUseCase _revealDigitalSignatureUseCase;
+  late final LogoutUseCase _logoutUseCase;
+  late final LogoutAllUseCase _logoutAllUseCase;
+  late final ChangePasswordUseCase _changePasswordUseCase;
   late final RoleResolver _roleResolver;
   late final PendingIntentStore _pendingIntentStore;
   late final SessionCubit _sessionCubit;
@@ -164,6 +172,13 @@ class _AppState extends State<App> {
       _serviceRequestRepository,
     );
 
+    _revealDigitalSignatureUseCase = RevealDigitalSignatureUseCase(
+      _customerPortalRepository,
+    );
+    _logoutUseCase = LogoutUseCase(_customerPortalRepository);
+    _logoutAllUseCase = LogoutAllUseCase(_customerPortalRepository);
+    _changePasswordUseCase = ChangePasswordUseCase(_authRepository);
+
     _authInterceptor.setAuthRepository(_authRepository);
 
     _loginUseCase = LoginUseCase(_authRepository);
@@ -243,6 +258,14 @@ class _AppState extends State<App> {
         ),
         RepositoryProvider<GetLeadProfileUseCase>.value(
           value: _getLeadProfileUseCase,
+        ),
+        RepositoryProvider<RevealDigitalSignatureUseCase>.value(
+          value: _revealDigitalSignatureUseCase,
+        ),
+        RepositoryProvider<LogoutUseCase>.value(value: _logoutUseCase),
+        RepositoryProvider<LogoutAllUseCase>.value(value: _logoutAllUseCase),
+        RepositoryProvider<ChangePasswordUseCase>.value(
+          value: _changePasswordUseCase,
         ),
       ],
       child: MultiBlocProvider(

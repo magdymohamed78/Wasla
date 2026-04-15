@@ -207,5 +207,46 @@
         "type": "String"
       }
     }
-  }
+  },
+  "homeGreeting": "مرحباً",
+  "homeGreetingWithName": "مرحباً، {firstName}",
+  "@homeGreetingWithName": {
+    "placeholders": {
+      "firstName": {
+        "type": "String"
+      }
+    }
+  },
+  "notificationsPageTitle": "الإشعارات",
+  "notificationsPagePlaceholderMessage": "محتوى الإشعارات قادم قريباً.",
+
+  "settingsEditProfileTitle": "تعديل الملف الشخصي",
+  "settingsEditProfileSubtitle": "تحديث معلوماتك الشخصية",
+  "settingsDigitalSignatureTitle": "التوقيع الرقمي",
+  "settingsDigitalSignatureMasked": "*************",
+  "settingsSignaturePasswordTitle": "تأكيد كلمة المرور",
+  "settingsSignaturePasswordHint": "أدخل كلمة المرور",
+  "settingsSignaturePasswordSubmit": "تأكيد",
+  "settingsSignatureCopied": "تم النسخ إلى الحافظة",
+  "settingsSignatureLocked": "محاولات فاشلة كثيرة. يرجى المحاولة مرة أخرى بعد 15 دقيقة.",
+  "settingsChangePasswordTitle": "تغيير كلمة المرور",
+  "settingsCurrentPassword": "كلمة المرور الحالية",
+  "settingsNewPassword": "كلمة المرور الجديدة",
+  "settingsConfirmNewPassword": "تأكيد كلمة المرور الجديدة",
+  "settingsChangePasswordSubmit": "تغيير كلمة المرور",
+  "settingsChangePasswordSuccess": "تم تغيير كلمة المرور بنجاح",
+  "settingsSectionAccountManagement": "إدارة الحساب",
+  "settingsSectionDigitalSignature": "التوقيع الرقمي",
+  "settingsSectionSecurity": "الأمان والمصادقة",
+  "settingsSectionPreferences": "تفضيلات التطبيق",
+  "settingsSecuritySectionTitle": "الأمان والمصادقة",
+  "settingsLogoutCurrent": "تسجيل الخروج",
+  "settingsLogoutCurrentSubtitle": "تسجيل الخروج من هذا الجهاز",
+  "settingsLogoutAll": "تسجيل الخروج من جميع الأجهزة",
+  "settingsLogoutAllSubtitle": "تسجيل الخروج من جميع الأجهزة التي سجلت الدخول منها",
+  "settingsLogoutAllConfirmTitle": "تسجيل الخروج من جميع الأجهزة؟",
+  "settingsLogoutAllConfirmMessage": "سيتم تسجيل خروجك من جميع الأجهزة.",
+  "settingsLogoutAllConfirm": "تأكيد",
+  "settingsLogoutAllCancel": "إلغاء",
+  "settingsLanguageTitle": "اللغة"
 }

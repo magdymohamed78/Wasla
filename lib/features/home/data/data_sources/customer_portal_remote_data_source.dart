@@ -18,6 +18,12 @@ abstract class CustomerPortalRemoteDataSource {
   Future<CustomerProfileDto> getMyProfile();
 
   Future<LeadProfileDto> getMyLeadProfile();
+
+  Future<String> revealDigitalSignature({required String password});
+
+  Future<void> logout();
+
+  Future<void> logoutAll();
 }
 
 class CustomerPortalRemoteDataSourceImpl
@@ -28,6 +34,10 @@ class CustomerPortalRemoteDataSourceImpl
   static const String _myProfileEndpoint = '/api/customer-portal/my/profile';
   static const String _myLeadProfileEndpoint =
       '/api/customer-portal/my/lead-profile';
+  static const String _revealSignatureEndpoint =
+      '/api/customer-portal/my/digital-signature';
+  static const String _logoutEndpoint = '/api/customer-portal/logout';
+  static const String _logoutAllEndpoint = '/api/customer-portal/logout-all';
 
   final Dio _dio;
 
@@ -115,5 +125,41 @@ class CustomerPortalRemoteDataSourceImpl
     }
 
     return LeadProfileDto.fromJson(payload);
+  }
+
+  @override
+  Future<String> revealDigitalSignature({required String password}) async {
+    final response = await _dio.post<dynamic>(
+      _revealSignatureEndpoint,
+      data: <String, dynamic>{'password': password},
+    );
+
+    final payload = response.data;
+    if (payload is Map<String, dynamic>) {
+      final dto = SignatureRevealResponseDto.fromJson(payload);
+      if (dto.digitalSignature != null && dto.digitalSignature!.isNotEmpty) {
+        return dto.digitalSignature!;
+      }
+    }
+
+    if (payload is String && payload.isNotEmpty) {
+      return payload;
+    }
+
+    throw DioException(
+      requestOptions: response.requestOptions,
+      response: response,
+      message: 'Invalid digital signature response.',
+    );
+  }
+
+  @override
+  Future<void> logout() async {
+    await _dio.post<dynamic>(_logoutEndpoint);
+  }
+
+  @override
+  Future<void> logoutAll() async {
+    await _dio.post<dynamic>(_logoutAllEndpoint);
   }
 }

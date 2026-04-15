@@ -50,4 +50,19 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
     final profile = await _remote.getMyLeadProfile();
     return profile.toDomain();
   }
+
+  @override
+  Future<String> revealDigitalSignature({required String password}) {
+    return _remote.revealDigitalSignature(password: password);
+  }
+
+  @override
+  Future<void> logout() {
+    return _remote.logout();
+  }
+
+  @override
+  Future<void> logoutAll() {
+    return _remote.logoutAll();
+  }
 }

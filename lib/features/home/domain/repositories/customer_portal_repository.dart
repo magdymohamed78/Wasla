@@ -16,4 +16,10 @@ abstract class CustomerPortalRepository {
   Future<CustomerPortalProfile> getCustomerProfile();
 
   Future<LeadPortalProfile> getLeadProfile();
+
+  Future<String> revealDigitalSignature({required String password});
+
+  Future<void> logout();
+
+  Future<void> logoutAll();
 }

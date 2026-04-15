@@ -1177,6 +1177,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Company details for ID: {companyId}'**
   String companyDetailsPlaceholderBody(String companyId);
+
+  /// No description provided for @homeGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello'**
+  String get homeGreeting;
+
+  /// No description provided for @homeGreetingWithName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {firstName}'**
+  String homeGreetingWithName(String firstName);
+
+  /// No description provided for @notificationsPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsPageTitle;
+
+  /// No description provided for @notificationsPagePlaceholderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications content is coming soon.'**
+  String get notificationsPagePlaceholderMessage;
+
+  /// No description provided for @settingsEditProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get settingsEditProfileTitle;
+
+  /// No description provided for @settingsEditProfileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your personal information'**
+  String get settingsEditProfileSubtitle;
+
+  /// No description provided for @settingsDigitalSignatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital Signature'**
+  String get settingsDigitalSignatureTitle;
+
+  /// No description provided for @settingsDigitalSignatureMasked.
+  ///
+  /// In en, this message translates to:
+  /// **'*************'**
+  String get settingsDigitalSignatureMasked;
+
+  /// No description provided for @settingsSignaturePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Password'**
+  String get settingsSignaturePasswordTitle;
+
+  /// No description provided for @settingsSignaturePasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get settingsSignaturePasswordHint;
+
+  /// No description provided for @settingsSignaturePasswordSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get settingsSignaturePasswordSubmit;
+
+  /// No description provided for @settingsSignatureCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get settingsSignatureCopied;
+
+  /// No description provided for @settingsSignatureLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many failed attempts. Please try again after 15 minutes.'**
+  String get settingsSignatureLocked;
+
+  /// No description provided for @settingsChangePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get settingsChangePasswordTitle;
+
+  /// No description provided for @settingsCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get settingsCurrentPassword;
+
+  /// No description provided for @settingsNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get settingsNewPassword;
+
+  /// No description provided for @settingsConfirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get settingsConfirmNewPassword;
+
+  /// No description provided for @settingsChangePasswordSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get settingsChangePasswordSubmit;
+
+  /// No description provided for @settingsChangePasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed successfully'**
+  String get settingsChangePasswordSuccess;
+
+  /// No description provided for @settingsSectionAccountManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCOUNT MANAGEMENT'**
+  String get settingsSectionAccountManagement;
+
+  /// No description provided for @settingsSectionDigitalSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'DIGITAL SIGNATURE'**
+  String get settingsSectionDigitalSignature;
+
+  /// No description provided for @settingsSectionSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'SECURITY & AUTHENTICATION'**
+  String get settingsSectionSecurity;
+
+  /// No description provided for @settingsSectionPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'APPLICATION PREFERENCES'**
+  String get settingsSectionPreferences;
+
+  /// No description provided for @settingsSecuritySectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Security & Authentication'**
+  String get settingsSecuritySectionTitle;
+
+  /// No description provided for @settingsLogoutCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get settingsLogoutCurrent;
+
+  /// No description provided for @settingsLogoutCurrentSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of this device'**
+  String get settingsLogoutCurrentSubtitle;
+
+  /// No description provided for @settingsLogoutAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout All Devices'**
+  String get settingsLogoutAll;
+
+  /// No description provided for @settingsLogoutAllSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out from all devices where you\'re logged in'**
+  String get settingsLogoutAllSubtitle;
+
+  /// No description provided for @settingsLogoutAllConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout All Devices?'**
+  String get settingsLogoutAllConfirmTitle;
+
+  /// No description provided for @settingsLogoutAllConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will sign you out from all devices.'**
+  String get settingsLogoutAllConfirmMessage;
+
+  /// No description provided for @settingsLogoutAllConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get settingsLogoutAllConfirm;
+
+  /// No description provided for @settingsLogoutAllCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get settingsLogoutAllCancel;
+
+  /// No description provided for @settingsLanguageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguageTitle;
 }
 
 class _AppLocalizationsDelegate

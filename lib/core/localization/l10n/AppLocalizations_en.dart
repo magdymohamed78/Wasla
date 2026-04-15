@@ -588,4 +588,109 @@ class AppLocalizationsEn extends AppLocalizations {
   String companyDetailsPlaceholderBody(String companyId) {
     return 'Company details for ID: $companyId';
   }
+
+  @override
+  String get homeGreeting => 'Hello';
+
+  @override
+  String homeGreetingWithName(String firstName) {
+    return 'Hello, $firstName';
+  }
+
+  @override
+  String get notificationsPageTitle => 'Notifications';
+
+  @override
+  String get notificationsPagePlaceholderMessage =>
+      'Notifications content is coming soon.';
+
+  @override
+  String get settingsEditProfileTitle => 'Edit Profile';
+
+  @override
+  String get settingsEditProfileSubtitle => 'Update your personal information';
+
+  @override
+  String get settingsDigitalSignatureTitle => 'Digital Signature';
+
+  @override
+  String get settingsDigitalSignatureMasked => '*************';
+
+  @override
+  String get settingsSignaturePasswordTitle => 'Verify Password';
+
+  @override
+  String get settingsSignaturePasswordHint => 'Enter your password';
+
+  @override
+  String get settingsSignaturePasswordSubmit => 'Verify';
+
+  @override
+  String get settingsSignatureCopied => 'Copied to clipboard';
+
+  @override
+  String get settingsSignatureLocked =>
+      'Too many failed attempts. Please try again after 15 minutes.';
+
+  @override
+  String get settingsChangePasswordTitle => 'Change Password';
+
+  @override
+  String get settingsCurrentPassword => 'Current Password';
+
+  @override
+  String get settingsNewPassword => 'New Password';
+
+  @override
+  String get settingsConfirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get settingsChangePasswordSubmit => 'Change Password';
+
+  @override
+  String get settingsChangePasswordSuccess => 'Password changed successfully';
+
+  @override
+  String get settingsSectionAccountManagement => 'ACCOUNT MANAGEMENT';
+
+  @override
+  String get settingsSectionDigitalSignature => 'DIGITAL SIGNATURE';
+
+  @override
+  String get settingsSectionSecurity => 'SECURITY & AUTHENTICATION';
+
+  @override
+  String get settingsSectionPreferences => 'APPLICATION PREFERENCES';
+
+  @override
+  String get settingsSecuritySectionTitle => 'Security & Authentication';
+
+  @override
+  String get settingsLogoutCurrent => 'Logout';
+
+  @override
+  String get settingsLogoutCurrentSubtitle => 'Sign out of this device';
+
+  @override
+  String get settingsLogoutAll => 'Logout All Devices';
+
+  @override
+  String get settingsLogoutAllSubtitle =>
+      'Sign out from all devices where you\'re logged in';
+
+  @override
+  String get settingsLogoutAllConfirmTitle => 'Logout All Devices?';
+
+  @override
+  String get settingsLogoutAllConfirmMessage =>
+      'This will sign you out from all devices.';
+
+  @override
+  String get settingsLogoutAllConfirm => 'Confirm';
+
+  @override
+  String get settingsLogoutAllCancel => 'Cancel';
+
+  @override
+  String get settingsLanguageTitle => 'Language';
 }

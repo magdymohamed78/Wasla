@@ -17,7 +17,7 @@ class ViewAllSearchEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: const Color.fromARGB(0, 0, 0, 0),
       child: InkWell(
         borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
         onTap: onTap,

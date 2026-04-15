@@ -11,6 +11,7 @@ import '../../domain/use_cases/discovery_use_cases.dart';
 import '../cubit/home_discovery_cubit.dart';
 import '../cubit/home_discovery_state.dart';
 import '../widgets/company_section_carousel.dart';
+import '../widgets/home_header_section.dart';
 import '../widgets/home_section_skeleton.dart';
 import '../widgets/view_all_search_entry.dart';
 
@@ -51,6 +52,8 @@ class _HomeDiscoveryView extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(AppDimensions.paddingMd),
                 children: [
+                  const HomeHeaderSection(),
+                  const SizedBox(height: AppDimensions.spacingMd),
                   ViewAllSearchEntry(
                     hintText: localizations.homeSearchForServicesOrCompanies,
                     onTap: () => context.push(AppRouter.explore),

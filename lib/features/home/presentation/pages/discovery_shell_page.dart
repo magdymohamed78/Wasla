@@ -315,8 +315,8 @@ class DiscoveryShellPage extends StatelessWidget {
       ),
       _ShellNavItem(
         label: localizations.navigationOffers,
-        icon: Icons.local_shipping_outlined,
-        selectedIcon: Icons.local_shipping_rounded,
+        icon: Icons.local_offer_outlined,
+        selectedIcon: Icons.local_offer,
         onTap: () {
           if (currentTab != DiscoveryTab.offers) {
             context.go(_routeForTab(DiscoveryTab.offers, state));
@@ -354,17 +354,26 @@ class DiscoveryShellPage extends StatelessWidget {
     required AppLocalizations localizations,
     required int navigationItemCount,
   }) async {
+    final rootContext = Navigator.of(context, rootNavigator: true).context;
+
+    if (currentTab != DiscoveryTab.home) {
+      context.go(AppRouter.home);
+      await WidgetsBinding.instance.endOfFrame;
+    }
+
     final selectedRoute = await CompaniesNavDropdown.show(
-      context: context,
+      // ignore: use_build_context_synchronously
+      context: rootContext,
       localizations: localizations,
       navigationItemCount: navigationItemCount,
     );
 
-    if (selectedRoute == null || !context.mounted) {
+    if (selectedRoute == null) {
       return;
     }
 
-    context.go(selectedRoute);
+    // ignore: use_build_context_synchronously
+    GoRouter.of(rootContext).go(selectedRoute);
   }
 
   String? _settingsRoute(LeadAccessState state) {

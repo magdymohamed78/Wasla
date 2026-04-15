@@ -12,27 +12,37 @@ import '../models/refresh_token_response_model.dart';
 abstract class AuthRemoteDataSource {
   Future<LoginResponseModel> login(LoginRequestModel request);
   Future<LoginResponseModel> register(RegisterRequestModel request);
-  Future<RefreshTokenResponseModel> refreshToken(RefreshTokenRequestModel request);
+  Future<RefreshTokenResponseModel> refreshToken(
+    RefreshTokenRequestModel request,
+  );
   Future<void> forgotPassword(ForgotPasswordRequestModel request);
   Future<void> resendOtp(ResendOtpRequestModel request);
   Future<void> resetPassword(ResetPasswordRequestModel request);
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmNewPassword,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final Dio _dio;
   static const String _loginEndpoint = '/api/customer-portal/login';
   static const String _registerEndpoint = '/api/customer-portal/register';
-  static const String _refreshTokenEndpoint = '/api/customer-portal/refresh-token';
+  static const String _refreshTokenEndpoint =
+      '/api/customer-portal/refresh-token';
   static const String _forgotPasswordEndpoint = '/api/Auth/forgot-password';
   static const String _resendOtpEndpoint = '/api/Auth/resend-otp';
   static const String _resetPasswordEndpoint = '/api/Auth/reset-password';
+  static const String _changePasswordEndpoint = '/api/Auth/change-password';
 
   const AuthRemoteDataSourceImpl(this._dio);
 
   @override
   Future<LoginResponseModel> login(LoginRequestModel request) async {
     final url = '${_dio.options.baseUrl}$_loginEndpoint';
-    
+
     debugPrint('════════════════════════════════════════════════════');
     debugPrint('[AuthRemoteDataSource] LOGIN REQUEST');
     debugPrint('[AuthRemoteDataSource] URL: POST $url');
@@ -60,7 +70,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             message: 'Empty response body from server',
           );
         }
-        
+
         if (_isErrorResponse(response.data!)) {
           final errorMessage = _extractErrorMessage(response.data!);
           throw DioException(
@@ -69,7 +79,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             message: errorMessage,
           );
         }
-        
+
         return LoginResponseModel.fromJson(response.data!);
       }
 
@@ -83,7 +93,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('[AuthRemoteDataSource] DIO EXCEPTION');
       debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
       debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
-      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint(
+        '[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}',
+      );
       debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
       debugPrint('[AuthRemoteDataSource] Error: ${e.error}');
       debugPrint('════════════════════════════════════════════════════');
@@ -105,7 +117,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<LoginResponseModel> register(RegisterRequestModel request) async {
     final url = '${_dio.options.baseUrl}$_registerEndpoint';
-    
+
     debugPrint('════════════════════════════════════════════════════');
     debugPrint('[AuthRemoteDataSource] REGISTER REQUEST');
     debugPrint('[AuthRemoteDataSource] URL: POST $url');
@@ -133,7 +145,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             message: 'Empty response body from server',
           );
         }
-        
+
         if (_isErrorResponse(response.data!)) {
           final errorMessage = _extractErrorMessage(response.data!);
           throw DioException(
@@ -142,7 +154,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             message: errorMessage,
           );
         }
-        
+
         return LoginResponseModel.fromJson(response.data!);
       }
 
@@ -156,7 +168,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('[AuthRemoteDataSource] DIO EXCEPTION');
       debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
       debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
-      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint(
+        '[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}',
+      );
       debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
       debugPrint('[AuthRemoteDataSource] Error: ${e.error}');
       debugPrint('════════════════════════════════════════════════════');
@@ -176,9 +190,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<RefreshTokenResponseModel> refreshToken(RefreshTokenRequestModel request) async {
+  Future<RefreshTokenResponseModel> refreshToken(
+    RefreshTokenRequestModel request,
+  ) async {
     final url = '${_dio.options.baseUrl}$_refreshTokenEndpoint';
-    
+
     debugPrint('════════════════════════════════════════════════════');
     debugPrint('[AuthRemoteDataSource] REFRESH TOKEN REQUEST');
     debugPrint('[AuthRemoteDataSource] URL: POST $url');
@@ -203,7 +219,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
             message: 'Empty response body from server',
           );
         }
-        
+
         return RefreshTokenResponseModel.fromJson(response.data!);
       }
 
@@ -216,7 +232,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('════════════════════════════════════════════════════');
       debugPrint('[AuthRemoteDataSource] REFRESH TOKEN EXCEPTION');
       debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
-      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint(
+        '[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}',
+      );
       debugPrint('════════════════════════════════════════════════════');
       rethrow;
     } catch (e, stackTrace) {
@@ -237,22 +255,22 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     if (data.containsKey('token') && data['token'] is String) {
       return false;
     }
-    
+
     if (data.containsKey('success') && data['success'] == false) {
       return true;
     }
-    
+
     if (data.containsKey('error') || data.containsKey('errors')) {
       return !data.containsKey('token');
     }
-    
+
     if (data.containsKey('statusCode')) {
       final code = data['statusCode'];
       if (code is int && code >= 400) {
         return true;
       }
     }
-    
+
     return !data.containsKey('token');
   }
 
@@ -291,7 +309,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('[AuthRemoteDataSource] FORGOT PASSWORD EXCEPTION');
       debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
       debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
-      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint(
+        '[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}',
+      );
       debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
       debugPrint('════════════════════════════════════════════════════');
       rethrow;
@@ -336,7 +356,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('[AuthRemoteDataSource] RESEND OTP EXCEPTION');
       debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
       debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
-      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint(
+        '[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}',
+      );
       debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
       debugPrint('════════════════════════════════════════════════════');
       rethrow;
@@ -381,7 +403,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       debugPrint('[AuthRemoteDataSource] RESET PASSWORD EXCEPTION');
       debugPrint('[AuthRemoteDataSource] Type: ${e.type}');
       debugPrint('[AuthRemoteDataSource] Message: ${e.message}');
-      debugPrint('[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}');
+      debugPrint(
+        '[AuthRemoteDataSource] Status Code: ${e.response?.statusCode}',
+      );
       debugPrint('[AuthRemoteDataSource] Response Data: ${e.response?.data}');
       debugPrint('════════════════════════════════════════════════════');
       rethrow;
@@ -397,5 +421,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         message: 'Unexpected error: $e',
       );
     }
+  }
+
+  @override
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String confirmNewPassword,
+  }) async {
+    await _dio.post<dynamic>(
+      _changePasswordEndpoint,
+      data: <String, dynamic>{
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+        'confirmNewPassword': confirmNewPassword,
+      },
+    );
   }
 }
