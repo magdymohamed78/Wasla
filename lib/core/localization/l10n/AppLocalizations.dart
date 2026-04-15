@@ -1223,7 +1223,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDigitalSignatureMasked.
   ///
   /// In en, this message translates to:
-  /// **'*************'**
+  /// **'*********'**
   String get settingsDigitalSignatureMasked;
 
   /// No description provided for @settingsSignaturePasswordTitle.
@@ -1325,25 +1325,19 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLogoutCurrent.
   ///
   /// In en, this message translates to:
-  /// **'Logout'**
+  /// **'Log Out Current Session'**
   String get settingsLogoutCurrent;
-
-  /// No description provided for @settingsLogoutCurrentSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign out of this device'**
-  String get settingsLogoutCurrentSubtitle;
 
   /// No description provided for @settingsLogoutAll.
   ///
   /// In en, this message translates to:
-  /// **'Logout All Devices'**
+  /// **'Log Out All Devices'**
   String get settingsLogoutAll;
 
   /// No description provided for @settingsLogoutAllSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Sign out from all devices where you\'re logged in'**
+  /// **'Terminate all active sessions\nacross your logged-in platforms.'**
   String get settingsLogoutAllSubtitle;
 
   /// No description provided for @settingsLogoutAllConfirmTitle.

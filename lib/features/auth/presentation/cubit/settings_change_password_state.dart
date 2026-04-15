@@ -8,6 +8,10 @@ class ChangePasswordState {
   final String? generalError;
   final bool isSubmitting;
   final bool isSuccess;
+  final bool hasSubmitted;
+  final bool currentPasswordTouched;
+  final bool newPasswordTouched;
+  final bool confirmPasswordTouched;
 
   const ChangePasswordState({
     this.currentPassword = '',
@@ -19,6 +23,10 @@ class ChangePasswordState {
     this.generalError,
     this.isSubmitting = false,
     this.isSuccess = false,
+    this.hasSubmitted = false,
+    this.currentPasswordTouched = false,
+    this.newPasswordTouched = false,
+    this.confirmPasswordTouched = false,
   });
 
   ChangePasswordState copyWith({
@@ -35,6 +43,10 @@ class ChangePasswordState {
     bool clearGeneralError = false,
     bool? isSubmitting,
     bool? isSuccess,
+    bool? hasSubmitted,
+    bool? currentPasswordTouched,
+    bool? newPasswordTouched,
+    bool? confirmPasswordTouched,
   }) {
     return ChangePasswordState(
       currentPassword: currentPassword ?? this.currentPassword,
@@ -54,6 +66,12 @@ class ChangePasswordState {
           : (generalError ?? this.generalError),
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
+      hasSubmitted: hasSubmitted ?? this.hasSubmitted,
+      currentPasswordTouched:
+          currentPasswordTouched ?? this.currentPasswordTouched,
+      newPasswordTouched: newPasswordTouched ?? this.newPasswordTouched,
+      confirmPasswordTouched:
+          confirmPasswordTouched ?? this.confirmPasswordTouched,
     );
   }
 }

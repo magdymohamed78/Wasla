@@ -13,7 +13,7 @@ class SettingsSection extends StatelessWidget {
     super.key,
     required this.label,
     required this.child,
-    this.hasBackgroundCard = false,
+    this.hasBackgroundCard = true,
   });
 
   @override
@@ -25,29 +25,46 @@ class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.only(
             left: AppDimensions.spacingSm,
             right: AppDimensions.spacingSm,
-            bottom: AppDimensions.spacingMd,
-            top: AppDimensions.spacingMd,
+            bottom: AppDimensions.spacingSm,
           ),
-          child: Text(
-            label.toUpperCase(),
-            style: AppTypography.bodySmall.copyWith(
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.2,
-              color: AppColors.textSecondary,
-              fontSize: 11,
-            ),
+          child: Row(
+            children: [
+              Container(
+                width: 3,
+                height: 14,
+                decoration: BoxDecoration(
+                  color: AppColors.brandRed,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                label.toUpperCase(),
+                style: AppTypography.bodySmall.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: AppColors.textSecondary,
+                  fontSize: 11,
+                ),
+              ),
+            ],
           ),
         ),
         if (hasBackgroundCard)
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFF9FAFB), // Very faint grey card
+              color: AppColors.surface,
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.cardShadow.withValues(alpha: 0.06),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-            padding: const EdgeInsets.symmetric(
-              vertical: AppDimensions.spacingSm,
-            ),
-            child: child,
+            clipBehavior: Clip.antiAlias,
+            child: Material(color: Colors.transparent, child: child),
           )
         else
           child,

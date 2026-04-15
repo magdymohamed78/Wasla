@@ -16,22 +16,17 @@ class SettingsLanguageSection extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            _LanguageRadioTile(
+            _LanguageTile(
+              icon: Icons.language_rounded,
               label: 'English',
               isSelected: state.locale.languageCode == 'en',
               onTap: () =>
                   context.read<LocaleCubit>().changeLocale(const Locale('en')),
+              showDivider: true,
             ),
-            Divider(
-              color: AppColors.divider,
-              height: 1,
-              indent:
-                  AppDimensions.paddingMd +
-                  AppDimensions.iconSizeMd +
-                  AppDimensions.spacingMd,
-            ),
-            _LanguageRadioTile(
-              label: 'العربية',
+            _LanguageTile(
+              icon: Icons.language_rounded,
+              label: 'Arabic',
               isSelected: state.locale.languageCode == 'ar',
               onTap: () =>
                   context.read<LocaleCubit>().changeLocale(const Locale('ar')),
@@ -43,47 +38,84 @@ class SettingsLanguageSection extends StatelessWidget {
   }
 }
 
-class _LanguageRadioTile extends StatelessWidget {
+class _LanguageTile extends StatelessWidget {
+  final IconData icon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool showDivider;
 
-  const _LanguageRadioTile({
+  const _LanguageTile({
+    required this.icon,
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.showDivider = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: 56,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.paddingMd,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: AppTypography.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w500,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.paddingMd,
+              vertical: AppDimensions.paddingSm,
+            ),
+            child: Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.brandRed.withOpacity(0.1)
+                        : AppColors.background,
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.borderRadiusMd,
+                    ),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: isSelected
+                        ? AppColors.brandRed
+                        : AppColors.textSecondary,
+                    size: AppDimensions.iconSizeMd,
+                  ),
                 ),
-              ),
+                const SizedBox(width: AppDimensions.spacingMd),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: AppTypography.bodyMedium.copyWith(
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
+                      color: isSelected
+                          ? AppColors.brandRed
+                          : AppColors.textPrimary,
+                    ),
+                  ),
+                ),
+                if (isSelected)
+                  const Icon(
+                    Icons.check_circle_rounded,
+                    color: AppColors.brandRed,
+                    size: 22,
+                  ),
+              ],
             ),
-            Radio<String>(
-              value: label,
-              groupValue: isSelected ? label : '',
-              onChanged: (_) => onTap(),
-              activeColor: AppColors.brandRed,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
-            ),
-          ],
+          ),
         ),
-      ),
+        if (showDivider)
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingMd),
+            child: Divider(height: 1, thickness: 0.5),
+          ),
+      ],
     );
   }
 }

@@ -15,8 +15,8 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   void _syncFromSession(SessionState sessionState) {
     final user = sessionState.user;
-    final firstName = user?.firstName ?? '';
-    final lastName = user?.lastName ?? '';
+    final firstName = _capitalizeNamePart(user?.firstName ?? '');
+    final lastName = _capitalizeNamePart(user?.lastName ?? '');
     final fullName = _buildFullName(firstName, lastName);
     final initials = _buildInitials(firstName, lastName);
 
@@ -34,6 +34,24 @@ class SettingsCubit extends Cubit<SettingsState> {
   String _buildFullName(String firstName, String lastName) {
     final parts = [firstName, lastName].where((p) => p.isNotEmpty);
     return parts.isEmpty ? '' : parts.join(' ');
+  }
+
+  String _capitalizeNamePart(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return '';
+
+    return trimmed
+        .split(RegExp(r'\s+'))
+        .where((word) => word.isNotEmpty)
+        .map(_capitalizeWord)
+        .join(' ');
+  }
+
+  String _capitalizeWord(String word) {
+    if (word.isEmpty) return '';
+    final first = word[0].toUpperCase();
+    final rest = word.length > 1 ? word.substring(1).toLowerCase() : '';
+    return '$first$rest';
   }
 
   String _buildInitials(String firstName, String lastName) {

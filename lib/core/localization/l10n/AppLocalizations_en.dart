@@ -614,7 +614,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDigitalSignatureTitle => 'Digital Signature';
 
   @override
-  String get settingsDigitalSignatureMasked => '*************';
+  String get settingsDigitalSignatureMasked => '*********';
 
   @override
   String get settingsSignaturePasswordTitle => 'Verify Password';
@@ -666,17 +666,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSecuritySectionTitle => 'Security & Authentication';
 
   @override
-  String get settingsLogoutCurrent => 'Logout';
+  String get settingsLogoutCurrent => 'Log Out Current Session';
 
   @override
-  String get settingsLogoutCurrentSubtitle => 'Sign out of this device';
-
-  @override
-  String get settingsLogoutAll => 'Logout All Devices';
+  String get settingsLogoutAll => 'Log Out All Devices';
 
   @override
   String get settingsLogoutAllSubtitle =>
-      'Sign out from all devices where you\'re logged in';
+      'Terminate all active sessions\nacross your logged-in platforms.';
 
   @override
   String get settingsLogoutAllConfirmTitle => 'Logout All Devices?';

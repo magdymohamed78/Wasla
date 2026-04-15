@@ -605,7 +605,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsDigitalSignatureTitle => 'التوقيع الرقمي';
 
   @override
-  String get settingsDigitalSignatureMasked => '*************';
+  String get settingsDigitalSignatureMasked => '*********';
 
   @override
   String get settingsSignaturePasswordTitle => 'تأكيد كلمة المرور';
@@ -657,17 +657,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsSecuritySectionTitle => 'الأمان والمصادقة';
 
   @override
-  String get settingsLogoutCurrent => 'تسجيل الخروج';
-
-  @override
-  String get settingsLogoutCurrentSubtitle => 'تسجيل الخروج من هذا الجهاز';
+  String get settingsLogoutCurrent => 'تسجيل الخروج من الجلسة الحالية';
 
   @override
   String get settingsLogoutAll => 'تسجيل الخروج من جميع الأجهزة';
 
   @override
   String get settingsLogoutAllSubtitle =>
-      'تسجيل الخروج من جميع الأجهزة التي سجلت الدخول منها';
+      'إنهاء جميع الجلسات النشطة\nعلى كل الأجهزة المسجّل الدخول عليها';
 
   @override
   String get settingsLogoutAllConfirmTitle => 'تسجيل الخروج من جميع الأجهزة؟';

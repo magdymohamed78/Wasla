@@ -11,6 +11,7 @@ class SettingsTile extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isLoading;
   final bool showTrailing;
+  final bool showDivider;
 
   const SettingsTile({
     super.key,
@@ -20,61 +21,85 @@ class SettingsTile extends StatelessWidget {
     this.onTap,
     this.isLoading = false,
     this.showTrailing = true,
+    this.showDivider = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: isLoading ? null : onTap,
-      child: Container(
-        height: 60,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.paddingMd,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: AppColors.textSecondary,
-              size: AppDimensions.iconSizeMd,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap: isLoading ? null : onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.paddingMd,
+              vertical: AppDimensions.paddingSm,
             ),
-            const SizedBox(width: AppDimensions.spacingMd),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTypography.bodyMedium.copyWith(
-                      fontWeight: FontWeight.w600,
+            child: Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.borderRadiusMd,
                     ),
                   ),
-                  if (subtitle != null)
-                    Text(
-                      subtitle!,
-                      style: AppTypography.bodySmall,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                ],
-              ),
+                  child: Icon(
+                    icon,
+                    color: AppColors.textSecondary,
+                    size: AppDimensions.iconSizeMd,
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTypography.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (subtitle != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            subtitle!,
+                            style: AppTypography.bodySmall,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                if (isLoading)
+                  const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                else if (showTrailing)
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: AppColors.textSecondary,
+                    size: AppDimensions.iconSizeSm,
+                  ),
+              ],
             ),
-            if (isLoading)
-              const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            else if (showTrailing)
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: AppColors.textSecondary,
-                size: AppDimensions.iconSizeSm,
-              ),
-          ],
+          ),
         ),
-      ),
+        if (showDivider)
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppDimensions.paddingMd),
+            child: Divider(height: 1, thickness: 0.5),
+          ),
+      ],
     );
   }
 }

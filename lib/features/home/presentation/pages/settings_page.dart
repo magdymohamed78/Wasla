@@ -90,7 +90,7 @@ class SettingsPage extends StatelessWidget {
                   label: localizations.settingsSectionPreferences,
                   child: const SettingsLanguageSection(),
                 ),
-                const SizedBox(height: AppDimensions.spacingLg),
+                const SizedBox(height: AppDimensions.spacingXl),
               ],
             ),
           ),

@@ -13,36 +13,95 @@ class SettingsChangePasswordCubit extends Cubit<ChangePasswordState> {
        super(const ChangePasswordState());
 
   void currentPasswordChanged(String value) {
+    final shouldValidate = state.hasSubmitted || state.currentPasswordTouched;
+    final currentError = shouldValidate
+        ? _validateCurrentPassword(value)
+        : null;
+
     emit(
       state.copyWith(
         currentPassword: value,
-        clearCurrentPasswordError: true,
+        currentPasswordError: currentError,
+        clearCurrentPasswordError: !shouldValidate || currentError == null,
         clearGeneralError: true,
       ),
     );
   }
 
   void newPasswordChanged(String value) {
+    final shouldValidateNew = state.hasSubmitted || state.newPasswordTouched;
+    final newError = shouldValidateNew
+        ? Validators.validatePasswordLength(value)
+        : null;
+
+    final shouldValidateConfirm =
+        state.hasSubmitted || state.confirmPasswordTouched;
+    final confirmError = shouldValidateConfirm
+        ? Validators.validatePasswordMatch(value, state.confirmPassword)
+        : null;
+
     emit(
       state.copyWith(
         newPassword: value,
-        clearNewPasswordError: true,
+        newPasswordError: newError,
+        clearNewPasswordError: !shouldValidateNew || newError == null,
+        confirmPasswordError: confirmError,
+        clearConfirmPasswordError:
+            !shouldValidateConfirm || confirmError == null,
         clearGeneralError: true,
       ),
     );
   }
 
   void confirmPasswordChanged(String value) {
+    final shouldValidate = state.hasSubmitted || state.confirmPasswordTouched;
+    final confirmError = shouldValidate
+        ? Validators.validatePasswordMatch(state.newPassword, value)
+        : null;
+
     emit(
       state.copyWith(
         confirmPassword: value,
-        clearConfirmPasswordError: true,
+        confirmPasswordError: confirmError,
+        clearConfirmPasswordError: !shouldValidate || confirmError == null,
         clearGeneralError: true,
       ),
     );
   }
 
+  void currentPasswordBlurred() {
+    emit(
+      state.copyWith(
+        currentPasswordTouched: true,
+        currentPasswordError: _validateCurrentPassword(state.currentPassword),
+      ),
+    );
+  }
+
+  void newPasswordBlurred() {
+    emit(
+      state.copyWith(
+        newPasswordTouched: true,
+        newPasswordError: Validators.validatePasswordLength(state.newPassword),
+      ),
+    );
+  }
+
+  void confirmPasswordBlurred() {
+    emit(
+      state.copyWith(
+        confirmPasswordTouched: true,
+        confirmPasswordError: Validators.validatePasswordMatch(
+          state.newPassword,
+          state.confirmPassword,
+        ),
+      ),
+    );
+  }
+
   Future<void> submit() async {
+    emit(state.copyWith(hasSubmitted: true));
+
     final currentError = _validateCurrentPassword(state.currentPassword);
     final newError = Validators.validatePasswordLength(state.newPassword);
     final confirmError = Validators.validatePasswordMatch(
@@ -56,12 +115,19 @@ class SettingsChangePasswordCubit extends Cubit<ChangePasswordState> {
           currentPasswordError: currentError,
           newPasswordError: newError,
           confirmPasswordError: confirmError,
+          hasSubmitted: true,
         ),
       );
       return;
     }
 
-    emit(state.copyWith(isSubmitting: true, clearGeneralError: true));
+    emit(
+      state.copyWith(
+        isSubmitting: true,
+        clearGeneralError: true,
+        hasSubmitted: true,
+      ),
+    );
 
     try {
       await _changePasswordUseCase(

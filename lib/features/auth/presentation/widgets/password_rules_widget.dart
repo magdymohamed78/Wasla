@@ -19,7 +19,6 @@ class PasswordRulesWidget extends StatelessWidget {
   PasswordRuleState _getRuleState(bool isMet) {
     if (password.isEmpty) return PasswordRuleState.neutral;
     if (isMet) return PasswordRuleState.valid;
-    if (hasFocus) return PasswordRuleState.neutral;
     return PasswordRuleState.invalid;
   }
 

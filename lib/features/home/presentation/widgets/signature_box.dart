@@ -29,14 +29,16 @@ class SignatureBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacingSm),
       child: Material(
-        color: const Color(0xFFF9FAFB),
-        borderRadius: BorderRadius.circular(16.0),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
         child: InkWell(
           onTap: isLocked ? null : onTap,
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 24.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: AppDimensions.paddingSm,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -57,10 +59,10 @@ class SignatureBox extends StatelessWidget {
                   ),
                 ] else ...[
                   Text(
-                    '• • • • • • • •',
+                    localizations.settingsDigitalSignatureMasked,
                     style: AppTypography.heading1.copyWith(
                       color: AppColors.brandRed,
-                      letterSpacing: 4,
+                      letterSpacing: 5,
                       height: 1.0, // Removes extra vertical padding on font
                     ),
                     textAlign: TextAlign.center,

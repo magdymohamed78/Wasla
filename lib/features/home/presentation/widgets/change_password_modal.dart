@@ -8,7 +8,8 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/toast_utils.dart';
 import '../../../../features/auth/presentation/cubit/settings_change_password_cubit.dart';
 import '../../../../features/auth/presentation/cubit/settings_change_password_state.dart';
-import '../../../../features/auth/presentation/widgets/password_rules_widget.dart';
+import '../../../../features/auth/presentation/widgets/password_feedback_section.dart';
+import '../../../../core/widgets/secondary_button.dart';
 
 class ChangePasswordModal extends StatefulWidget {
   const ChangePasswordModal({super.key});
@@ -21,7 +22,9 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _currentPasswordFocusNode = FocusNode();
   final _newPasswordFocusNode = FocusNode();
+  final _confirmPasswordFocusNode = FocusNode();
 
   bool _obscureCurrent = true;
   bool _obscureNew = true;
@@ -30,8 +33,21 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
   @override
   void initState() {
     super.initState();
+    _currentPasswordFocusNode.addListener(() {
+      if (!_currentPasswordFocusNode.hasFocus) {
+        context.read<SettingsChangePasswordCubit>().currentPasswordBlurred();
+      }
+    });
     _newPasswordFocusNode.addListener(() {
       setState(() {});
+      if (!_newPasswordFocusNode.hasFocus) {
+        context.read<SettingsChangePasswordCubit>().newPasswordBlurred();
+      }
+    });
+    _confirmPasswordFocusNode.addListener(() {
+      if (!_confirmPasswordFocusNode.hasFocus) {
+        context.read<SettingsChangePasswordCubit>().confirmPasswordBlurred();
+      }
     });
   }
 
@@ -40,8 +56,30 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
     _currentPasswordController.dispose();
     _newPasswordController.dispose();
     _confirmPasswordController.dispose();
+    _currentPasswordFocusNode.dispose();
     _newPasswordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
     super.dispose();
+  }
+
+  String? _mapCurrentError(String? error) {
+    if (error == 'password_empty') return 'Please enter your current password';
+    return error;
+  }
+
+  String? _mapNewError(String? error) {
+    if (error == null) return null;
+    if (error == 'password_empty') return 'Please enter a new password';
+    return 'Password must meet all requirements';
+  }
+
+  String? _mapConfirmError(String? error) {
+    if (error == null) return null;
+    if (error == 'confirm_password_empty') {
+      return 'Please confirm your new password';
+    }
+    if (error == 'passwords_do_not_match') return 'Passwords do not match';
+    return error;
   }
 
   @override
@@ -74,31 +112,12 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        localizations.settingsChangePasswordTitle,
-                        style: AppTypography.heading3.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: state.isSubmitting
-                            ? null
-                            : () => Navigator.of(context).pop(),
-                        icon: const Icon(
-                          Icons.close_rounded,
-                          color: AppColors.textSecondary,
-                        ),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        style: const ButtonStyle(
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    localizations.settingsChangePasswordTitle,
+                    style: AppTypography.heading3.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
                   ),
                   const SizedBox(height: AppDimensions.spacingSm),
                   Text(
@@ -111,11 +130,12 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                   const SizedBox(height: AppDimensions.spacingXl),
                   _PasswordField(
                     controller: _currentPasswordController,
+                    focusNode: _currentPasswordFocusNode,
                     label: localizations.settingsCurrentPassword,
                     obscure: _obscureCurrent,
                     onToggle: () =>
                         setState(() => _obscureCurrent = !_obscureCurrent),
-                    errorText: state.currentPasswordError,
+                    errorText: _mapCurrentError(state.currentPasswordError),
                     onChanged: (v) => context
                         .read<SettingsChangePasswordCubit>()
                         .currentPasswordChanged(v),
@@ -127,24 +147,25 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                     label: localizations.settingsNewPassword,
                     obscure: _obscureNew,
                     onToggle: () => setState(() => _obscureNew = !_obscureNew),
-                    errorText: state.newPasswordError,
+                    errorText: _mapNewError(state.newPasswordError),
                     onChanged: (v) => context
                         .read<SettingsChangePasswordCubit>()
                         .newPasswordChanged(v),
                   ),
                   const SizedBox(height: AppDimensions.spacingSm),
-                  PasswordRulesWidget(
+                  PasswordFeedbackSection(
                     password: state.newPassword,
                     hasFocus: _newPasswordFocusNode.hasFocus,
                   ),
                   const SizedBox(height: AppDimensions.spacingLg),
                   _PasswordField(
                     controller: _confirmPasswordController,
+                    focusNode: _confirmPasswordFocusNode,
                     label: localizations.settingsConfirmNewPassword,
                     obscure: _obscureConfirm,
                     onToggle: () =>
                         setState(() => _obscureConfirm = !_obscureConfirm),
-                    errorText: state.confirmPasswordError,
+                    errorText: _mapConfirmError(state.confirmPasswordError),
                     onChanged: (v) => context
                         .read<SettingsChangePasswordCubit>()
                         .confirmPasswordChanged(v),
@@ -198,6 +219,13 @@ class _ChangePasswordModalState extends State<ChangePasswordModal> {
                               color: AppColors.surface,
                             ),
                           ),
+                  ),
+                  const SizedBox(height: AppDimensions.spacingMd),
+                  SecondaryButton(
+                    label: localizations.settingsLogoutAllCancel,
+                    onPressed: state.isSubmitting
+                        ? null
+                        : () => Navigator.of(context).pop(),
                   ),
                 ],
               ),

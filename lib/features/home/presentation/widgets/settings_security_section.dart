@@ -28,14 +28,7 @@ class SettingsSecuritySection extends StatelessWidget {
           icon: Icons.lock_outline_rounded,
           title: localizations.settingsChangePasswordTitle,
           onTap: () => _openChangePasswordModal(context),
-        ),
-        Divider(
-          color: AppColors.divider,
-          height: 1,
-          indent:
-              AppDimensions.paddingMd +
-              AppDimensions.iconSizeMd +
-              AppDimensions.spacingMd,
+          showDivider: true,
         ),
         BlocBuilder<LogoutCubit, LogoutState>(
           builder: (context, state) {
@@ -47,23 +40,25 @@ class SettingsSecuritySection extends StatelessWidget {
                   ? null
                   : () => _confirmLogoutAll(context),
               isLoading: state.isLoggingOutAll,
+              showDivider: true,
             );
           },
         ),
-        Divider(
-          color: AppColors.divider,
-          height: 1,
-          indent:
-              AppDimensions.paddingMd +
-              AppDimensions.iconSizeMd +
-              AppDimensions.spacingMd,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.paddingMd,
+          ),
+          child: Divider(
+            height: 1,
+            thickness: 0.5,
+            color: AppColors.error.withOpacity(0.15),
+          ),
         ),
         BlocBuilder<LogoutCubit, LogoutState>(
           builder: (context, state) {
             return SettingsDangerTile(
               icon: Icons.logout_rounded,
               title: localizations.settingsLogoutCurrent,
-              subtitle: localizations.settingsLogoutCurrentSubtitle,
               onTap: state.isLoggingOutCurrent
                   ? null
                   : () async {
@@ -74,7 +69,6 @@ class SettingsSecuritySection extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: AppDimensions.spacingSm),
       ],
     );
   }
