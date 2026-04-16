@@ -1369,6 +1369,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get settingsLanguageTitle;
+
+  /// No description provided for @profileRoleLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Lead'**
+  String get profileRoleLead;
+
+  /// No description provided for @profileRoleCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get profileRoleCustomer;
+
+  /// No description provided for @profileEditPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get profileEditPageTitle;
+
+  /// No description provided for @profilePersonalDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Details'**
+  String get profilePersonalDetailsTitle;
+
+  /// No description provided for @profileAddressInformationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Information'**
+  String get profileAddressInformationTitle;
+
+  /// No description provided for @profileConnectedCompaniesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected Companies'**
+  String get profileConnectedCompaniesTitle;
+
+  /// No description provided for @profileConnectedCompaniesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No connected companies'**
+  String get profileConnectedCompaniesEmptyTitle;
+
+  /// No description provided for @profileConnectedCompaniesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect with a company to start receiving offers and service requests.'**
+  String get profileConnectedCompaniesEmptyMessage;
+
+  /// No description provided for @profileFullNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get profileFullNameLabel;
+
+  /// No description provided for @profileEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get profileEmailLabel;
+
+  /// No description provided for @profilePhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get profilePhoneLabel;
+
+  /// No description provided for @profileMemberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Member Since'**
+  String get profileMemberSince;
+
+  /// No description provided for @profileStreetAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Street Address'**
+  String get profileStreetAddress;
+
+  /// No description provided for @profileCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get profileCityLabel;
+
+  /// No description provided for @profileZipCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip Code'**
+  String get profileZipCodeLabel;
+
+  /// No description provided for @profileCityZipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City / Zip'**
+  String get profileCityZipLabel;
+
+  /// No description provided for @profileCountryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get profileCountryLabel;
+
+  /// No description provided for @profileSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get profileSaveChanges;
+
+  /// No description provided for @profileCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get profileCancel;
+
+  /// No description provided for @profileSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileSaveSuccess;
+
+  /// No description provided for @profileSaveError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to update profile. Please try again.'**
+  String get profileSaveError;
+
+  /// No description provided for @profileCompanyCustomerId.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer ID'**
+  String get profileCompanyCustomerId;
+
+  /// No description provided for @profileCompanyRequestedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested At'**
+  String get profileCompanyRequestedAt;
+
+  /// No description provided for @profileCompanyRespondedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Responded At'**
+  String get profileCompanyRespondedAt;
+
+  /// No description provided for @profileCompanyStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get profileCompanyStatusPending;
+
+  /// No description provided for @profileCompanyStatusAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get profileCompanyStatusAccepted;
+
+  /// No description provided for @profileCompanyStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get profileCompanyStatusRejected;
+
+  /// No description provided for @profileCompanyStatusUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get profileCompanyStatusUnknown;
 }
 
 class _AppLocalizationsDelegate

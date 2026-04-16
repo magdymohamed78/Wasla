@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
-import '../../../../core/theme/app_typography.dart';
 import '../../domain/entities/discovery_types.dart';
 import '../../domain/use_cases/customer_portal_use_cases.dart';
 import '../cubit/lead_profile_cubit.dart';
+import '../widgets/profile_components.dart';
 
 class LeadProfilePage extends StatelessWidget {
   const LeadProfilePage({super.key});
@@ -48,58 +51,94 @@ class _LeadProfileView extends StatelessWidget {
             }
 
             final profile = state.profile!;
-            final fullName = profile.fullName;
-
             return RefreshIndicator(
               onRefresh: context.read<LeadProfileCubit>().load,
               child: ListView(
                 padding: const EdgeInsets.all(AppDimensions.paddingMd),
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(AppDimensions.paddingLg),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.borderRadiusLg,
-                      ),
+                  ProfileAvatarHeader(
+                    firstName: profile.firstName ?? '',
+                    lastName: profile.lastName ?? '',
+                    roleLabel: localizations.profileRoleLead,
+                  ),
+                  const SizedBox(height: AppDimensions.spacingLg),
+                  ProfileSectionCard(
+                    title: localizations.profilePersonalDetailsTitle,
+                    trailing: EditProfileButton(
+                      label: localizations.profileEditPageTitle,
+                      onPressed: () async {
+                        final updated = await context.push<bool>(
+                          AppRouter.leadProfileEdit,
+                        );
+
+                        if (updated == true && context.mounted) {
+                          context.read<LeadProfileCubit>().load();
+                        }
+                      },
                     ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          fullName.isEmpty
-                              ? localizations.navigationProfile
-                              : fullName,
-                          style: AppTypography.heading3,
+                        ProfileInfoRow(
+                          icon: Icons.person_outline,
+                          label: localizations.profileFullNameLabel,
+                          value: buildFullName(
+                            firstName: profile.firstName,
+                            lastName: profile.lastName,
+                          ),
                         ),
-                        const SizedBox(height: AppDimensions.spacingXs),
-                        if ((profile.email ?? '').isNotEmpty)
-                          Text(profile.email!, style: AppTypography.bodyMedium),
-                        const SizedBox(height: AppDimensions.spacingSm),
-                        if ((profile.phoneNumber ?? '').isNotEmpty)
-                          Text(
-                            profile.phoneNumber!,
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        if ((profile.address ?? '').isNotEmpty)
-                          Text(
-                            profile.address!,
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        if ((profile.city ?? '').isNotEmpty ||
-                            (profile.country ?? '').isNotEmpty)
-                          Text(
-                            '${profile.city ?? ''} ${profile.country ?? ''}'
-                                .trim(),
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
+                        const Divider(color: AppColors.divider),
+                        ProfileInfoRow(
+                          icon: Icons.email_outlined,
+                          label: localizations.profileEmailLabel,
+                          value: _valueOrDash(profile.email),
+                        ),
+                        const Divider(color: AppColors.divider),
+                        ProfileInfoRow(
+                          icon: Icons.phone_outlined,
+                          label: localizations.profilePhoneLabel,
+                          value: _valueOrDash(profile.phoneNumber),
+                        ),
+                        const Divider(color: AppColors.divider),
+                        ProfileInfoRow(
+                          icon: Icons.calendar_today_outlined,
+                          label: localizations.profileMemberSince,
+                          value: _formatDate(context, profile.createdAt),
+                        ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.spacingMd),
+                  ProfileSectionCard(
+                    title: localizations.profileAddressInformationTitle,
+                    child: Column(
+                      children: [
+                        ProfileInfoRow(
+                          icon: Icons.location_on_outlined,
+                          label: localizations.profileStreetAddress,
+                          value: _valueOrDash(profile.address),
+                        ),
+                        const Divider(color: AppColors.divider),
+                        ProfileInfoRow(
+                          icon: Icons.map_outlined,
+                          label: localizations.profileCityZipLabel,
+                          value: _combineCityZip(profile.city, profile.zipCode),
+                        ),
+                        const Divider(color: AppColors.divider),
+                        ProfileInfoRow(
+                          icon: Icons.public_outlined,
+                          label: localizations.profileCountryLabel,
+                          value: _valueOrDash(profile.country),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: AppDimensions.spacingMd),
+                  ProfileSectionCard(
+                    title: localizations.profileConnectedCompaniesTitle,
+                    child: ProfileEmptyState(
+                      title: localizations.profileConnectedCompaniesEmptyTitle,
+                      message:
+                          localizations.profileConnectedCompaniesEmptyMessage,
                     ),
                   ),
                 ],
@@ -109,6 +148,35 @@ class _LeadProfileView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _valueOrDash(String? value) {
+    final normalized = (value ?? '').trim();
+    return normalized.isEmpty ? '-' : normalized;
+  }
+
+  String _combineCityZip(String? city, String? zipCode) {
+    final cityValue = (city ?? '').trim();
+    final zipValue = (zipCode ?? '').trim();
+
+    if (cityValue.isEmpty && zipValue.isEmpty) {
+      return '-';
+    }
+
+    if (cityValue.isNotEmpty && zipValue.isNotEmpty) {
+      return '$cityValue, $zipValue';
+    }
+
+    return cityValue.isNotEmpty ? cityValue : zipValue;
+  }
+
+  String _formatDate(BuildContext context, DateTime? value) {
+    if (value == null) {
+      return '-';
+    }
+
+    final locale = Localizations.localeOf(context).toString();
+    return DateFormat.yMMMd(locale).format(value.toLocal());
   }
 }
 

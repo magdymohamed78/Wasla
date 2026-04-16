@@ -11,13 +11,17 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/change_password_page.dart';
 import '../../features/home/presentation/pages/all_companies_page.dart';
 import '../../features/home/presentation/pages/company_details_page.dart';
+import '../../features/home/presentation/pages/customer_connected_companies_page.dart';
+import '../../features/home/presentation/pages/customer_profile_edit_page.dart';
 import '../../features/home/presentation/pages/discovery_shell_page.dart';
 import '../../features/home/presentation/pages/explore_page.dart';
+import '../../features/home/presentation/pages/lead_profile_edit_page.dart';
 import '../../features/home/presentation/pages/new_service_request_page.dart';
 import '../../features/home/presentation/pages/notifications_page.dart';
 import '../../features/home/presentation/pages/recommended_companies_page.dart';
 import '../../features/home/presentation/pages/trending_companies_page.dart';
 import '../../features/home/presentation/cubit/lead_access_state.dart';
+import '../../features/home/domain/entities/customer_portal_content.dart';
 
 class AppRouter {
   AppRouter._();
@@ -45,7 +49,11 @@ class AppRouter {
   static const String customerRequests = '/my/service-requests';
   static const String customerOffers = '/my/offers';
   static const String customerProfile = '/my/profile';
+  static const String customerProfileEdit = '/my/profile/edit';
+  static const String customerConnectedCompanies =
+      '/my/profile/connected-companies';
   static const String leadProfile = '/my/lead-profile';
+  static const String leadProfileEdit = '/my/lead-profile/edit';
   static const String requestActions = '/request-actions';
   static const String newServiceRequest = '/new-service-request';
   static const String leadSettings = '/my/lead-settings';
@@ -186,9 +194,28 @@ class AppRouter {
               const DiscoveryShellPage(currentTab: DiscoveryTab.profile),
         ),
         GoRoute(
+          path: customerProfileEdit,
+          builder: (context, state) => const CustomerProfileEditPage(),
+        ),
+        GoRoute(
+          path: customerConnectedCompanies,
+          builder: (context, state) {
+            final extra = state.extra;
+            final companies = extra is List<ConnectedCompany>
+                ? extra
+                : const <ConnectedCompany>[];
+
+            return CustomerConnectedCompaniesPage(companies: companies);
+          },
+        ),
+        GoRoute(
           path: leadProfile,
           builder: (context, state) =>
               const DiscoveryShellPage(currentTab: DiscoveryTab.profile),
+        ),
+        GoRoute(
+          path: leadProfileEdit,
+          builder: (context, state) => const LeadProfileEditPage(),
         ),
         GoRoute(
           path: newServiceRequest,

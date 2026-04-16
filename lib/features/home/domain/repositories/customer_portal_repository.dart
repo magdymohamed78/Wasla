@@ -17,6 +17,14 @@ abstract class CustomerPortalRepository {
 
   Future<LeadPortalProfile> getLeadProfile();
 
+  Future<CustomerPortalProfile> updateCustomerProfile({
+    required UpdatePortalProfileInput input,
+  });
+
+  Future<LeadPortalProfile> updateLeadProfile({
+    required UpdatePortalProfileInput input,
+  });
+
   Future<String> revealDigitalSignature({required String password});
 
   Future<void> logout();

@@ -681,4 +681,89 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsLanguageTitle => 'اللغة';
+
+  @override
+  String get profileRoleLead => 'عميل محتمل';
+
+  @override
+  String get profileRoleCustomer => 'عميل';
+
+  @override
+  String get profileEditPageTitle => 'تعديل الملف الشخصي';
+
+  @override
+  String get profilePersonalDetailsTitle => 'البيانات الشخصية';
+
+  @override
+  String get profileAddressInformationTitle => 'معلومات العنوان';
+
+  @override
+  String get profileConnectedCompaniesTitle => 'الشركات المرتبطة';
+
+  @override
+  String get profileConnectedCompaniesEmptyTitle => 'لا توجد شركات مرتبطة';
+
+  @override
+  String get profileConnectedCompaniesEmptyMessage =>
+      'اتصل بإحدى الشركات لبدء استقبال العروض وطلبات الخدمة.';
+
+  @override
+  String get profileFullNameLabel => 'الاسم الكامل';
+
+  @override
+  String get profileEmailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get profilePhoneLabel => 'الهاتف';
+
+  @override
+  String get profileMemberSince => 'عضو منذ';
+
+  @override
+  String get profileStreetAddress => 'عنوان الشارع';
+
+  @override
+  String get profileCityLabel => 'المدينة';
+
+  @override
+  String get profileZipCodeLabel => 'الرمز البريدي';
+
+  @override
+  String get profileCityZipLabel => 'المدينة / الرمز';
+
+  @override
+  String get profileCountryLabel => 'الدولة';
+
+  @override
+  String get profileSaveChanges => 'حفظ التغييرات';
+
+  @override
+  String get profileCancel => 'إلغاء';
+
+  @override
+  String get profileSaveSuccess => 'تم تحديث الملف الشخصي بنجاح';
+
+  @override
+  String get profileSaveError => 'تعذر تحديث الملف الشخصي. حاول مرة أخرى.';
+
+  @override
+  String get profileCompanyCustomerId => 'معرّف العميل';
+
+  @override
+  String get profileCompanyRequestedAt => 'تاريخ الطلب';
+
+  @override
+  String get profileCompanyRespondedAt => 'تاريخ الرد';
+
+  @override
+  String get profileCompanyStatusPending => 'قيد الانتظار';
+
+  @override
+  String get profileCompanyStatusAccepted => 'مقبول';
+
+  @override
+  String get profileCompanyStatusRejected => 'مرفوض';
+
+  @override
+  String get profileCompanyStatusUnknown => 'غير معروف';
 }

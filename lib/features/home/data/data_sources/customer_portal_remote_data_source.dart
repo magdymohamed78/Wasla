@@ -19,6 +19,14 @@ abstract class CustomerPortalRemoteDataSource {
 
   Future<LeadProfileDto> getMyLeadProfile();
 
+  Future<CustomerProfileDto> updateMyProfile({
+    required UpdateCustomerProfileDto payload,
+  });
+
+  Future<LeadProfileDto> updateMyLeadProfile({
+    required UpdateCustomerProfileDto payload,
+  });
+
   Future<String> revealDigitalSignature({required String password});
 
   Future<void> logout();
@@ -125,6 +133,46 @@ class CustomerPortalRemoteDataSourceImpl
     }
 
     return LeadProfileDto.fromJson(payload);
+  }
+
+  @override
+  Future<CustomerProfileDto> updateMyProfile({
+    required UpdateCustomerProfileDto payload,
+  }) async {
+    final response = await _dio.put<dynamic>(
+      _myProfileEndpoint,
+      data: payload.toJson(),
+    );
+    final body = response.data;
+    if (body is! Map<String, dynamic>) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        message: 'Invalid customer profile update response payload.',
+      );
+    }
+
+    return CustomerProfileDto.fromJson(body);
+  }
+
+  @override
+  Future<LeadProfileDto> updateMyLeadProfile({
+    required UpdateCustomerProfileDto payload,
+  }) async {
+    final response = await _dio.put<dynamic>(
+      _myLeadProfileEndpoint,
+      data: payload.toJson(),
+    );
+    final body = response.data;
+    if (body is! Map<String, dynamic>) {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        message: 'Invalid lead profile update response payload.',
+      );
+    }
+
+    return LeadProfileDto.fromJson(body);
   }
 
   @override

@@ -48,6 +48,116 @@ DateTime? _asDate(dynamic value) {
   return DateTime.tryParse(raw);
 }
 
+List<ConnectedCompanyDto> _asConnectedCompanies(dynamic value) {
+  if (value is! List) {
+    return const <ConnectedCompanyDto>[];
+  }
+
+  return value
+      .whereType<Map<String, dynamic>>()
+      .map(ConnectedCompanyDto.fromJson)
+      .toList(growable: false);
+}
+
+class ConnectedCompanyDto {
+  final int leadCompanyId;
+  final int companyId;
+  final String? companyName;
+  final String? companyLogoUrl;
+  final String? status;
+  final int? customerId;
+  final DateTime? requestedAt;
+  final DateTime? respondedAt;
+
+  const ConnectedCompanyDto({
+    required this.leadCompanyId,
+    required this.companyId,
+    this.companyName,
+    this.companyLogoUrl,
+    this.status,
+    this.customerId,
+    this.requestedAt,
+    this.respondedAt,
+  });
+
+  factory ConnectedCompanyDto.fromJson(Map<String, dynamic> json) {
+    final rawCustomerId = json['customerId'];
+
+    return ConnectedCompanyDto(
+      leadCompanyId: _asInt(json['leadCompanyId']),
+      companyId: _asInt(json['companyId']),
+      companyName: _asString(json['companyName']),
+      companyLogoUrl: _asString(json['companyLogoUrl']),
+      status: _asString(json['status']),
+      customerId: rawCustomerId == null ? null : _asInt(rawCustomerId),
+      requestedAt: _asDate(json['requestedAt']),
+      respondedAt: _asDate(json['respondedAt']),
+    );
+  }
+
+  ConnectedCompany toDomain() {
+    return ConnectedCompany(
+      leadCompanyId: leadCompanyId,
+      companyId: companyId,
+      companyName: companyName,
+      companyLogoUrl: companyLogoUrl,
+      status: status,
+      customerId: customerId,
+      requestedAt: requestedAt,
+      respondedAt: respondedAt,
+    );
+  }
+}
+
+class UpdateCustomerProfileDto {
+  final String firstName;
+  final String lastName;
+  final String? phoneNumber;
+  final String? address;
+  final String? city;
+  final String? zipCode;
+  final String? country;
+
+  const UpdateCustomerProfileDto({
+    required this.firstName,
+    required this.lastName,
+    this.phoneNumber,
+    this.address,
+    this.city,
+    this.zipCode,
+    this.country,
+  });
+
+  factory UpdateCustomerProfileDto.fromDomain(UpdatePortalProfileInput input) {
+    String? normalize(String? value) {
+      final trimmed = value?.trim() ?? '';
+      return trimmed.isEmpty ? null : trimmed;
+    }
+
+    return UpdateCustomerProfileDto(
+      firstName: input.firstName.trim(),
+      lastName: input.lastName.trim(),
+      phoneNumber: normalize(input.phoneNumber),
+      address: normalize(input.address),
+      city: normalize(input.city),
+      zipCode: normalize(input.zipCode),
+      country: normalize(input.country),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'firstName': firstName,
+      'lastName': lastName,
+      'phoneNumber': phoneNumber,
+      'address': address,
+      'city': city,
+      'zipCode': zipCode,
+      'country': country,
+    };
+  }
+}
+
 class CustomerServiceRequestSummaryDto {
   final int serviceRequestId;
   final String? referenceNumber;
@@ -167,6 +277,7 @@ class CustomerProfileDto {
   final String? country;
   final String? digitalSignature;
   final DateTime? createdAt;
+  final List<ConnectedCompanyDto> connectedCompanies;
 
   const CustomerProfileDto({
     required this.userId,
@@ -181,6 +292,7 @@ class CustomerProfileDto {
     this.country,
     this.digitalSignature,
     this.createdAt,
+    this.connectedCompanies = const <ConnectedCompanyDto>[],
   });
 
   factory CustomerProfileDto.fromJson(Map<String, dynamic> json) {
@@ -197,6 +309,7 @@ class CustomerProfileDto {
       country: _asString(json['country']),
       digitalSignature: _asString(json['digitalSignature']),
       createdAt: _asDate(json['createdAt']),
+      connectedCompanies: _asConnectedCompanies(json['connectedCompanies']),
     );
   }
 
@@ -214,6 +327,9 @@ class CustomerProfileDto {
       country: country,
       digitalSignature: digitalSignature,
       createdAt: createdAt,
+      connectedCompanies: connectedCompanies
+          .map((company) => company.toDomain())
+          .toList(growable: false),
     );
   }
 }
@@ -230,6 +346,7 @@ class LeadProfileDto {
   final String? zipCode;
   final String? country;
   final DateTime? createdAt;
+  final List<ConnectedCompanyDto> connectedCompanies;
 
   const LeadProfileDto({
     required this.userId,
@@ -243,6 +360,7 @@ class LeadProfileDto {
     this.zipCode,
     this.country,
     this.createdAt,
+    this.connectedCompanies = const <ConnectedCompanyDto>[],
   });
 
   factory LeadProfileDto.fromJson(Map<String, dynamic> json) {
@@ -258,6 +376,7 @@ class LeadProfileDto {
       zipCode: _asString(json['zipCode']),
       country: _asString(json['country']),
       createdAt: _asDate(json['createdAt']),
+      connectedCompanies: _asConnectedCompanies(json['connectedCompanies']),
     );
   }
 
@@ -274,6 +393,9 @@ class LeadProfileDto {
       zipCode: zipCode,
       country: country,
       createdAt: createdAt,
+      connectedCompanies: connectedCompanies
+          .map((company) => company.toDomain())
+          .toList(growable: false),
     );
   }
 }

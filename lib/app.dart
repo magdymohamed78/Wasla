@@ -80,6 +80,8 @@ class _AppState extends State<App> {
   late final GetCustomerOffersUseCase _getCustomerOffersUseCase;
   late final GetCustomerProfileUseCase _getCustomerProfileUseCase;
   late final GetLeadProfileUseCase _getLeadProfileUseCase;
+  late final UpdateCustomerProfileUseCase _updateCustomerProfileUseCase;
+  late final UpdateLeadProfileUseCase _updateLeadProfileUseCase;
   late final SubmitServiceRequestUseCase _submitServiceRequestUseCase;
   late final RevealDigitalSignatureUseCase _revealDigitalSignatureUseCase;
   late final LogoutUseCase _logoutUseCase;
@@ -163,6 +165,12 @@ class _AppState extends State<App> {
       _customerPortalRepository,
     );
     _getLeadProfileUseCase = GetLeadProfileUseCase(_customerPortalRepository);
+    _updateCustomerProfileUseCase = UpdateCustomerProfileUseCase(
+      _customerPortalRepository,
+    );
+    _updateLeadProfileUseCase = UpdateLeadProfileUseCase(
+      _customerPortalRepository,
+    );
 
     _serviceRequestRemoteDataSource = ServiceRequestRemoteDataSourceImpl(_dio);
     _serviceRequestRepository = ServiceRequestRepositoryImpl(
@@ -258,6 +266,12 @@ class _AppState extends State<App> {
         ),
         RepositoryProvider<GetLeadProfileUseCase>.value(
           value: _getLeadProfileUseCase,
+        ),
+        RepositoryProvider<UpdateCustomerProfileUseCase>.value(
+          value: _updateCustomerProfileUseCase,
+        ),
+        RepositoryProvider<UpdateLeadProfileUseCase>.value(
+          value: _updateLeadProfileUseCase,
         ),
         RepositoryProvider<RevealDigitalSignatureUseCase>.value(
           value: _revealDigitalSignatureUseCase,

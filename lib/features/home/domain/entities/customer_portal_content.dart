@@ -24,6 +24,48 @@ class CustomerServiceRequestSummary {
   });
 }
 
+class ConnectedCompany {
+  final int leadCompanyId;
+  final int companyId;
+  final String? companyName;
+  final String? companyLogoUrl;
+  final String? status;
+  final int? customerId;
+  final DateTime? requestedAt;
+  final DateTime? respondedAt;
+
+  const ConnectedCompany({
+    required this.leadCompanyId,
+    required this.companyId,
+    this.companyName,
+    this.companyLogoUrl,
+    this.status,
+    this.customerId,
+    this.requestedAt,
+    this.respondedAt,
+  });
+}
+
+class UpdatePortalProfileInput {
+  final String firstName;
+  final String lastName;
+  final String? phoneNumber;
+  final String? address;
+  final String? city;
+  final String? zipCode;
+  final String? country;
+
+  const UpdatePortalProfileInput({
+    required this.firstName,
+    required this.lastName,
+    this.phoneNumber,
+    this.address,
+    this.city,
+    this.zipCode,
+    this.country,
+  });
+}
+
 class CustomerOfferSummary {
   final int offerId;
   final String? offerNumber;
@@ -59,6 +101,7 @@ class CustomerPortalProfile {
   final String? country;
   final String? digitalSignature;
   final DateTime? createdAt;
+  final List<ConnectedCompany> connectedCompanies;
 
   const CustomerPortalProfile({
     required this.userId,
@@ -73,6 +116,7 @@ class CustomerPortalProfile {
     this.country,
     this.digitalSignature,
     this.createdAt,
+    this.connectedCompanies = const <ConnectedCompany>[],
   });
 
   String get fullName {
@@ -95,6 +139,7 @@ class LeadPortalProfile {
   final String? zipCode;
   final String? country;
   final DateTime? createdAt;
+  final List<ConnectedCompany> connectedCompanies;
 
   const LeadPortalProfile({
     required this.userId,
@@ -108,6 +153,7 @@ class LeadPortalProfile {
     this.zipCode,
     this.country,
     this.createdAt,
+    this.connectedCompanies = const <ConnectedCompany>[],
   });
 
   String get fullName {

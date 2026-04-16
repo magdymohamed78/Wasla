@@ -1,3 +1,5 @@
+import 'package:waslaapp/features/home/data/models/customer_portal_models.dart';
+
 import '../../domain/entities/customer_portal_content.dart';
 import '../../domain/repositories/customer_portal_repository.dart';
 import '../data_sources/customer_portal_remote_data_source.dart';
@@ -52,6 +54,27 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   }
 
   @override
+  Future<CustomerPortalProfile> updateCustomerProfile({
+    required UpdatePortalProfileInput input,
+  }) async {
+    final updated =
+        await _updateProfile(isLead: false, input: input)
+            as CustomerPortalProfile;
+
+    return updated;
+  }
+
+  @override
+  Future<LeadPortalProfile> updateLeadProfile({
+    required UpdatePortalProfileInput input,
+  }) async {
+    final updated =
+        await _updateProfile(isLead: true, input: input) as LeadPortalProfile;
+
+    return updated;
+  }
+
+  @override
   Future<String> revealDigitalSignature({required String password}) {
     return _remote.revealDigitalSignature(password: password);
   }
@@ -64,5 +87,20 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   @override
   Future<void> logoutAll() {
     return _remote.logoutAll();
+  }
+
+  Future<Object> _updateProfile({
+    required bool isLead,
+    required UpdatePortalProfileInput input,
+  }) async {
+    final payload = UpdateCustomerProfileDto.fromDomain(input);
+
+    if (isLead) {
+      final updatedLead = await _remote.updateMyLeadProfile(payload: payload);
+      return updatedLead.toDomain();
+    }
+
+    final updatedCustomer = await _remote.updateMyProfile(payload: payload);
+    return updatedCustomer.toDomain();
   }
 }

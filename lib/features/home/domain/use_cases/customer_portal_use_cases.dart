@@ -56,3 +56,23 @@ class GetLeadProfileUseCase {
     return _repository.getLeadProfile();
   }
 }
+
+class UpdateCustomerProfileUseCase {
+  final CustomerPortalRepository _repository;
+
+  const UpdateCustomerProfileUseCase(this._repository);
+
+  Future<CustomerPortalProfile> call(UpdatePortalProfileInput input) {
+    return _repository.updateCustomerProfile(input: input);
+  }
+}
+
+class UpdateLeadProfileUseCase {
+  final CustomerPortalRepository _repository;
+
+  const UpdateLeadProfileUseCase(this._repository);
+
+  Future<LeadPortalProfile> call(UpdatePortalProfileInput input) {
+    return _repository.updateLeadProfile(input: input);
+  }
+}

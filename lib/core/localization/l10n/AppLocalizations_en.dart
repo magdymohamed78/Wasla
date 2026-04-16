@@ -690,4 +690,89 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLanguageTitle => 'Language';
+
+  @override
+  String get profileRoleLead => 'Lead';
+
+  @override
+  String get profileRoleCustomer => 'Customer';
+
+  @override
+  String get profileEditPageTitle => 'Edit Profile';
+
+  @override
+  String get profilePersonalDetailsTitle => 'Personal Details';
+
+  @override
+  String get profileAddressInformationTitle => 'Address Information';
+
+  @override
+  String get profileConnectedCompaniesTitle => 'Connected Companies';
+
+  @override
+  String get profileConnectedCompaniesEmptyTitle => 'No connected companies';
+
+  @override
+  String get profileConnectedCompaniesEmptyMessage =>
+      'Connect with a company to start receiving offers and service requests.';
+
+  @override
+  String get profileFullNameLabel => 'Full Name';
+
+  @override
+  String get profileEmailLabel => 'Email';
+
+  @override
+  String get profilePhoneLabel => 'Phone';
+
+  @override
+  String get profileMemberSince => 'Member Since';
+
+  @override
+  String get profileStreetAddress => 'Street Address';
+
+  @override
+  String get profileCityLabel => 'City';
+
+  @override
+  String get profileZipCodeLabel => 'Zip Code';
+
+  @override
+  String get profileCityZipLabel => 'City / Zip';
+
+  @override
+  String get profileCountryLabel => 'Country';
+
+  @override
+  String get profileSaveChanges => 'Save Changes';
+
+  @override
+  String get profileCancel => 'Cancel';
+
+  @override
+  String get profileSaveSuccess => 'Profile updated successfully';
+
+  @override
+  String get profileSaveError => 'Unable to update profile. Please try again.';
+
+  @override
+  String get profileCompanyCustomerId => 'Customer ID';
+
+  @override
+  String get profileCompanyRequestedAt => 'Requested At';
+
+  @override
+  String get profileCompanyRespondedAt => 'Responded At';
+
+  @override
+  String get profileCompanyStatusPending => 'Pending';
+
+  @override
+  String get profileCompanyStatusAccepted => 'Accepted';
+
+  @override
+  String get profileCompanyStatusRejected => 'Rejected';
+
+  @override
+  String get profileCompanyStatusUnknown => 'Unknown';
 }
