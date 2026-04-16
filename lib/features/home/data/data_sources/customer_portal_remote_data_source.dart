@@ -1,6 +1,17 @@
 import 'package:dio/dio.dart';
 
 import '../models/customer_portal_models.dart';
+import 'customer_offers_remote_data_source.dart';
+import 'customer_requests_remote_data_source.dart';
+import 'digital_signature_remote_data_source.dart';
+import 'logout_remote_data_source.dart';
+import 'profile_remote_data_source.dart';
+
+export 'customer_offers_remote_data_source.dart';
+export 'customer_requests_remote_data_source.dart';
+export 'digital_signature_remote_data_source.dart';
+export 'logout_remote_data_source.dart';
+export 'profile_remote_data_source.dart';
 
 abstract class CustomerPortalRemoteDataSource {
   Future<List<CustomerServiceRequestSummaryDto>> getMyServiceRequests({
@@ -36,178 +47,64 @@ abstract class CustomerPortalRemoteDataSource {
 
 class CustomerPortalRemoteDataSourceImpl
     implements CustomerPortalRemoteDataSource {
-  static const String _myServiceRequestsEndpoint =
-      '/api/customer-portal/my/service-requests';
-  static const String _myOffersEndpoint = '/api/customer-portal/my/offers';
-  static const String _myProfileEndpoint = '/api/customer-portal/my/profile';
-  static const String _myLeadProfileEndpoint =
-      '/api/customer-portal/my/lead-profile';
-  static const String _revealSignatureEndpoint =
-      '/api/customer-portal/my/digital-signature';
-  static const String _logoutEndpoint = '/api/customer-portal/logout';
-  static const String _logoutAllEndpoint = '/api/customer-portal/logout-all';
+  final ProfileRemoteDataSource _profile;
+  final CustomerRequestsRemoteDataSource _requests;
+  final CustomerOffersRemoteDataSource _offers;
+  final DigitalSignatureRemoteDataSource _signature;
+  final LogoutRemoteDataSource _logout;
 
-  final Dio _dio;
-
-  const CustomerPortalRemoteDataSourceImpl(this._dio);
+  CustomerPortalRemoteDataSourceImpl(Dio dio)
+    : _profile = ProfileRemoteDataSource(dio),
+      _requests = CustomerRequestsRemoteDataSource(dio),
+      _offers = CustomerOffersRemoteDataSource(dio),
+      _signature = DigitalSignatureRemoteDataSource(dio),
+      _logout = LogoutRemoteDataSource(dio);
 
   @override
   Future<List<CustomerServiceRequestSummaryDto>> getMyServiceRequests({
     int pageIndex = 1,
     int pageSize = 20,
     String? status,
-  }) async {
-    final response = await _dio.get<dynamic>(
-      _myServiceRequestsEndpoint,
-      queryParameters: <String, dynamic>{
-        'pageIndex': pageIndex,
-        'pageSize': pageSize,
-        if (status != null && status.trim().isNotEmpty) 'status': status.trim(),
-      },
-    );
-
-    final payload = response.data;
-    final items = payload is Map<String, dynamic> ? payload['items'] : payload;
-    if (items is! List) {
-      return const <CustomerServiceRequestSummaryDto>[];
-    }
-
-    return items
-        .whereType<Map<String, dynamic>>()
-        .map(CustomerServiceRequestSummaryDto.fromJson)
-        .toList(growable: false);
-  }
+  }) => _requests.getMyServiceRequests(
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+    status: status,
+  );
 
   @override
   Future<List<CustomerOfferSummaryDto>> getMyOffers({
     int pageIndex = 1,
     int pageSize = 20,
     String? status,
-  }) async {
-    final response = await _dio.get<dynamic>(
-      _myOffersEndpoint,
-      queryParameters: <String, dynamic>{
-        'pageIndex': pageIndex,
-        'pageSize': pageSize,
-        if (status != null && status.trim().isNotEmpty) 'status': status.trim(),
-      },
-    );
-
-    final payload = response.data;
-    final items = payload is Map<String, dynamic> ? payload['items'] : payload;
-    if (items is! List) {
-      return const <CustomerOfferSummaryDto>[];
-    }
-
-    return items
-        .whereType<Map<String, dynamic>>()
-        .map(CustomerOfferSummaryDto.fromJson)
-        .toList(growable: false);
-  }
+  }) => _offers.getMyOffers(
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+    status: status,
+  );
 
   @override
-  Future<CustomerProfileDto> getMyProfile() async {
-    final response = await _dio.get<dynamic>(_myProfileEndpoint);
-    final payload = response.data;
-    if (payload is! Map<String, dynamic>) {
-      throw DioException(
-        requestOptions: response.requestOptions,
-        response: response,
-        message: 'Invalid customer profile response payload.',
-      );
-    }
-
-    return CustomerProfileDto.fromJson(payload);
-  }
+  Future<CustomerProfileDto> getMyProfile() => _profile.getMyProfile();
 
   @override
-  Future<LeadProfileDto> getMyLeadProfile() async {
-    final response = await _dio.get<dynamic>(_myLeadProfileEndpoint);
-    final payload = response.data;
-    if (payload is! Map<String, dynamic>) {
-      throw DioException(
-        requestOptions: response.requestOptions,
-        response: response,
-        message: 'Invalid lead profile response payload.',
-      );
-    }
-
-    return LeadProfileDto.fromJson(payload);
-  }
+  Future<LeadProfileDto> getMyLeadProfile() => _profile.getMyLeadProfile();
 
   @override
   Future<CustomerProfileDto> updateMyProfile({
     required UpdateCustomerProfileDto payload,
-  }) async {
-    final response = await _dio.put<dynamic>(
-      _myProfileEndpoint,
-      data: payload.toJson(),
-    );
-    final body = response.data;
-    if (body is! Map<String, dynamic>) {
-      throw DioException(
-        requestOptions: response.requestOptions,
-        response: response,
-        message: 'Invalid customer profile update response payload.',
-      );
-    }
-
-    return CustomerProfileDto.fromJson(body);
-  }
+  }) => _profile.updateMyProfile(payload: payload);
 
   @override
   Future<LeadProfileDto> updateMyLeadProfile({
     required UpdateCustomerProfileDto payload,
-  }) async {
-    final response = await _dio.put<dynamic>(
-      _myLeadProfileEndpoint,
-      data: payload.toJson(),
-    );
-    final body = response.data;
-    if (body is! Map<String, dynamic>) {
-      throw DioException(
-        requestOptions: response.requestOptions,
-        response: response,
-        message: 'Invalid lead profile update response payload.',
-      );
-    }
-
-    return LeadProfileDto.fromJson(body);
-  }
+  }) => _profile.updateMyLeadProfile(payload: payload);
 
   @override
-  Future<String> revealDigitalSignature({required String password}) async {
-    final response = await _dio.post<dynamic>(
-      _revealSignatureEndpoint,
-      data: <String, dynamic>{'password': password},
-    );
-
-    final payload = response.data;
-    if (payload is Map<String, dynamic>) {
-      final dto = SignatureRevealResponseDto.fromJson(payload);
-      if (dto.digitalSignature != null && dto.digitalSignature!.isNotEmpty) {
-        return dto.digitalSignature!;
-      }
-    }
-
-    if (payload is String && payload.isNotEmpty) {
-      return payload;
-    }
-
-    throw DioException(
-      requestOptions: response.requestOptions,
-      response: response,
-      message: 'Invalid digital signature response.',
-    );
-  }
+  Future<String> revealDigitalSignature({required String password}) =>
+      _signature.revealDigitalSignature(password: password);
 
   @override
-  Future<void> logout() async {
-    await _dio.post<dynamic>(_logoutEndpoint);
-  }
+  Future<void> logout() => _logout.logout();
 
   @override
-  Future<void> logoutAll() async {
-    await _dio.post<dynamic>(_logoutAllEndpoint);
-  }
+  Future<void> logoutAll() => _logout.logoutAll();
 }

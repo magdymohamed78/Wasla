@@ -10,10 +10,10 @@ import '../../domain/entities/discovery_types.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
 import '../cubit/home_discovery_cubit.dart';
 import '../cubit/home_discovery_state.dart';
-import '../widgets/company_section_carousel.dart';
+import '../../../companies/presentation/widgets/company_section_carousel.dart';
 import '../widgets/home_header_section.dart';
 import '../widgets/home_section_skeleton.dart';
-import '../widgets/view_all_search_entry.dart';
+import '../../../explore/presentation/widgets/view_all_search_entry.dart';
 
 class HomePlaceholderPage extends StatelessWidget {
   const HomePlaceholderPage({super.key});

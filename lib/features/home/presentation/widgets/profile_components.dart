@@ -21,54 +21,85 @@ class ProfileAvatarHeader extends StatelessWidget {
     final fullName = buildFullName(firstName: firstName, lastName: lastName);
     final initials = buildInitials(firstName: firstName, lastName: lastName);
 
-    return Column(
-      children: [
-        Container(
-          width: 96,
-          height: 96,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [AppColors.brandRed, Color(0xFFC70039)],
-            ),
-            border: Border.all(color: AppColors.surface, width: 4),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.brandRed.withValues(alpha: 0.25),
-                blurRadius: 20,
-                offset: const Offset(0, 8),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.paddingMd,
+        vertical: AppDimensions.spacingLg,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.cardShadow.withValues(alpha: 0.08),
+            blurRadius: 14,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 96,
+            height: 96,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.brandRed, Color(0xFFC70039)],
               ),
-            ],
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            initials,
-            style: AppTypography.heading1.copyWith(
-              color: AppColors.surface,
-              fontWeight: FontWeight.w800,
+              border: Border.all(color: AppColors.surface, width: 4),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.brandRed.withValues(alpha: 0.25),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              initials,
+              style: AppTypography.heading1.copyWith(
+                color: AppColors.surface,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: AppDimensions.spacingMd),
-        Text(
-          fullName,
-          style: AppTypography.heading3.copyWith(
-            fontWeight: FontWeight.w700,
-            color: AppColors.textPrimary,
+          const SizedBox(height: AppDimensions.spacingMd),
+          Text(
+            fullName,
+            style: AppTypography.heading3.copyWith(
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: AppDimensions.spacingXs),
-        Text(
-          roleLabel,
-          style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
+          const SizedBox(height: AppDimensions.spacingXs),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.paddingSm,
+              vertical: AppDimensions.spacingXs,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.brandRed.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(
+                AppDimensions.borderRadiusRound,
+              ),
+            ),
+            child: Text(
+              roleLabel,
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.brandRed,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
+            ),
           ),
-          textAlign: TextAlign.center,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -113,12 +144,14 @@ class ProfileSectionCard extends StatelessWidget {
   final String title;
   final Widget child;
   final Widget? trailing;
+  final IconData? sectionIcon;
 
   const ProfileSectionCard({
     super.key,
     required this.title,
     required this.child,
     this.trailing,
+    this.sectionIcon,
   });
 
   @override
@@ -142,6 +175,10 @@ class ProfileSectionCard extends StatelessWidget {
         children: [
           Row(
             children: [
+              if (sectionIcon != null) ...[
+                Icon(sectionIcon, size: 20, color: AppColors.brandRed),
+                const SizedBox(width: AppDimensions.spacingSm),
+              ],
               Expanded(
                 child: Text(
                   title,
@@ -183,7 +220,16 @@ class ProfileInfoRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 20, color: AppColors.brandRed),
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: AppColors.brandRed.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(
+                  AppDimensions.borderRadiusSm,
+                ),
+              ),
+              child: Icon(icon, size: 16, color: AppColors.brandRed),
+            ),
             const SizedBox(width: AppDimensions.spacingSm),
           ],
           Expanded(
@@ -275,6 +321,96 @@ class ProfileEmptyState extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ProfileEditableField extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool enabled;
+  final ValueChanged<String> onChanged;
+  final String? errorText;
+  final TextInputType? keyboardType;
+  final IconData? prefixIcon;
+
+  const ProfileEditableField({
+    super.key,
+    required this.label,
+    required this.value,
+    this.enabled = true,
+    required this.onChanged,
+    this.errorText,
+    this.keyboardType,
+    this.prefixIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      initialValue: value,
+      enabled: enabled,
+      onChanged: onChanged,
+      keyboardType: keyboardType,
+      style: AppTypography.bodyMedium.copyWith(
+        color: enabled ? AppColors.textPrimary : AppColors.textSecondary,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        errorText: errorText,
+        prefixIcon: prefixIcon != null
+            ? Icon(
+                prefixIcon,
+                color: enabled ? AppColors.brandRed : AppColors.textSecondary,
+                size: 20,
+              )
+            : null,
+        suffixIcon: !enabled
+            ? Icon(Icons.lock_outline, size: 16, color: AppColors.textSecondary)
+            : null,
+        labelStyle: AppTypography.bodySmall.copyWith(
+          color: enabled ? AppColors.textSecondary : AppColors.textSecondary,
+        ),
+        filled: true,
+        fillColor: enabled ? AppColors.background : AppColors.buttonSecondary,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.paddingMd,
+          vertical: AppDimensions.paddingSm,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+          borderSide: BorderSide(
+            color: AppColors.divider.withValues(alpha: 0.5),
+            width: 1,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+          borderSide: BorderSide(
+            color: AppColors.divider.withValues(alpha: 0.5),
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+          borderSide: const BorderSide(color: AppColors.brandRed, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+          borderSide: const BorderSide(color: AppColors.error, width: 2),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+          borderSide: BorderSide(
+            color: AppColors.divider.withValues(alpha: 0.3),
+            width: 1,
+          ),
+        ),
       ),
     );
   }

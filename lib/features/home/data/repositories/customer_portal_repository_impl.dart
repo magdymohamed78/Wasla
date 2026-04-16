@@ -57,21 +57,18 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   Future<CustomerPortalProfile> updateCustomerProfile({
     required UpdatePortalProfileInput input,
   }) async {
-    final updated =
-        await _updateProfile(isLead: false, input: input)
-            as CustomerPortalProfile;
-
-    return updated;
+    final payload = UpdateCustomerProfileDto.fromDomain(input);
+    final updated = await _remote.updateMyProfile(payload: payload);
+    return updated.toDomain();
   }
 
   @override
   Future<LeadPortalProfile> updateLeadProfile({
     required UpdatePortalProfileInput input,
   }) async {
-    final updated =
-        await _updateProfile(isLead: true, input: input) as LeadPortalProfile;
-
-    return updated;
+    final payload = UpdateCustomerProfileDto.fromDomain(input);
+    final updated = await _remote.updateMyLeadProfile(payload: payload);
+    return updated.toDomain();
   }
 
   @override
@@ -87,20 +84,5 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   @override
   Future<void> logoutAll() {
     return _remote.logoutAll();
-  }
-
-  Future<Object> _updateProfile({
-    required bool isLead,
-    required UpdatePortalProfileInput input,
-  }) async {
-    final payload = UpdateCustomerProfileDto.fromDomain(input);
-
-    if (isLead) {
-      final updatedLead = await _remote.updateMyLeadProfile(payload: payload);
-      return updatedLead.toDomain();
-    }
-
-    final updatedCustomer = await _remote.updateMyProfile(payload: payload);
-    return updatedCustomer.toDomain();
   }
 }

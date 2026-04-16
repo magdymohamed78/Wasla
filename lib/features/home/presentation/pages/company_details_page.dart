@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:waslaapp/features/companies/presentation/cubit/company_details_cubit.dart';
+import 'package:waslaapp/features/companies/presentation/cubit/company_details_state.dart';
+import 'package:waslaapp/features/companies/presentation/widgets/company_details_sections.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
@@ -15,9 +18,6 @@ import '../../../../core/widgets/primary_button.dart';
 import '../../domain/entities/discovery_types.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
 import '../../domain/use_cases/role_guard_use_cases.dart';
-import '../cubit/company_details_cubit.dart';
-import '../cubit/company_details_state.dart';
-import '../widgets/company_details_sections.dart';
 import '../widgets/restricted_request_prompt_card.dart';
 
 class CompanyDetailsPage extends StatelessWidget {

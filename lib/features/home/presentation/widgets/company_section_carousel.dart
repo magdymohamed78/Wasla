@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:waslaapp/features/companies/presentation/widgets/company_summary_card.dart';
 
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../domain/entities/company_summary.dart';
-import 'company_summary_card.dart';
 
 class CompanySectionCarousel extends StatelessWidget {
   final String title;

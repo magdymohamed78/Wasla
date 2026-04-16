@@ -9,14 +9,14 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/use_cases/role_guard_use_cases.dart';
 import '../cubit/lead_access_cubit.dart';
 import '../cubit/lead_access_state.dart';
-import '../widgets/companies_nav_dropdown.dart';
-import 'customer_offers_page.dart';
-import 'customer_profile_page.dart';
-import 'customer_requests_page.dart';
-import 'customer_settings_page.dart';
+import '../../../companies/presentation/widgets/companies_nav_dropdown.dart';
+import '../../../offers/presentation/pages/customer_offers_page.dart';
+import '../../../profile/presentation/pages/customer_profile_page.dart';
+import '../../../requests/presentation/pages/customer_requests_page.dart';
+import '../../../settings/presentation/pages/customer_settings_page.dart';
 import 'home_page.dart';
-import 'lead_profile_page.dart';
-import 'lead_settings_page.dart';
+import '../../../profile/presentation/pages/lead_profile_page.dart';
+import '../../../settings/presentation/pages/lead_settings_page.dart';
 import 'restricted_tab_page.dart';
 
 class DiscoveryShellPage extends StatelessWidget {

@@ -1,4 +1,4 @@
-enum LoadStatus { initial, loading, success, empty, error }
+export '../../../../core/types/load_status.dart';
 
 enum TrendDirection { improving, declining, neutral }
 
