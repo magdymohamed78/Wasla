@@ -36,88 +36,79 @@ class CompanyDetailsHeaderSection extends StatelessWidget {
         ? unknownCompanyLabel
         : companyName.trim();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.cardShadow.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.paddingMd),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-              child: SizedBox(
-                width: 72,
-                height: 72,
-                child: hasLogo
-                    ? CachedNetworkImage(
-                        imageUrl: companyLogoUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (_, _) =>
-                            const _CompanyLogoPlaceholder(icon: Icons.image),
-                        errorWidget: (_, _, _) =>
-                            const _CompanyLogoPlaceholder(),
-                      )
-                    : const _CompanyLogoPlaceholder(),
-              ),
+    return _SectionCard(
+      child: Column(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+            child: SizedBox(
+              width: 80,
+              height: 80,
+              child: hasLogo
+                  ? CachedNetworkImage(
+                      imageUrl: companyLogoUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (_, _) =>
+                          const _CompanyLogoPlaceholder(icon: Icons.image),
+                      errorWidget: (_, _, _) => const _CompanyLogoPlaceholder(),
+                    )
+                  : const _CompanyLogoPlaceholder(),
             ),
-            const SizedBox(width: AppDimensions.spacingMd),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    displayName,
-                    style: AppTypography.heading3,
-                    maxLines: 2,
+          ),
+          const SizedBox(height: AppDimensions.spacingMd),
+          Text(
+            displayName,
+            style: AppTypography.heading3,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (locationLine.isNotEmpty) ...[
+            const SizedBox(height: AppDimensions.spacingXs),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.location_on_rounded,
+                  size: AppDimensions.iconSizeSm,
+                  color: AppColors.textSecondary,
+                ),
+                const SizedBox(width: AppDimensions.spacingXs),
+                Flexible(
+                  child: Text(
+                    locationLine,
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (locationLine.isNotEmpty) ...[
-                    const SizedBox(height: AppDimensions.spacingXs),
-                    Text(
-                      locationLine,
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: AppDimensions.spacingSm),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        color: Color(0xFFFFB300),
-                        size: AppDimensions.iconSizeMd,
-                      ),
-                      const SizedBox(width: AppDimensions.spacingXs),
-                      Expanded(
-                        child: Text(
-                          hasReviews
-                              ? '${averageRating!.toStringAsFixed(1)} ($reviewCount)'
-                              : noReviewsLabel,
-                          style: AppTypography.bodyMedium.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
-        ),
+          const SizedBox(height: AppDimensions.spacingXs),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.star_rounded,
+                color: Color(0xFFFFB300),
+                size: AppDimensions.iconSizeMd,
+              ),
+              const SizedBox(width: AppDimensions.spacingXs),
+              Text(
+                hasReviews
+                    ? '${averageRating!.toStringAsFixed(1)} ($reviewCount)'
+                    : noReviewsLabel,
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -143,26 +134,26 @@ class CompanyContactSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rows = <Widget>[];
+    final items = <_ContactItem>[];
 
     if (contactEmail.isNotEmpty) {
-      rows.add(_ContactRow(icon: Icons.email_rounded, value: contactEmail));
+      items.add(_ContactItem(icon: Icons.email_rounded, value: contactEmail));
     }
     if (phoneNumber.isNotEmpty) {
-      rows.add(_ContactRow(icon: Icons.phone_rounded, value: phoneNumber));
+      items.add(_ContactItem(icon: Icons.phone_rounded, value: phoneNumber));
     }
     if (addressLine.isNotEmpty) {
-      rows.add(_ContactRow(icon: Icons.home_rounded, value: addressLine));
+      items.add(_ContactItem(icon: Icons.home_rounded, value: addressLine));
     }
     if (locationLine.isNotEmpty) {
-      rows.add(
-        _ContactRow(icon: Icons.location_on_rounded, value: locationLine),
+      items.add(
+        _ContactItem(icon: Icons.location_on_rounded, value: locationLine),
       );
     }
 
     return _SectionCard(
       title: title,
-      child: rows.isEmpty
+      child: items.isEmpty
           ? Text(
               emptyMessage,
               style: AppTypography.bodyMedium.copyWith(
@@ -170,16 +161,17 @@ class CompanyContactSection extends StatelessWidget {
               ),
             )
           : Column(
-              children: rows
-                  .map(
-                    (row) => Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: AppDimensions.spacingSm,
-                      ),
-                      child: row,
+              children: [
+                for (int i = 0; i < items.length; i++) ...[
+                  _ContactRow(item: items[i]),
+                  if (i < items.length - 1)
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: AppColors.divider,
                     ),
-                  )
-                  .toList(growable: false),
+                ],
+              ],
             ),
     );
   }
@@ -217,7 +209,7 @@ class CompanyServicesSection extends StatelessWidget {
         children: services
             .map(
               (service) => Padding(
-                padding: const EdgeInsets.only(bottom: AppDimensions.spacingMd),
+                padding: const EdgeInsets.only(bottom: AppDimensions.spacingSm),
                 child: _ServiceTile(service: service),
               ),
             )
@@ -233,12 +225,9 @@ class CompanyReviewsSection extends StatelessWidget {
   final String emptyMessage;
   final String anonymousReviewerLabel;
   final String noCommentLabel;
-  final String loadMoreLabel;
-  final String retryLabel;
-  final bool hasMoreReviews;
-  final bool isLoadingMoreReviews;
-  final String? errorMessage;
-  final VoidCallback onLoadMore;
+  final String viewAllLabel;
+  final int? maxReviews;
+  final VoidCallback? onViewAll;
 
   const CompanyReviewsSection({
     super.key,
@@ -247,12 +236,9 @@ class CompanyReviewsSection extends StatelessWidget {
     required this.emptyMessage,
     required this.anonymousReviewerLabel,
     required this.noCommentLabel,
-    required this.loadMoreLabel,
-    required this.retryLabel,
-    required this.hasMoreReviews,
-    required this.isLoadingMoreReviews,
-    required this.errorMessage,
-    required this.onLoadMore,
+    required this.viewAllLabel,
+    this.maxReviews,
+    this.onViewAll,
   });
 
   @override
@@ -269,12 +255,17 @@ class CompanyReviewsSection extends StatelessWidget {
       );
     }
 
+    final displayReviews = maxReviews != null && reviews.length > maxReviews!
+        ? reviews.sublist(0, maxReviews!)
+        : reviews;
+    final hasMore = maxReviews != null && reviews.length > maxReviews!;
+
     return _SectionCard(
       title: title,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...reviews.map(
+          ...displayReviews.map(
             (review) => Padding(
               padding: const EdgeInsets.only(bottom: AppDimensions.spacingMd),
               child: _ReviewTile(
@@ -284,26 +275,22 @@ class CompanyReviewsSection extends StatelessWidget {
               ),
             ),
           ),
-          if (errorMessage != null) ...[
-            Text(
-              errorMessage!,
-              style: AppTypography.bodySmall.copyWith(color: AppColors.error),
-            ),
-            const SizedBox(height: AppDimensions.spacingSm),
-          ],
-          if (hasMoreReviews)
-            Align(
-              alignment: AlignmentDirectional.centerStart,
+          if (onViewAll != null)
+            Center(
               child: TextButton.icon(
-                onPressed: isLoadingMoreReviews ? null : onLoadMore,
-                icon: isLoadingMoreReviews
-                    ? const SizedBox(
-                        width: AppDimensions.iconSizeSm,
-                        height: AppDimensions.iconSizeSm,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.expand_more_rounded),
-                label: Text(errorMessage == null ? loadMoreLabel : retryLabel),
+                onPressed: onViewAll,
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  size: 18,
+                  color: AppColors.brandRed,
+                ),
+                label: Text(
+                  viewAllLabel,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.brandRed,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
             ),
         ],
@@ -313,10 +300,10 @@ class CompanyReviewsSection extends StatelessWidget {
 }
 
 class _SectionCard extends StatelessWidget {
-  final String title;
+  final String? title;
   final Widget child;
 
-  const _SectionCard({required this.title, required this.child});
+  const _SectionCard({this.title, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -324,7 +311,7 @@ class _SectionCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
         boxShadow: [
           BoxShadow(
             color: AppColors.cardShadow.withValues(alpha: 0.08),
@@ -338,8 +325,10 @@ class _SectionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: AppTypography.heading3),
-            const SizedBox(height: AppDimensions.spacingSm),
+            if (title != null) ...[
+              Text(title!, style: AppTypography.heading3),
+              const SizedBox(height: AppDimensions.spacingMd),
+            ],
             child,
           ],
         ),
@@ -358,30 +347,54 @@ class _CompanyLogoPlaceholder extends StatelessWidget {
     return Container(
       color: AppColors.buttonSecondary,
       alignment: Alignment.center,
-      child: Icon(icon, color: AppColors.textSecondary),
+      child: Icon(icon, color: AppColors.textSecondary, size: 36),
     );
   }
 }
 
-class _ContactRow extends StatelessWidget {
+class _ContactItem {
   final IconData icon;
   final String value;
 
-  const _ContactRow({required this.icon, required this.value});
+  const _ContactItem({required this.icon, required this.value});
+}
+
+class _ContactRow extends StatelessWidget {
+  final _ContactItem item;
+
+  const _ContactRow({required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(
-          icon,
-          size: AppDimensions.iconSizeSm,
-          color: AppColors.textSecondary,
-        ),
-        const SizedBox(width: AppDimensions.spacingSm),
-        Expanded(child: Text(value, style: AppTypography.bodyMedium)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppDimensions.spacingSm),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: AppColors.brandRed.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+            ),
+            child: Icon(
+              item.icon,
+              size: AppDimensions.iconSizeSm,
+              color: AppColors.brandRed,
+            ),
+          ),
+          const SizedBox(width: AppDimensions.spacingMd),
+          Expanded(
+            child: Center(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(item.value, style: AppTypography.bodyMedium),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -471,12 +484,13 @@ class _ServiceTile extends StatelessWidget {
   }
 }
 
-class _ReviewTile extends StatelessWidget {
+class ReviewTile extends StatelessWidget {
   final CompanyReviewItem review;
   final String anonymousReviewerLabel;
   final String noCommentLabel;
 
-  const _ReviewTile({
+  const ReviewTile({
+    super.key,
     required this.review,
     required this.anonymousReviewerLabel,
     required this.noCommentLabel,
@@ -493,60 +507,106 @@ class _ReviewTile extends StatelessWidget {
     final dateLabel = review.createdAt == null
         ? null
         : _formatDate(context, review.createdAt!);
+    final initial = _avatarInitial(displayName, anonymousReviewerLabel);
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(AppDimensions.paddingSm),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  displayName,
-                  style: AppTypography.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w700,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            _ReviewAvatar(initial: initial, isAnonymous: initial == '?'),
+            const SizedBox(width: AppDimensions.spacingSm),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    displayName,
+                    style: AppTypography.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  if (dateLabel != null)
+                    Text(dateLabel, style: AppTypography.bodySmall),
+                ],
+              ),
+            ),
+            if (review.rating != null) ...[
+              const Icon(
+                Icons.star_rounded,
+                color: Color(0xFFFFB300),
+                size: AppDimensions.iconSizeSm,
+              ),
+              const SizedBox(width: AppDimensions.spacingXs),
+              Text(
+                review.rating!.toStringAsFixed(1),
+                style: AppTypography.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              if (review.rating != null) ...[
-                const Icon(
-                  Icons.star_rounded,
-                  color: Color(0xFFFFB300),
-                  size: AppDimensions.iconSizeSm,
-                ),
-                const SizedBox(width: AppDimensions.spacingXs),
-                Text(
-                  review.rating!.toStringAsFixed(1),
-                  style: AppTypography.bodyMedium,
-                ),
-              ],
             ],
-          ),
-          if (dateLabel != null) ...[
-            const SizedBox(height: AppDimensions.spacingXs),
-            Text(dateLabel, style: AppTypography.bodySmall),
           ],
-          const SizedBox(height: AppDimensions.spacingSm),
-          Text(
-            displayComment,
-            style: AppTypography.bodyMedium.copyWith(
-              color: AppColors.textSecondary,
-            ),
+        ),
+        const SizedBox(height: AppDimensions.spacingSm),
+        Text(
+          displayComment,
+          style: AppTypography.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
           ),
-        ],
-      ),
+        ),
+      ],
     );
+  }
+
+  String _avatarInitial(String displayName, String anonymousLabel) {
+    if (displayName == anonymousLabel) return '?';
+    final trimmed = displayName.trim();
+    if (trimmed.isEmpty) return '?';
+    return trimmed[0].toUpperCase();
   }
 
   String _formatDate(BuildContext context, DateTime date) {
     final localDate = date.toLocal();
     final locale = Localizations.localeOf(context).toString();
     return DateFormat.yMMMd(locale).format(localDate);
+  }
+}
+
+class _ReviewTile extends ReviewTile {
+  const _ReviewTile({
+    required super.review,
+    required super.anonymousReviewerLabel,
+    required super.noCommentLabel,
+  });
+}
+
+class _ReviewAvatar extends StatelessWidget {
+  final String initial;
+  final bool isAnonymous;
+
+  const _ReviewAvatar({required this.initial, this.isAnonymous = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final bgColor = isAnonymous
+        ? AppColors.buttonSecondary
+        : AppColors.brandRed.withValues(alpha: 0.1);
+    final textColor = isAnonymous
+        ? AppColors.textSecondary
+        : AppColors.brandRed;
+
+    return CircleAvatar(
+      radius: 18,
+      backgroundColor: bgColor,
+      child: Text(
+        initial,
+        style: AppTypography.bodyMedium.copyWith(
+          color: textColor,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
   }
 }

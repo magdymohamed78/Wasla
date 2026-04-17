@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
@@ -11,17 +12,19 @@ import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/change_password_page.dart';
 import '../../features/companies/presentation/pages/all_companies_page.dart';
 import '../../features/companies/presentation/pages/company_details_page.dart';
-import '../../features/profile/presentation/pages/customer_connected_companies_page.dart';
-import '../../features/profile/presentation/pages/customer_profile_edit_page.dart';
+import '../../features/companies/presentation/pages/company_reviews_page.dart';
 import '../../features/home/presentation/pages/discovery_shell_page.dart';
 import '../../features/explore/presentation/pages/explore_page.dart';
-import '../../features/profile/presentation/pages/lead_profile_edit_page.dart';
+import '../../features/profile/presentation/pages/profile_edit_page.dart';
 import '../../features/requests/presentation/pages/new_service_request_page.dart';
+import '../../features/requests/presentation/pages/request_details_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/companies/presentation/pages/recommended_companies_page.dart';
 import '../../features/companies/presentation/pages/trending_companies_page.dart';
 import '../../features/home/presentation/cubit/lead_access_state.dart';
-import '../../features/home/domain/entities/customer_portal_content.dart';
+import '../../features/home/domain/use_cases/customer_portal_use_cases.dart';
+import '../../features/profile/presentation/cubit/profile_edit_cubit.dart';
+import '../../core/session/session_cubit.dart';
 
 class AppRouter {
   AppRouter._();
@@ -50,8 +53,6 @@ class AppRouter {
   static const String customerOffers = '/my/offers';
   static const String customerProfile = '/my/profile';
   static const String customerProfileEdit = '/my/profile/edit';
-  static const String customerConnectedCompanies =
-      '/my/profile/connected-companies';
   static const String leadProfile = '/my/lead-profile';
   static const String leadProfileEdit = '/my/lead-profile/edit';
   static const String requestActions = '/request-actions';
@@ -62,6 +63,8 @@ class AppRouter {
   static const String recommendedCompanies = '/companies/recommended';
   static const String trendingCompanies = '/companies/trending';
   static const String notifications = '/notifications';
+  static const String requestDetails = '/my/service-requests/:requestId';
+  static const String requestsFullList = '/my/service-requests/list';
 
   static const List<String> _protectedRoutePrefixes = <String>[requestActions];
 
@@ -82,9 +85,23 @@ class AppRouter {
     leadProfile,
     leadSettings,
     customerSettings,
+    requestDetails,
   ];
 
   static String companyLocation(int companyId) => '$company/$companyId';
+
+  static String companyReviewsLocation(int companyId) =>
+      '$company/$companyId/reviews';
+
+  static String requestDetailsLocation(int serviceRequestId) =>
+      '/my/service-requests/$serviceRequestId';
+
+  static String requestsFullListLocation({String? filter}) {
+    if (filter != null && filter.isNotEmpty) {
+      return '$requestsFullList?filter=${Uri.encodeComponent(filter)}';
+    }
+    return requestsFullList;
+  }
 
   static String newServiceRequestLocation({required int companyId}) {
     return '$newServiceRequest?companyId=$companyId';
@@ -195,17 +212,41 @@ class AppRouter {
         ),
         GoRoute(
           path: customerProfileEdit,
-          builder: (context, state) => const CustomerProfileEditPage(),
-        ),
-        GoRoute(
-          path: customerConnectedCompanies,
           builder: (context, state) {
-            final extra = state.extra;
-            final companies = extra is List<ConnectedCompany>
-                ? extra
-                : const <ConnectedCompany>[];
-
-            return CustomerConnectedCompaniesPage(companies: companies);
+            final cubit = ProfileEditCubit(
+              loader: () async {
+                final profile = await context
+                    .read<GetCustomerProfileUseCase>()();
+                return ProfileEditFields(
+                  firstName: profile.firstName ?? '',
+                  lastName: profile.lastName ?? '',
+                  email: profile.email ?? '',
+                  phoneNumber: profile.phoneNumber ?? '',
+                  address: profile.address ?? '',
+                  city: profile.city ?? '',
+                  zipCode: profile.zipCode ?? '',
+                  country: profile.country ?? '',
+                  createdAt: profile.createdAt,
+                );
+              },
+              saver: (input) async {
+                final profile = await context
+                    .read<UpdateCustomerProfileUseCase>()(input);
+                return ProfileEditFields(
+                  firstName: profile.firstName ?? '',
+                  lastName: profile.lastName ?? '',
+                  email: profile.email ?? '',
+                  phoneNumber: profile.phoneNumber ?? '',
+                  address: profile.address ?? '',
+                  city: profile.city ?? '',
+                  zipCode: profile.zipCode ?? '',
+                  country: profile.country ?? '',
+                  createdAt: profile.createdAt,
+                );
+              },
+              sessionCubit: context.read<SessionCubit>(),
+            )..load();
+            return ProfileEditPage(cubit: cubit);
           },
         ),
         GoRoute(
@@ -215,7 +256,42 @@ class AppRouter {
         ),
         GoRoute(
           path: leadProfileEdit,
-          builder: (context, state) => const LeadProfileEditPage(),
+          builder: (context, state) {
+            final cubit = ProfileEditCubit(
+              loader: () async {
+                final profile = await context.read<GetLeadProfileUseCase>()();
+                return ProfileEditFields(
+                  firstName: profile.firstName ?? '',
+                  lastName: profile.lastName ?? '',
+                  email: profile.email ?? '',
+                  phoneNumber: profile.phoneNumber ?? '',
+                  address: profile.address ?? '',
+                  city: profile.city ?? '',
+                  zipCode: profile.zipCode ?? '',
+                  country: profile.country ?? '',
+                  createdAt: profile.createdAt,
+                );
+              },
+              saver: (input) async {
+                final profile = await context.read<UpdateLeadProfileUseCase>()(
+                  input,
+                );
+                return ProfileEditFields(
+                  firstName: profile.firstName ?? '',
+                  lastName: profile.lastName ?? '',
+                  email: profile.email ?? '',
+                  phoneNumber: profile.phoneNumber ?? '',
+                  address: profile.address ?? '',
+                  city: profile.city ?? '',
+                  zipCode: profile.zipCode ?? '',
+                  country: profile.country ?? '',
+                  createdAt: profile.createdAt,
+                );
+              },
+              sessionCubit: context.read<SessionCubit>(),
+            )..load();
+            return ProfileEditPage(cubit: cubit);
+          },
         ),
         GoRoute(
           path: newServiceRequest,
@@ -261,6 +337,24 @@ class AppRouter {
             final companyIdRaw = state.pathParameters['companyId'];
             final companyId = int.tryParse(companyIdRaw ?? '') ?? -1;
             return CompanyDetailsPage(companyId: companyId);
+          },
+          routes: [
+            GoRoute(
+              path: 'reviews',
+              builder: (context, state) {
+                final companyIdRaw = state.pathParameters['companyId'];
+                final companyId = int.tryParse(companyIdRaw ?? '') ?? -1;
+                return CompanyReviewsPage(companyId: companyId);
+              },
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/my/service-requests/:requestId',
+          builder: (context, state) {
+            final requestIdRaw = state.pathParameters['requestId'];
+            final requestId = int.tryParse(requestIdRaw ?? '') ?? -1;
+            return RequestDetailsPage(serviceRequestId: requestId);
           },
         ),
       ],

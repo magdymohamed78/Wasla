@@ -114,64 +114,111 @@ class _ExploreSkeletonCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: AppColors.buttonSecondary,
-      highlightColor: AppColors.surface,
+      highlightColor: AppColors.cardShadow,
       child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppDimensions.paddingMd),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 116,
-              decoration: const BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(AppDimensions.borderRadiusLg),
-                  topRight: Radius.circular(AppDimensions.borderRadiusLg),
+            Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: AppColors.divider,
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.borderRadiusMd,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(width: AppDimensions.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 14,
+                        width: 160,
+                        decoration: BoxDecoration(
+                          color: AppColors.divider,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                      const SizedBox(height: AppDimensions.spacingSm),
+                      Row(
+                        children: [
+                          Container(
+                            height: 10,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: AppColors.divider,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            height: 10,
+                            width: 60,
+                            decoration: BoxDecoration(
+                              color: AppColors.divider,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(AppDimensions.paddingSm),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 16,
-                    width: 180,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.borderRadiusSm,
-                      ),
+            const SizedBox(height: AppDimensions.spacingSm),
+            Container(
+              height: 1,
+              width: double.infinity,
+              color: AppColors.divider,
+            ),
+            const SizedBox(height: AppDimensions.spacingSm),
+            Wrap(
+              spacing: AppDimensions.spacingXs,
+              runSpacing: AppDimensions.spacingXs,
+              children: [
+                Container(
+                  height: 24,
+                  width: 80,
+                  decoration: BoxDecoration(
+                    color: AppColors.divider,
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.borderRadiusRound,
                     ),
                   ),
-                  const SizedBox(height: AppDimensions.spacingSm),
-                  Container(
-                    height: 12,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.borderRadiusSm,
-                      ),
+                ),
+                Container(
+                  height: 24,
+                  width: 65,
+                  decoration: BoxDecoration(
+                    color: AppColors.divider,
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.borderRadiusRound,
                     ),
                   ),
-                  const SizedBox(height: AppDimensions.spacingSm),
-                  Container(
-                    height: 12,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.borderRadiusSm,
-                      ),
+                ),
+                Container(
+                  height: 24,
+                  width: 55,
+                  decoration: BoxDecoration(
+                    color: AppColors.divider,
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.borderRadiusRound,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

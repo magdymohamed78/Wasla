@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
@@ -15,6 +14,7 @@ class CompanySummaryCard extends StatelessWidget {
   final CompanySummary company;
   final bool showTrendIndicator;
   final double? cardWidth;
+  final int? maxServiceTags;
   final VoidCallback? onTap;
 
   const CompanySummaryCard({
@@ -22,291 +22,162 @@ class CompanySummaryCard extends StatelessWidget {
     required this.company,
     this.showTrendIndicator = false,
     this.cardWidth,
+    this.maxServiceTags,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    final hasLogo =
-        company.companyLogoUrl != null &&
-        company.companyLogoUrl!.trim().isNotEmpty;
-    final hasReviews =
-        company.averageRating != null && (company.reviewCount ?? 0) > 0;
     final displayName = company.companyName.trim().isEmpty
         ? localizations.companyDetailsUnknownCompany
         : company.companyName.trim();
+    final hasReviews =
+        company.averageRating != null && (company.reviewCount ?? 0) > 0;
     final locationText = _locationText();
-    final cardSemanticLabel = _buildCardSemanticLabel(
-      companyName: displayName,
-      locationText: locationText,
-      hasReviews: hasReviews,
-      rating: company.averageRating,
-      reviewCount: company.reviewCount,
-      noReviewsLabel: localizations.homeNoReviewsYet,
-    );
 
-    return Semantics(
-      button: true,
-      label: cardSemanticLabel,
-      child: SizedBox(
-        width: cardWidth ?? 250,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final maxWidth = constraints.maxWidth.isFinite
-                ? constraints.maxWidth
-                : (cardWidth ?? 250);
-            final hasBoundedHeight = constraints.maxHeight.isFinite;
-            final maxHeight = constraints.maxHeight;
-            final isCompactWidth = maxWidth <= 190;
-            final isCompactHeight = hasBoundedHeight && maxHeight <= 230;
-            final isCompact = isCompactWidth || isCompactHeight;
-            final contentPadding = hasBoundedHeight && maxHeight <= 220
-                ? AppDimensions.paddingXs
-                : AppDimensions.paddingSm;
-            final sectionSpacing = isCompact
-                ? AppDimensions.spacingXs
-                : AppDimensions.spacingSm;
+    final allServices = company.serviceTypes;
+    final truncated =
+        maxServiceTags != null && allServices.length > maxServiceTags!;
+    final visibleServices = truncated
+        ? allServices.sublist(0, maxServiceTags!)
+        : allServices;
+    final remainingCount = truncated ? allServices.length - maxServiceTags! : 0;
 
-            final maxVisibleServices = isCompact ? 1 : 2;
-            final visibleServices = company.serviceTypes
-                .take(maxVisibleServices)
-                .toList(growable: false);
-            final canShowLocation =
-                locationText != null && (!hasBoundedHeight || maxHeight > 170);
-            final canShowServices =
-                visibleServices.isNotEmpty &&
-                (!hasBoundedHeight || maxHeight > 210);
-
-            final imageAspectRatio = isCompact ? 1.85 : 1.65;
-            final idealImageHeight = maxWidth / imageAspectRatio;
-            final cappedImageHeight = hasBoundedHeight
-                ? maxHeight * (isCompact ? 0.34 : 0.4)
-                : idealImageHeight;
-            var imageHeight = idealImageHeight > cappedImageHeight
-                ? cappedImageHeight
-                : idealImageHeight;
-            if (imageHeight < 56 && cappedImageHeight >= 56) {
-              imageHeight = 56;
-            }
-
-            final chipsAvailableWidth = (maxWidth - (contentPadding * 2))
-                .clamp(0.0, double.infinity)
-                .toDouble();
-            final rawServiceChipMaxWidth = maxVisibleServices == 1
-                ? chipsAvailableWidth
-                : (chipsAvailableWidth - AppDimensions.spacingXs) / 2;
-            final serviceChipMaxWidth = rawServiceChipMaxWidth > 0
-                ? rawServiceChipMaxWidth
-                : chipsAvailableWidth;
-
-            final content = Padding(
-              padding: EdgeInsets.all(contentPadding),
+    return SizedBox(
+      width: cardWidth,
+      child: Material(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
+          onTap:
+              onTap ??
+              () => context.push(AppRouter.companyLocation(company.companyId)),
+          child: Ink(
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.cardShadow.withValues(alpha: 0.08),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(AppDimensions.paddingMd),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: hasBoundedHeight
-                    ? MainAxisSize.max
-                    : MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      _CompanyLogo(url: company.companyLogoUrl),
+                      const SizedBox(width: AppDimensions.spacingMd),
                       Expanded(
-                        child: Text(
-                          displayName,
-                          maxLines: isCompact ? 1 : 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.bodyLarge.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    displayName,
+                                    style: AppTypography.bodyLarge.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (showTrendIndicator &&
+                                    company.trendDirection != null) ...[
+                                  const SizedBox(
+                                    width: AppDimensions.spacingXs,
+                                  ),
+                                  Flexible(
+                                    child: _TrendBadge(
+                                      direction: company.trendDirection!,
+                                      delta: company.improvementDelta,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            const SizedBox(height: AppDimensions.spacingXs),
+                            Row(
+                              children: [
+                                if (locationText != null) ...[
+                                  const Icon(
+                                    Icons.location_on_rounded,
+                                    size: AppDimensions.iconSizeSm,
+                                    color: AppColors.textSecondary,
+                                  ),
+                                  const SizedBox(
+                                    width: AppDimensions.spacingXs,
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      locationText,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTypography.bodySmall.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                ] else
+                                  const Spacer(),
+                                const SizedBox(width: AppDimensions.spacingSm),
+                                const Icon(
+                                  Icons.star_rounded,
+                                  size: AppDimensions.iconSizeSm,
+                                  color: Color(0xFFFFB300),
+                                ),
+                                const SizedBox(width: AppDimensions.spacingXs),
+                                Text(
+                                  hasReviews
+                                      ? '${company.averageRating!.toStringAsFixed(1)} (${company.reviewCount})'
+                                      : localizations.homeNoReviewsYet,
+                                  style: AppTypography.bodySmall.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      if (showTrendIndicator &&
-                          company.trendDirection != null) ...[
-                        const SizedBox(width: AppDimensions.spacingXs),
-                        _TrendBadge(
-                          direction: company.trendDirection!,
-                          delta: company.improvementDelta,
-                        ),
-                      ],
                     ],
                   ),
-                  if (canShowLocation) ...[
-                    SizedBox(height: AppDimensions.spacingXs),
-                    Row(
+                  if (allServices.isNotEmpty) ...[
+                    const SizedBox(height: AppDimensions.spacingSm),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: AppColors.divider,
+                    ),
+                    const SizedBox(height: AppDimensions.spacingSm),
+                    Wrap(
+                      spacing: AppDimensions.spacingXs,
+                      runSpacing: AppDimensions.spacingXs,
                       children: [
-                        const Icon(
-                          Icons.location_on_rounded,
-                          size: AppDimensions.iconSizeSm,
-                          color: AppColors.textSecondary,
-                        ),
-                        const SizedBox(width: AppDimensions.spacingXs),
-                        Expanded(
-                          child: Text(
-                            locationText,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ),
+                        ...visibleServices.map((s) => _ServiceTag(label: s)),
+                        if (remainingCount > 0) _MoreTag(count: remainingCount),
                       ],
                     ),
-                  ],
-                  SizedBox(height: sectionSpacing),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        size: AppDimensions.iconSizeSm,
-                        color: Color(0xFFFFB300),
-                      ),
-                      const SizedBox(width: AppDimensions.spacingXs),
-                      Expanded(
-                        child: Text(
-                          hasReviews
-                              ? '${company.averageRating!.toStringAsFixed(1)} (${company.reviewCount})'
-                              : localizations.homeNoReviewsYet,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (canShowServices) ...[
-                    SizedBox(height: sectionSpacing),
-                    if (hasBoundedHeight)
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Wrap(
-                            spacing: AppDimensions.spacingXs,
-                            runSpacing: AppDimensions.spacingXs,
-                            children: visibleServices
-                                .map(
-                                  (service) => _ServiceTag(
-                                    label: service,
-                                    maxWidth: serviceChipMaxWidth,
-                                  ),
-                                )
-                                .toList(growable: false),
-                          ),
-                        ),
-                      )
-                    else
-                      Wrap(
-                        spacing: AppDimensions.spacingXs,
-                        runSpacing: AppDimensions.spacingXs,
-                        children: visibleServices
-                            .map(
-                              (service) => _ServiceTag(
-                                label: service,
-                                maxWidth: serviceChipMaxWidth,
-                              ),
-                            )
-                            .toList(growable: false),
-                      ),
                   ],
                 ],
               ),
-            );
-
-            return Material(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(
-                  AppDimensions.borderRadiusLg,
-                ),
-                onTap:
-                    onTap ??
-                    () => context.push(
-                      AppRouter.companyLocation(company.companyId),
-                    ),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(
-                      AppDimensions.borderRadiusLg,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.cardShadow.withValues(alpha: 0.08),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: hasBoundedHeight
-                        ? MainAxisSize.max
-                        : MainAxisSize.min,
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(
-                            AppDimensions.borderRadiusLg,
-                          ),
-                          topRight: Radius.circular(
-                            AppDimensions.borderRadiusLg,
-                          ),
-                        ),
-                        child: SizedBox(
-                          height: imageHeight,
-                          width: double.infinity,
-                          child: hasLogo
-                              ? CachedNetworkImage(
-                                  imageUrl: company.companyLogoUrl!,
-                                  fit: BoxFit.cover,
-                                  placeholder: (_, _) =>
-                                      const _LogoLoadingPlaceholder(),
-                                  errorWidget: (_, _, _) =>
-                                      const _LogoPlaceholder(),
-                                )
-                              : const _LogoPlaceholder(),
-                        ),
-                      ),
-                      if (hasBoundedHeight)
-                        Expanded(child: content)
-                      else
-                        content,
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
-  }
-
-  String _buildCardSemanticLabel({
-    required String companyName,
-    required String? locationText,
-    required bool hasReviews,
-    required double? rating,
-    required int? reviewCount,
-    required String noReviewsLabel,
-  }) {
-    final segments = <String>[companyName];
-    if (locationText != null && locationText.isNotEmpty) {
-      segments.add(locationText);
-    }
-
-    if (hasReviews && rating != null) {
-      segments.add('${rating.toStringAsFixed(1)} (${reviewCount ?? 0})');
-    } else {
-      segments.add(noReviewsLabel);
-    }
-
-    return segments.join(' • ');
   }
 
   String? _locationText() {
@@ -329,61 +200,103 @@ class CompanySummaryCard extends StatelessWidget {
   }
 }
 
-class _LogoPlaceholder extends StatelessWidget {
-  const _LogoPlaceholder();
+class _CompanyLogo extends StatelessWidget {
+  final String? url;
+
+  const _CompanyLogo({this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    const size = 56.0;
+
+    if (url != null && url!.trim().isNotEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+        child: CachedNetworkImage(
+          imageUrl: url!,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorWidget: (_, _, _) => _PlaceholderLogo(size: size),
+        ),
+      );
+    }
+
+    return _PlaceholderLogo(size: size);
+  }
+}
+
+class _PlaceholderLogo extends StatelessWidget {
+  final double size;
+
+  const _PlaceholderLogo({required this.size});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.buttonSecondary,
-      alignment: Alignment.center,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.buttonSecondary,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+      ),
       child: Icon(
         Icons.business_rounded,
-        size: AppDimensions.iconSizeLg,
-        color: AppColors.textSecondary.withValues(alpha: 0.4),
+        size: size * 0.45,
+        color: AppColors.textSecondary.withValues(alpha: 0.5),
       ),
-    );
-  }
-}
-
-class _LogoLoadingPlaceholder extends StatelessWidget {
-  const _LogoLoadingPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: AppColors.buttonSecondary.withValues(alpha: 0.5),
-      highlightColor: AppColors.surface,
-      child: const ColoredBox(color: AppColors.surface),
     );
   }
 }
 
 class _ServiceTag extends StatelessWidget {
   final String label;
-  final double maxWidth;
 
-  const _ServiceTag({required this.label, required this.maxWidth});
+  const _ServiceTag({required this.label});
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxWidth: maxWidth),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.paddingXs,
-          vertical: AppDimensions.spacingXs,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.buttonSecondary,
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusRound),
-        ),
-        child: Text(
-          label,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          softWrap: false,
-          style: AppTypography.bodySmall,
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.paddingXs,
+        vertical: AppDimensions.spacingXs,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.buttonSecondary,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusRound),
+      ),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: AppTypography.bodySmall,
+      ),
+    );
+  }
+}
+
+class _MoreTag extends StatelessWidget {
+  final int count;
+
+  const _MoreTag({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.paddingXs,
+        vertical: AppDimensions.spacingXs,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.brandRed.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusRound),
+      ),
+      child: Text(
+        '+$count',
+        maxLines: 1,
+        style: AppTypography.bodySmall.copyWith(
+          color: AppColors.brandRed,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

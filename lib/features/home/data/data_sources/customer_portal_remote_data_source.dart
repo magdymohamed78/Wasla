@@ -20,6 +20,16 @@ abstract class CustomerPortalRemoteDataSource {
     String? status,
   });
 
+  Future<Map<String, dynamic>> getMyServiceRequestsPaged({
+    int pageIndex,
+    int pageSize,
+    String? status,
+  });
+
+  Future<Map<String, dynamic>> getServiceRequestDetails({
+    required int serviceRequestId,
+  });
+
   Future<List<CustomerOfferSummaryDto>> getMyOffers({
     int pageIndex,
     int pageSize,
@@ -70,6 +80,22 @@ class CustomerPortalRemoteDataSourceImpl
     pageSize: pageSize,
     status: status,
   );
+
+  @override
+  Future<Map<String, dynamic>> getMyServiceRequestsPaged({
+    int pageIndex = 1,
+    int pageSize = 10,
+    String? status,
+  }) => _requests.getMyServiceRequestsPaged(
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+    status: status,
+  );
+
+  @override
+  Future<Map<String, dynamic>> getServiceRequestDetails({
+    required int serviceRequestId,
+  }) => _requests.getServiceRequestDetails(serviceRequestId: serviceRequestId);
 
   @override
   Future<List<CustomerOfferSummaryDto>> getMyOffers({

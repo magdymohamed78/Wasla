@@ -23,76 +23,138 @@ class HomeSectionSkeleton extends StatelessWidget {
       children: [
         Text(title, style: AppTypography.heading3),
         const SizedBox(height: AppDimensions.spacingSm),
-        SizedBox(
-          height: 248,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: itemCount,
-            separatorBuilder: (_, _) =>
-                const SizedBox(width: AppDimensions.spacingSm),
-            itemBuilder: (context, index) {
-              return Shimmer.fromColors(
-                baseColor: AppColors.buttonSecondary,
-                highlightColor: AppColors.surface,
-                child: Container(
-                  width: 250,
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(
-                      AppDimensions.borderRadiusLg,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 116,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(AppDimensions.borderRadiusLg),
-                          ),
-                        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          child: Row(
+            children: List.generate(itemCount, (index) {
+              return Padding(
+                padding: EdgeInsets.only(
+                  right: index == itemCount - 1 ? 0 : AppDimensions.spacingSm,
+                ),
+                child: Shimmer.fromColors(
+                  baseColor: AppColors.buttonSecondary,
+                  highlightColor: AppColors.cardShadow,
+                  child: Container(
+                    width: 280,
+                    padding: const EdgeInsets.all(AppDimensions.paddingMd),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.borderRadiusXl,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(AppDimensions.paddingSm),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
                           children: [
                             Container(
-                              height: 16,
-                              width: 160,
+                              width: 56,
+                              height: 56,
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(4),
+                                color: AppColors.divider,
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.borderRadiusMd,
+                                ),
                               ),
                             ),
-                            const SizedBox(height: AppDimensions.spacingSm),
-                            Container(
-                              height: 12,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                            const SizedBox(height: AppDimensions.spacingMd),
-                            Container(
-                              height: 14,
-                              width: 140,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(4),
+                            const SizedBox(width: AppDimensions.spacingMd),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 14,
+                                    width: 140,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.divider,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: AppDimensions.spacingSm,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 10,
+                                        width: 80,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.divider,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      Container(
+                                        height: 10,
+                                        width: 60,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.divider,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: AppDimensions.spacingSm),
+                        Container(
+                          height: 1,
+                          width: double.infinity,
+                          color: AppColors.divider,
+                        ),
+                        const SizedBox(height: AppDimensions.spacingSm),
+                        Row(
+                          children: [
+                            Container(
+                              height: 24,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                color: AppColors.divider,
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.borderRadiusRound,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: AppDimensions.spacingXs),
+                            Container(
+                              height: 24,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                color: AppColors.divider,
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.borderRadiusRound,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: AppDimensions.spacingXs),
+                            Container(
+                              height: 24,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                color: AppColors.divider,
+                                borderRadius: BorderRadius.circular(
+                                  AppDimensions.borderRadiusRound,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
-            },
+            }),
           ),
         ),
       ],
@@ -126,7 +188,7 @@ class HomeSectionInlineError extends StatelessWidget {
           padding: const EdgeInsets.all(AppDimensions.paddingMd),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
             border: Border.all(color: AppColors.error.withValues(alpha: 0.2)),
           ),
           child: Row(
@@ -176,7 +238,7 @@ class HomeSectionEmpty extends StatelessWidget {
           padding: const EdgeInsets.all(AppDimensions.paddingMd),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
           ),
           child: Text(
             message,

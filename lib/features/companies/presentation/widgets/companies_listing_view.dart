@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
@@ -128,7 +129,7 @@ class _CompaniesListingViewState extends State<CompaniesListingView> {
                       );
                     },
                     firstPageProgressIndicatorBuilder: (context) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const _ListingSkeleton(count: 4);
                     },
                     newPageProgressIndicatorBuilder: (context) {
                       return const Padding(
@@ -166,6 +167,137 @@ class _CompaniesListingViewState extends State<CompaniesListingView> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ListingSkeleton extends StatelessWidget {
+  final int count;
+
+  const _ListingSkeleton({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: AppColors.buttonSecondary,
+      highlightColor: AppColors.cardShadow,
+      child: Column(
+        children: List.generate(count, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: AppDimensions.spacingMd),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppDimensions.paddingMd),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(
+                  AppDimensions.borderRadiusXl,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: AppColors.divider,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.borderRadiusMd,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: AppDimensions.spacingMd),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 14,
+                              width: 160,
+                              decoration: BoxDecoration(
+                                color: AppColors.divider,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                            const SizedBox(height: AppDimensions.spacingSm),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 10,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.divider,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                                const Spacer(),
+                                Container(
+                                  height: 10,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.divider,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.spacingSm),
+                  Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: AppColors.divider,
+                  ),
+                  const SizedBox(height: AppDimensions.spacingSm),
+                  Wrap(
+                    spacing: AppDimensions.spacingXs,
+                    runSpacing: AppDimensions.spacingXs,
+                    children: [
+                      Container(
+                        height: 24,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          color: AppColors.divider,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.borderRadiusRound,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 24,
+                        width: 65,
+                        decoration: BoxDecoration(
+                          color: AppColors.divider,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.borderRadiusRound,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 24,
+                        width: 55,
+                        decoration: BoxDecoration(
+                          color: AppColors.divider,
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.borderRadiusRound,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

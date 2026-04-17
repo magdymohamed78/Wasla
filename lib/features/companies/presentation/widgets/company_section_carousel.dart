@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../home/domain/entities/company_summary.dart';
@@ -32,29 +33,43 @@ class CompanySectionCarousel extends StatelessWidget {
           children: [
             Expanded(child: Text(title, style: AppTypography.heading3)),
             if (onViewAll != null && viewAllLabel != null)
-              TextButton(onPressed: onViewAll, child: Text(viewAllLabel!)),
+              TextButton.icon(
+                onPressed: onViewAll,
+                icon: const Icon(
+                  Icons.arrow_forward,
+                  size: 18,
+                  color: AppColors.brandRed,
+                ),
+                label: Text(
+                  viewAllLabel!,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.brandRed,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
           ],
         ),
         const SizedBox(height: AppDimensions.spacingSm),
-        SizedBox(
-          height: 260,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            clipBehavior: Clip.none,
-            itemCount: companies.length,
-            separatorBuilder: (_, _) =>
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          clipBehavior: Clip.hardEdge,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final company in companies) ...[
+                CompanySummaryCard(
+                  company: company,
+                  showTrendIndicator: showTrendIndicator,
+                  cardWidth: 280,
+                  onTap: onCompanyTap == null
+                      ? null
+                      : () => onCompanyTap!(company),
+                ),
                 const SizedBox(width: AppDimensions.spacingSm),
-            itemBuilder: (context, index) {
-              final company = companies[index];
-              return CompanySummaryCard(
-                company: company,
-                showTrendIndicator: showTrendIndicator,
-                onTap: onCompanyTap == null
-                    ? null
-                    : () => onCompanyTap!(company),
-              );
-            },
+              ],
+            ],
           ),
         ),
       ],

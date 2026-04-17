@@ -41,29 +41,50 @@ class ServiceFilterChips extends StatelessWidget {
                 padding: const EdgeInsetsDirectional.only(
                   end: AppDimensions.spacingSm,
                 ),
-                child: ChoiceChip(
-                  selected: isSelected,
-                  label: Text(entry.value),
-                  labelStyle: AppTypography.bodySmall.copyWith(
-                    color: isSelected
-                        ? AppColors.surface
-                        : AppColors.textPrimary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  selectedColor: AppColors.brandRed,
-                  backgroundColor: AppColors.buttonSecondary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      AppDimensions.borderRadiusRound,
+                child: GestureDetector(
+                  onTap: () => onSelected(entry.key),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.paddingSm,
+                      vertical: AppDimensions.spacingSm,
                     ),
-                    side: isSelected
-                        ? const BorderSide(
-                            color: AppColors.brandRed,
-                            width: 1.5,
-                          )
-                        : const BorderSide(color: Colors.transparent),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.brandRed
+                          : AppColors.surface,
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.borderRadiusRound,
+                      ),
+                      border: Border.all(
+                        color: isSelected
+                            ? AppColors.brandRed
+                            : AppColors.divider,
+                        width: 1,
+                      ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.brandRed.withValues(
+                                  alpha: 0.2,
+                                ),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Text(
+                      entry.value,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: isSelected
+                            ? AppColors.surface
+                            : AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                  onSelected: (_) => onSelected(entry.key),
                 ),
               );
             })

@@ -585,12 +585,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get companyDetailsInvalidCompanyId => 'Invalid company ID.';
 
   @override
+  String get companyDetailsViewAllReviews => 'View All Reviews';
+
+  @override
   String companyDetailsPlaceholderBody(String companyId) {
     return 'Company details for ID: $companyId';
   }
 
   @override
   String get homeGreeting => 'Hello';
+
+  @override
+  String get companyReviewsPageTitle => 'All Reviews';
 
   @override
   String homeGreetingWithName(String firstName) {
@@ -775,4 +781,104 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileCompanyStatusUnknown => 'Unknown';
+
+  @override
+  String profileCompanyLoadMore(int count) {
+    return 'Load More (+$count)';
+  }
+
+  @override
+  String get requestsPageTitle => 'Requests';
+
+  @override
+  String get requestsHeaderTitle => 'Service Requests';
+
+  @override
+  String get requestsHeaderDescription =>
+      'Track and manage your service requests';
+
+  @override
+  String get requestsFilterAll => 'All';
+
+  @override
+  String get requestsFilterPending => 'Pending';
+
+  @override
+  String get requestsFilterOfferSent => 'Offer Sent';
+
+  @override
+  String get requestsFilterDeclined => 'Declined';
+
+  @override
+  String get requestsFilterExpired => 'Expired';
+
+  @override
+  String get requestsCardViewRequest => 'View Request';
+
+  @override
+  String get requestsEmptyTitle => 'No requests yet';
+
+  @override
+  String get requestsEmptyMessage =>
+      'Your service requests will appear here once you submit one.';
+
+  @override
+  String get requestsEmptyBrowseCompanies => 'Browse Companies';
+
+  @override
+  String get requestsErrorTitle => 'Something went wrong';
+
+  @override
+  String get requestsErrorMessage =>
+      'Unable to load your requests. Please try again.';
+
+  @override
+  String get requestsRetry => 'Retry';
+
+  @override
+  String get requestsLoadMore => 'Loading more requests...';
+
+  @override
+  String get requestsDetailsTitle => 'Request Details';
+
+  @override
+  String get requestsDetailsReference => 'Reference';
+
+  @override
+  String get requestsDetailsCompany => 'Company';
+
+  @override
+  String get requestsDetailsStatus => 'Status';
+
+  @override
+  String get requestsDetailsServiceType => 'Service Type';
+
+  @override
+  String get requestsDetailsPreferredDate => 'Preferred Date';
+
+  @override
+  String get requestsDetailsSubmissionDate => 'Submission Date';
+
+  @override
+  String get requestsDetailsNotFound => 'Request not found.';
+
+  @override
+  String get requestsDetailsAccessDenied =>
+      'You do not have access to this request.';
+
+  @override
+  String get requestsFullPageTitle => 'All Requests';
+
+  @override
+  String get requestsFullPageEmptyTitle => 'No requests in this category';
+
+  @override
+  String get requestsFullPageEmptyMessage =>
+      'Try switching to a different filter or browse companies.';
+
+  @override
+  String get requestsFullPageLoadingMore => 'Loading more...';
+
+  @override
+  String get requestsDateNotAvailable => 'N/A';
 }

@@ -208,6 +208,7 @@
   "companyDetailsUnknownCompany": "Unknown company",
   "companyDetailsUnnamedService": "Service",
   "companyDetailsInvalidCompanyId": "Invalid company ID.",
+  "companyDetailsViewAllReviews": "View All Reviews",
   "companyDetailsPlaceholderBody": "Company details for ID: {companyId}",
   "@companyDetailsPlaceholderBody": {
     "placeholders": {
@@ -217,6 +218,7 @@
     }
   },
   "homeGreeting": "Hello",
+  "companyReviewsPageTitle": "All Reviews",
   "homeGreetingWithName": "Hello, {firstName}",
   "@homeGreetingWithName": {
     "placeholders": {
@@ -285,5 +287,44 @@
   "profileCompanyStatusPending": "Pending",
   "profileCompanyStatusAccepted": "Accepted",
   "profileCompanyStatusRejected": "Rejected",
-  "profileCompanyStatusUnknown": "Unknown"
+  "profileCompanyStatusUnknown": "Unknown",
+  "profileCompanyLoadMore": "Load More (+{count})",
+  "@profileCompanyLoadMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "requestsPageTitle": "Requests",
+  "requestsHeaderTitle": "Service Requests",
+  "requestsHeaderDescription": "Track and manage your service requests",
+  "requestsFilterAll": "All",
+  "requestsFilterPending": "Pending",
+  "requestsFilterOfferSent": "Offer Sent",
+  "requestsFilterDeclined": "Declined",
+  "requestsFilterExpired": "Expired",
+  "requestsCardViewRequest": "View Request",
+  "requestsEmptyTitle": "No requests yet",
+  "requestsEmptyMessage": "Your service requests will appear here once you submit one.",
+  "requestsEmptyBrowseCompanies": "Browse Companies",
+  "requestsErrorTitle": "Something went wrong",
+  "requestsErrorMessage": "Unable to load your requests. Please try again.",
+  "requestsRetry": "Retry",
+  "requestsLoadMore": "Loading more requests...",
+  "requestsDetailsTitle": "Request Details",
+  "requestsDetailsReference": "Reference",
+  "requestsDetailsCompany": "Company",
+  "requestsDetailsStatus": "Status",
+  "requestsDetailsServiceType": "Service Type",
+  "requestsDetailsPreferredDate": "Preferred Date",
+  "requestsDetailsSubmissionDate": "Submission Date",
+  "requestsDetailsNotFound": "Request not found.",
+  "requestsDetailsAccessDenied": "You do not have access to this request.",
+  "requestsFullPageTitle": "All Requests",
+  "requestsFullPageEmptyTitle": "No requests in this category",
+  "requestsFullPageEmptyMessage": "Try switching to a different filter or browse companies.",
+  "requestsFullPageLoadingMore": "Loading more...",
+  "requestsDateNotAvailable": "N/A"
 }

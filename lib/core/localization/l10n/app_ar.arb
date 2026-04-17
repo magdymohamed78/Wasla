@@ -200,6 +200,7 @@
   "companyDetailsUnknownCompany": "شركة غير معروفة",
   "companyDetailsUnnamedService": "خدمة",
   "companyDetailsInvalidCompanyId": "معرف الشركة غير صالح.",
+  "companyDetailsViewAllReviews": "عرض جميع المراجعات",
   "companyDetailsPlaceholderBody": "تفاصيل الشركة للمعرف: {companyId}",
   "@companyDetailsPlaceholderBody": {
     "placeholders": {
@@ -209,6 +210,7 @@
     }
   },
   "homeGreeting": "مرحباً",
+  "companyReviewsPageTitle": "جميع المراجعات",
   "homeGreetingWithName": "مرحباً، {firstName}",
   "@homeGreetingWithName": {
     "placeholders": {
@@ -277,5 +279,44 @@
   "profileCompanyStatusPending": "قيد الانتظار",
   "profileCompanyStatusAccepted": "مقبول",
   "profileCompanyStatusRejected": "مرفوض",
-  "profileCompanyStatusUnknown": "غير معروف"
+  "profileCompanyStatusUnknown": "غير معروف",
+  "profileCompanyLoadMore": "عرض المزيد (+{count})",
+  "@profileCompanyLoadMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "requestsPageTitle": "الطلبات",
+  "requestsHeaderTitle": "طلبات الخدمة",
+  "requestsHeaderDescription": "تتبع طلبات الخدمة الخاصة بك وإدارتها",
+  "requestsFilterAll": "الكل",
+  "requestsFilterPending": "قيد الانتظار",
+  "requestsFilterOfferSent": "تم إرسال عرض",
+  "requestsFilterDeclined": "مرفوض",
+  "requestsFilterExpired": "منتهية",
+  "requestsCardViewRequest": "عرض الطلب",
+  "requestsEmptyTitle": "لا توجد طلبات بعد",
+  "requestsEmptyMessage": "ستظهر طلبات الخدمة هنا بمجرد تقديم طلب.",
+  "requestsEmptyBrowseCompanies": "تصفح الشركات",
+  "requestsErrorTitle": "حدث خطأ ما",
+  "requestsErrorMessage": "تعذر تحميل طلباتك. يرجى المحاولة مرة أخرى.",
+  "requestsRetry": "إعادة المحاولة",
+  "requestsLoadMore": "جارٍ تحميل المزيد من الطلبات...",
+  "requestsDetailsTitle": "تفاصيل الطلب",
+  "requestsDetailsReference": "المرجع",
+  "requestsDetailsCompany": "الشركة",
+  "requestsDetailsStatus": "الحالة",
+  "requestsDetailsServiceType": "نوع الخدمة",
+  "requestsDetailsPreferredDate": "التاريخ المفضل",
+  "requestsDetailsSubmissionDate": "تاريخ التقديم",
+  "requestsDetailsNotFound": "الطلب غير موجود.",
+  "requestsDetailsAccessDenied": "ليس لديك صلاحية الوصول إلى هذا الطلب.",
+  "requestsFullPageTitle": "جميع الطلبات",
+  "requestsFullPageEmptyTitle": "لا توجد طلبات في هذا التصنيف",
+  "requestsFullPageEmptyMessage": "حاول التبديل إلى تصفية مختلفة أو تصفح الشركات.",
+  "requestsFullPageLoadingMore": "جارٍ التحميل...",
+  "requestsDateNotAvailable": "غير متوفر"
 }

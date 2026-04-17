@@ -106,6 +106,8 @@ class _AppState extends State<App> {
   // ── Requests ──────────────────────────────────────────────────
   late final GetCustomerServiceRequestsUseCase
   _getCustomerServiceRequestsUseCase;
+  late final GetCustomerServiceRequestDetailsUseCase
+  _getCustomerServiceRequestDetailsUseCase;
   late final ServiceRequestRemoteDataSource _serviceRequestRemoteDataSource;
   late final ServiceRequestRepository _serviceRequestRepository;
   late final SubmitServiceRequestUseCase _submitServiceRequestUseCase;
@@ -215,6 +217,8 @@ class _AppState extends State<App> {
     _getCustomerServiceRequestsUseCase = GetCustomerServiceRequestsUseCase(
       _customerPortalRepository,
     );
+    _getCustomerServiceRequestDetailsUseCase =
+        GetCustomerServiceRequestDetailsUseCase(_customerPortalRepository);
     _getCustomerOffersUseCase = GetCustomerOffersUseCase(
       _customerPortalRepository,
     );
@@ -334,6 +338,9 @@ class _AppState extends State<App> {
         ),
         RepositoryProvider<GetCustomerServiceRequestsUseCase>.value(
           value: _getCustomerServiceRequestsUseCase,
+        ),
+        RepositoryProvider<GetCustomerServiceRequestDetailsUseCase>.value(
+          value: _getCustomerServiceRequestDetailsUseCase,
         ),
 
         // ── Offers ──────────────────────────────────────────────

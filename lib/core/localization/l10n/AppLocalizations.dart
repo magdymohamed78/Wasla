@@ -1172,6 +1172,12 @@ abstract class AppLocalizations {
   /// **'Invalid company ID.'**
   String get companyDetailsInvalidCompanyId;
 
+  /// No description provided for @companyDetailsViewAllReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'View All Reviews'**
+  String get companyDetailsViewAllReviews;
+
   /// No description provided for @companyDetailsPlaceholderBody.
   ///
   /// In en, this message translates to:
@@ -1183,6 +1189,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello'**
   String get homeGreeting;
+
+  /// No description provided for @companyReviewsPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All Reviews'**
+  String get companyReviewsPageTitle;
 
   /// No description provided for @homeGreetingWithName.
   ///
@@ -1537,6 +1549,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unknown'**
   String get profileCompanyStatusUnknown;
+
+  /// No description provided for @profileCompanyLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load More (+{count})'**
+  String profileCompanyLoadMore(int count);
+
+  /// No description provided for @requestsPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests'**
+  String get requestsPageTitle;
+
+  /// No description provided for @requestsHeaderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Service Requests'**
+  String get requestsHeaderTitle;
+
+  /// No description provided for @requestsHeaderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Track and manage your service requests'**
+  String get requestsHeaderDescription;
+
+  /// No description provided for @requestsFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get requestsFilterAll;
+
+  /// No description provided for @requestsFilterPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get requestsFilterPending;
+
+  /// No description provided for @requestsFilterOfferSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer Sent'**
+  String get requestsFilterOfferSent;
+
+  /// No description provided for @requestsFilterDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get requestsFilterDeclined;
+
+  /// No description provided for @requestsFilterExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get requestsFilterExpired;
+
+  /// No description provided for @requestsCardViewRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'View Request'**
+  String get requestsCardViewRequest;
+
+  /// No description provided for @requestsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No requests yet'**
+  String get requestsEmptyTitle;
+
+  /// No description provided for @requestsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your service requests will appear here once you submit one.'**
+  String get requestsEmptyMessage;
+
+  /// No description provided for @requestsEmptyBrowseCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse Companies'**
+  String get requestsEmptyBrowseCompanies;
+
+  /// No description provided for @requestsErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get requestsErrorTitle;
+
+  /// No description provided for @requestsErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your requests. Please try again.'**
+  String get requestsErrorMessage;
+
+  /// No description provided for @requestsRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get requestsRetry;
+
+  /// No description provided for @requestsLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading more requests...'**
+  String get requestsLoadMore;
+
+  /// No description provided for @requestsDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Details'**
+  String get requestsDetailsTitle;
+
+  /// No description provided for @requestsDetailsReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get requestsDetailsReference;
+
+  /// No description provided for @requestsDetailsCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Company'**
+  String get requestsDetailsCompany;
+
+  /// No description provided for @requestsDetailsStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get requestsDetailsStatus;
+
+  /// No description provided for @requestsDetailsServiceType.
+  ///
+  /// In en, this message translates to:
+  /// **'Service Type'**
+  String get requestsDetailsServiceType;
+
+  /// No description provided for @requestsDetailsPreferredDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Date'**
+  String get requestsDetailsPreferredDate;
+
+  /// No description provided for @requestsDetailsSubmissionDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Submission Date'**
+  String get requestsDetailsSubmissionDate;
+
+  /// No description provided for @requestsDetailsNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Request not found.'**
+  String get requestsDetailsNotFound;
+
+  /// No description provided for @requestsDetailsAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have access to this request.'**
+  String get requestsDetailsAccessDenied;
+
+  /// No description provided for @requestsFullPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All Requests'**
+  String get requestsFullPageTitle;
+
+  /// No description provided for @requestsFullPageEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No requests in this category'**
+  String get requestsFullPageEmptyTitle;
+
+  /// No description provided for @requestsFullPageEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try switching to a different filter or browse companies.'**
+  String get requestsFullPageEmptyMessage;
+
+  /// No description provided for @requestsFullPageLoadingMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading more...'**
+  String get requestsFullPageLoadingMore;
+
+  /// No description provided for @requestsDateNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get requestsDateNotAvailable;
 }
 
 class _AppLocalizationsDelegate

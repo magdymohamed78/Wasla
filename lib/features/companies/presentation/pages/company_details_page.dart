@@ -152,18 +152,12 @@ class _CompanyDetailsView extends StatelessWidget {
                           anonymousReviewerLabel:
                               localizations.companyDetailsAnonymousReviewer,
                           noCommentLabel: localizations.companyDetailsNoComment,
-                          loadMoreLabel:
-                              localizations.companyDetailsLoadMoreReviews,
-                          retryLabel: localizations.networkErrorRetry,
-                          hasMoreReviews: state.hasMoreReviews,
-                          isLoadingMoreReviews: state.isLoadingMoreReviews,
-                          errorMessage: _reviewsErrorMessage(
-                            localizations,
-                            state,
+                          viewAllLabel:
+                              localizations.companyDetailsViewAllReviews,
+                          maxReviews: 3,
+                          onViewAll: () => context.push(
+                            AppRouter.companyReviewsLocation(state.companyId),
                           ),
-                          onLoadMore: context
-                              .read<CompanyDetailsCubit>()
-                              .loadMoreReviews,
                         ),
                         const SizedBox(height: AppDimensions.spacingMd),
                         PrimaryButton(
@@ -268,17 +262,6 @@ class _CompanyDetailsView extends StatelessWidget {
 
     return localizations.companyDetailsLoadFailed;
   }
-
-  String? _reviewsErrorMessage(
-    AppLocalizations localizations,
-    CompanyDetailsState state,
-  ) {
-    if (state.reviewsErrorMessage == null) {
-      return null;
-    }
-
-    return localizations.networkErrorServer;
-  }
 }
 
 class _CompanyDetailsSkeleton extends StatelessWidget {
@@ -289,26 +272,28 @@ class _CompanyDetailsSkeleton extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(AppDimensions.paddingMd),
       children: [
-        _skeletonBox(height: 120),
-        const SizedBox(height: AppDimensions.spacingMd),
-        _skeletonBox(height: 140),
-        const SizedBox(height: AppDimensions.spacingMd),
         _skeletonBox(height: 180),
         const SizedBox(height: AppDimensions.spacingMd),
-        _skeletonBox(height: 220),
+        _skeletonBox(height: 120),
+        const SizedBox(height: AppDimensions.spacingMd),
+        _skeletonBox(height: 160),
+        const SizedBox(height: AppDimensions.spacingMd),
+        _skeletonBox(height: 240),
+        const SizedBox(height: AppDimensions.spacingMd),
+        _skeletonBox(height: 48),
       ],
     );
   }
 
   Widget _skeletonBox({required double height}) {
     return Shimmer.fromColors(
-      baseColor: AppColors.buttonSecondary.withValues(alpha: 0.5),
-      highlightColor: AppColors.surface,
+      baseColor: AppColors.buttonSecondary,
+      highlightColor: AppColors.cardShadow,
       child: Container(
         height: height,
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
         ),
       ),
     );

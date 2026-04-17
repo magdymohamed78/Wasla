@@ -576,12 +576,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get companyDetailsInvalidCompanyId => 'معرف الشركة غير صالح.';
 
   @override
+  String get companyDetailsViewAllReviews => 'عرض جميع المراجعات';
+
+  @override
   String companyDetailsPlaceholderBody(String companyId) {
     return 'تفاصيل الشركة للمعرف: $companyId';
   }
 
   @override
   String get homeGreeting => 'مرحباً';
+
+  @override
+  String get companyReviewsPageTitle => 'جميع المراجعات';
 
   @override
   String homeGreetingWithName(String firstName) {
@@ -766,4 +772,103 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileCompanyStatusUnknown => 'غير معروف';
+
+  @override
+  String profileCompanyLoadMore(int count) {
+    return 'عرض المزيد (+$count)';
+  }
+
+  @override
+  String get requestsPageTitle => 'الطلبات';
+
+  @override
+  String get requestsHeaderTitle => 'طلبات الخدمة';
+
+  @override
+  String get requestsHeaderDescription =>
+      'تتبع طلبات الخدمة الخاصة بك وإدارتها';
+
+  @override
+  String get requestsFilterAll => 'الكل';
+
+  @override
+  String get requestsFilterPending => 'قيد الانتظار';
+
+  @override
+  String get requestsFilterOfferSent => 'تم إرسال عرض';
+
+  @override
+  String get requestsFilterDeclined => 'مرفوض';
+
+  @override
+  String get requestsFilterExpired => 'منتهية';
+
+  @override
+  String get requestsCardViewRequest => 'عرض الطلب';
+
+  @override
+  String get requestsEmptyTitle => 'لا توجد طلبات بعد';
+
+  @override
+  String get requestsEmptyMessage => 'ستظهر طلبات الخدمة هنا بمجرد تقديم طلب.';
+
+  @override
+  String get requestsEmptyBrowseCompanies => 'تصفح الشركات';
+
+  @override
+  String get requestsErrorTitle => 'حدث خطأ ما';
+
+  @override
+  String get requestsErrorMessage =>
+      'تعذر تحميل طلباتك. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get requestsRetry => 'إعادة المحاولة';
+
+  @override
+  String get requestsLoadMore => 'جارٍ تحميل المزيد من الطلبات...';
+
+  @override
+  String get requestsDetailsTitle => 'تفاصيل الطلب';
+
+  @override
+  String get requestsDetailsReference => 'المرجع';
+
+  @override
+  String get requestsDetailsCompany => 'الشركة';
+
+  @override
+  String get requestsDetailsStatus => 'الحالة';
+
+  @override
+  String get requestsDetailsServiceType => 'نوع الخدمة';
+
+  @override
+  String get requestsDetailsPreferredDate => 'التاريخ المفضل';
+
+  @override
+  String get requestsDetailsSubmissionDate => 'تاريخ التقديم';
+
+  @override
+  String get requestsDetailsNotFound => 'الطلب غير موجود.';
+
+  @override
+  String get requestsDetailsAccessDenied =>
+      'ليس لديك صلاحية الوصول إلى هذا الطلب.';
+
+  @override
+  String get requestsFullPageTitle => 'جميع الطلبات';
+
+  @override
+  String get requestsFullPageEmptyTitle => 'لا توجد طلبات في هذا التصنيف';
+
+  @override
+  String get requestsFullPageEmptyMessage =>
+      'حاول التبديل إلى تصفية مختلفة أو تصفح الشركات.';
+
+  @override
+  String get requestsFullPageLoadingMore => 'جارٍ التحميل...';
+
+  @override
+  String get requestsDateNotAvailable => 'غير متوفر';
 }

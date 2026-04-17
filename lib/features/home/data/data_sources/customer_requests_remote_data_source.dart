@@ -34,4 +34,45 @@ class CustomerRequestsRemoteDataSource {
         .map(CustomerServiceRequestSummaryDto.fromJson)
         .toList(growable: false);
   }
+
+  Future<Map<String, dynamic>> getMyServiceRequestsPaged({
+    int pageIndex = 1,
+    int pageSize = 10,
+    String? status,
+  }) async {
+    final response = await _dio.get<dynamic>(
+      _endpoint,
+      queryParameters: <String, dynamic>{
+        'pageIndex': pageIndex,
+        'pageSize': pageSize,
+        if (status != null && status.trim().isNotEmpty) 'status': status.trim(),
+      },
+    );
+
+    final payload = response.data;
+    if (payload is Map<String, dynamic>) {
+      return payload;
+    }
+
+    return {
+      'items': <dynamic>[],
+      'pageIndex': pageIndex,
+      'pageSize': pageSize,
+      'totalCount': 0,
+      'totalPages': 0,
+    };
+  }
+
+  Future<Map<String, dynamic>> getServiceRequestDetails({
+    required int serviceRequestId,
+  }) async {
+    final response = await _dio.get<dynamic>('$_endpoint/$serviceRequestId');
+
+    final payload = response.data;
+    if (payload is Map<String, dynamic>) {
+      return payload;
+    }
+
+    throw Exception('Invalid response for request details');
+  }
 }

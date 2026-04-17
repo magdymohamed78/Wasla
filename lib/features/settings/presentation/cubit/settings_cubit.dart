@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/session/session_cubit.dart';
@@ -6,11 +8,19 @@ import 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
   final SessionCubit _sessionCubit;
+  StreamSubscription<SessionState>? _sessionSubscription;
 
   SettingsCubit({required SessionCubit sessionCubit})
     : _sessionCubit = sessionCubit,
       super(const SettingsState()) {
     _syncFromSession(_sessionCubit.state);
+    _sessionSubscription = _sessionCubit.stream.listen(_syncFromSession);
+  }
+
+  @override
+  Future<void> close() {
+    _sessionSubscription?.cancel();
+    return super.close();
   }
 
   void _syncFromSession(SessionState sessionState) {

@@ -3,6 +3,7 @@ class CustomerServiceRequestSummary {
   final String? referenceNumber;
   final int companyId;
   final String? companyName;
+  final String? companyLogoUrl;
   final String? serviceType;
   final String? status;
   final DateTime? preferredDate;
@@ -15,6 +16,7 @@ class CustomerServiceRequestSummary {
     required this.companyId,
     this.referenceNumber,
     this.companyName,
+    this.companyLogoUrl,
     this.serviceType,
     this.status,
     this.preferredDate,

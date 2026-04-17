@@ -10,8 +10,9 @@ import '../../../home/domain/entities/customer_portal_content.dart';
 
 class ConnectedCompanyCard extends StatelessWidget {
   final ConnectedCompany company;
+  final VoidCallback? onTap;
 
-  const ConnectedCompanyCard({super.key, required this.company});
+  const ConnectedCompanyCard({super.key, required this.company, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -19,64 +20,131 @@ class ConnectedCompanyCard extends StatelessWidget {
     final companyName = (company.companyName ?? '').trim().isEmpty
         ? localizations.companyDetailsUnknownCompany
         : company.companyName!.trim();
+    final statusColor = _resolveStatusColor(company.status);
 
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: AppDimensions.spacingSm),
-      padding: const EdgeInsets.all(AppDimensions.paddingMd),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _CompanyLogo(url: company.companyLogoUrl),
-          const SizedBox(width: AppDimensions.spacingSm),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+            boxShadow: const [
+              BoxShadow(
+                color: AppColors.cardShadow,
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  companyName,
-                  style: AppTypography.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+                Container(width: 4, color: statusColor),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimensions.paddingMd),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            _CompanyLogo(url: company.companyLogoUrl),
+                            const SizedBox(width: AppDimensions.spacingSm),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    companyName,
+                                    style: AppTypography.bodyLarge.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  if (company.customerId != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: AppDimensions.spacingXs / 2,
+                                      ),
+                                      child: Text(
+                                        '${localizations.profileCompanyCustomerId}: ${company.customerId}',
+                                        style: AppTypography.bodySmall,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: AppDimensions.spacingSm),
+                            _StatusBadge(
+                              label: _statusLabel(
+                                localizations,
+                                company.status,
+                              ),
+                              color: statusColor,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: AppDimensions.spacingSm),
+                        Row(
+                          children: [
+                            if (company.requestedAt != null)
+                              _DateChip(
+                                label:
+                                    '${localizations.profileCompanyRequestedAt}: ${_formatDate(context, company.requestedAt)}',
+                              ),
+                            const Spacer(),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 14,
+                              color: statusColor,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppDimensions.spacingXs),
-                _StatusPill(status: company.status),
-                const SizedBox(height: AppDimensions.spacingSm),
-                _KeyValueRow(
-                  label: localizations.profileCompanyCustomerId,
-                  value: company.customerId?.toString() ?? '-',
-                ),
-                const SizedBox(height: AppDimensions.spacingXs),
-                _KeyValueRow(
-                  label: localizations.profileCompanyRequestedAt,
-                  value: _formatDate(context, company.requestedAt),
-                ),
-                const SizedBox(height: AppDimensions.spacingXs),
-                _KeyValueRow(
-                  label: localizations.profileCompanyRespondedAt,
-                  value: _formatDate(context, company.respondedAt),
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   String _formatDate(BuildContext context, DateTime? value) {
-    if (value == null) {
-      return '-';
-    }
-
+    if (value == null) return '-';
     final locale = Localizations.localeOf(context).toString();
     return DateFormat.yMMMd(locale).format(value.toLocal());
+  }
+
+  static Color _resolveStatusColor(String? status) {
+    final normalized = (status ?? '').trim().toLowerCase();
+    if (normalized == 'accepted') return const Color(0xFF2E7D32);
+    if (normalized == 'pending') return AppColors.statusPending;
+    if (normalized == 'rejected') return AppColors.statusDeclined;
+    return AppColors.textSecondary;
+  }
+
+  static String _statusLabel(AppLocalizations localizations, String? status) {
+    final normalized = (status ?? '').trim().toLowerCase();
+    if (normalized == 'accepted') {
+      return localizations.profileCompanyStatusAccepted;
+    }
+    if (normalized == 'pending') {
+      return localizations.profileCompanyStatusPending;
+    }
+    if (normalized == 'rejected') {
+      return localizations.profileCompanyStatusRejected;
+    }
+    return localizations.profileCompanyStatusUnknown;
   }
 }
 
@@ -87,116 +155,94 @@ class _CompanyLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasUrl = (url ?? '').trim().isNotEmpty;
+    const size = AppDimensions.logoSizeSmall;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-      child: Container(
-        width: 56,
-        height: 56,
-        color: AppColors.buttonSecondary,
-        child: hasUrl
-            ? CachedNetworkImage(
-                imageUrl: url!,
-                fit: BoxFit.cover,
-                errorWidget: (_, _, _) => const _LogoFallback(),
-              )
-            : const _LogoFallback(),
-      ),
-    );
-  }
-}
-
-class _LogoFallback extends StatelessWidget {
-  const _LogoFallback();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Icon(
-      Icons.business_rounded,
-      color: AppColors.textSecondary,
-      size: AppDimensions.iconSizeMd,
-    );
-  }
-}
-
-class _StatusPill extends StatelessWidget {
-  final String? status;
-
-  const _StatusPill({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
-    final normalized = (status ?? '').trim().toLowerCase();
-
-    Color foreground = AppColors.textSecondary;
-    Color background = AppColors.buttonSecondary;
-    String label = localizations.profileCompanyStatusUnknown;
-
-    if (normalized == 'accepted') {
-      foreground = const Color(0xFF2E7D32);
-      background = const Color(0xFFE8F5E9);
-      label = localizations.profileCompanyStatusAccepted;
-    } else if (normalized == 'pending') {
-      foreground = const Color(0xFFEF6C00);
-      background = const Color(0xFFFFF3E0);
-      label = localizations.profileCompanyStatusPending;
-    } else if (normalized == 'rejected') {
-      foreground = AppColors.error;
-      background = const Color(0xFFFFEBEE);
-      label = localizations.profileCompanyStatusRejected;
+    if (url != null && url!.isNotEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
+        child: CachedNetworkImage(
+          imageUrl: url!,
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+          errorWidget: (_, _, _) => _PlaceholderLogo(size: size),
+        ),
+      );
     }
 
+    return _PlaceholderLogo(size: size);
+  }
+}
+
+class _PlaceholderLogo extends StatelessWidget {
+  final double size;
+
+  const _PlaceholderLogo({required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.buttonSecondary,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
+      ),
+      child: Icon(
+        Icons.business_rounded,
+        size: size * 0.5,
+        color: AppColors.textSecondary,
+      ),
+    );
+  }
+}
+
+class _StatusBadge extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _StatusBadge({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.paddingSm,
-        vertical: AppDimensions.spacingXs,
+        horizontal: AppDimensions.spacingSm,
+        vertical: AppDimensions.spacingXs + 1,
       ),
       decoration: BoxDecoration(
-        color: background,
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppDimensions.borderRadiusRound),
       ),
       child: Text(
         label,
         style: AppTypography.bodySmall.copyWith(
-          color: foreground,
+          color: color,
           fontWeight: FontWeight.w700,
+          fontSize: 11,
         ),
       ),
     );
   }
 }
 
-class _KeyValueRow extends StatelessWidget {
+class _DateChip extends StatelessWidget {
   final String label;
-  final String value;
 
-  const _KeyValueRow({required this.label, required this.value});
+  const _DateChip({required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          child: Text(
-            label,
-            style: AppTypography.bodySmall.copyWith(
-              color: AppColors.textSecondary,
-            ),
-          ),
+        Icon(
+          Icons.calendar_today_outlined,
+          size: AppDimensions.iconSizeSm - 2,
+          color: AppColors.textSecondary,
         ),
-        const SizedBox(width: AppDimensions.spacingSm),
-        Flexible(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            style: AppTypography.bodySmall.copyWith(
-              color: AppColors.textPrimary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
+        const SizedBox(width: AppDimensions.spacingXs),
+        Text(label, style: AppTypography.bodySmall),
       ],
     );
   }

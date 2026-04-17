@@ -6,6 +6,7 @@ class CustomerServiceRequestSummaryDto {
   final String? referenceNumber;
   final int companyId;
   final String? companyName;
+  final String? companyLogoUrl;
   final String? serviceType;
   final String? status;
   final DateTime? preferredDate;
@@ -18,6 +19,7 @@ class CustomerServiceRequestSummaryDto {
     required this.companyId,
     this.referenceNumber,
     this.companyName,
+    this.companyLogoUrl,
     this.serviceType,
     this.status,
     this.preferredDate,
@@ -34,6 +36,8 @@ class CustomerServiceRequestSummaryDto {
       referenceNumber: asString(json['referenceNumber']),
       companyId: asInt(json['companyId']),
       companyName: asString(json['companyName']),
+      companyLogoUrl:
+          asString(json['companyLogoUrl']) ?? asString(json['logoUrl']),
       serviceType: asString(json['serviceType']),
       status: asString(json['status']),
       preferredDate: asDate(json['preferredDate']),
@@ -49,6 +53,7 @@ class CustomerServiceRequestSummaryDto {
       referenceNumber: referenceNumber,
       companyId: companyId,
       companyName: companyName,
+      companyLogoUrl: companyLogoUrl,
       serviceType: serviceType,
       status: status,
       preferredDate: preferredDate,

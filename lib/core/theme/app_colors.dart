@@ -13,4 +13,9 @@ class AppColors {
   static const Color divider = Color(0xFFE0E0E0);
   static const Color error = Color(0xFFD32F2F);
   static const Color cardShadow = Color(0x1A000000);
+
+  static const Color statusPending = Color(0xFFF59E0B);
+  static const Color statusOfferSent = Color(0xFF3B82F6);
+  static const Color statusDeclined = Color(0xFFEF4444);
+  static const Color statusExpired = Color(0xFF9CA3AF);
 }

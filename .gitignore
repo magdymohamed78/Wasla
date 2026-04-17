@@ -80,11 +80,7 @@ test/
 # =========================
 # 🔥 Speckit / AI Agents
 # =========================
-.agent/
-.kilocode/
-.specify/
-.specify-cache/
-.specify-temp/
+
 telemetry-id
 *.tmp
 *.cache

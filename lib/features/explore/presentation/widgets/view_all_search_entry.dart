@@ -17,9 +17,9 @@ class ViewAllSearchEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color.fromARGB(0, 0, 0, 0),
+      color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
         onTap: onTap,
         child: Ink(
           padding: const EdgeInsets.symmetric(
@@ -28,14 +28,13 @@ class ViewAllSearchEntry extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(
-              AppDimensions.borderRadiusRound,
-            ),
+            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
+            border: Border.all(color: AppColors.divider),
             boxShadow: [
               BoxShadow(
-                color: AppColors.cardShadow.withValues(alpha: 0.08),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
+                color: AppColors.cardShadow.withValues(alpha: 0.06),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
