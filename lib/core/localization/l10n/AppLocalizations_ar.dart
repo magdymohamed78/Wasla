@@ -871,4 +871,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get requestsDateNotAvailable => 'غير متوفر';
+
+  @override
+  String get homeServices => 'الخدمات';
+
+  @override
+  String get moreLabell => 'المزيد';
 }

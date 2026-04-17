@@ -881,4 +881,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestsDateNotAvailable => 'N/A';
+
+  @override
+  String get homeServices => 'Services';
+
+  @override
+  String get moreLabell => 'More';
 }

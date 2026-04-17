@@ -318,5 +318,7 @@
   "requestsFullPageEmptyTitle": "لا توجد طلبات في هذا التصنيف",
   "requestsFullPageEmptyMessage": "حاول التبديل إلى تصفية مختلفة أو تصفح الشركات.",
   "requestsFullPageLoadingMore": "جارٍ التحميل...",
-  "requestsDateNotAvailable": "غير متوفر"
+  "requestsDateNotAvailable": "غير متوفر",
+  "homeServices": "الخدمات",
+  "moreLabell": "المزيد"
 }

@@ -258,7 +258,7 @@ class CompanyReviewsSection extends StatelessWidget {
     final displayReviews = maxReviews != null && reviews.length > maxReviews!
         ? reviews.sublist(0, maxReviews!)
         : reviews;
-    final hasMore = maxReviews != null && reviews.length > maxReviews!;
+   // final hasMore = maxReviews != null && reviews.length > maxReviews!;
 
     return _SectionCard(
       title: title,

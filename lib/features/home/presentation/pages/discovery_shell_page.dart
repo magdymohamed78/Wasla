@@ -9,7 +9,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../domain/use_cases/role_guard_use_cases.dart';
 import '../cubit/lead_access_cubit.dart';
 import '../cubit/lead_access_state.dart';
-import '../../../companies/presentation/widgets/companies_nav_dropdown.dart';
+import '../widgets/discovery_floating_modal.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../../../offers/presentation/pages/customer_offers_page.dart';
 import '../../../profile/presentation/pages/customer_profile_page.dart';
 import '../../../requests/presentation/pages/customer_requests_page.dart';
@@ -60,11 +61,8 @@ class DiscoveryShellPage extends StatelessWidget {
               destinations: navItems
                   .map(
                     (item) => NavigationDestination(
-                      icon: Icon(item.icon),
-                      selectedIcon: Icon(
-                        item.selectedIcon,
-                        color: AppColors.brandRed,
-                      ),
+                      icon: item.icon,
+                      selectedIcon: item.selectedIcon ?? item.icon,
                       label: item.label,
                     ),
                   )
@@ -191,20 +189,15 @@ class DiscoveryShellPage extends StatelessWidget {
 
   int _selectedIndex(LeadAccessState state) {
     if (state.isGuest) {
-      return currentTab == DiscoveryTab.home ? 0 : 1;
-    }
-
-    if (state.isLead) {
       switch (currentTab) {
         case DiscoveryTab.home:
           return 0;
-        case DiscoveryTab.profile:
-          return 1;
-        case DiscoveryTab.settings:
-          return 2;
         case DiscoveryTab.requests:
         case DiscoveryTab.offers:
-          return 0;
+          return 1;
+        case DiscoveryTab.profile:
+        case DiscoveryTab.settings:
+          return 2;
       }
     }
 
@@ -212,13 +205,12 @@ class DiscoveryShellPage extends StatelessWidget {
       case DiscoveryTab.home:
         return 0;
       case DiscoveryTab.requests:
-        return 1;
       case DiscoveryTab.offers:
-        return 2;
+        return 1;
       case DiscoveryTab.profile:
-        return 3;
+        return 2;
       case DiscoveryTab.settings:
-        return 4;
+        return 3;
     }
   }
 
@@ -227,106 +219,87 @@ class DiscoveryShellPage extends StatelessWidget {
     required AppLocalizations localizations,
     required LeadAccessState state,
   }) {
+    final wIcon = Container(
+      width: 32,
+      height: 32,
+      decoration: const BoxDecoration(
+        color: AppColors.brandRed,
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: const Text(
+        'W',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+    );
+
+    final modalItem = _ShellNavItem(
+      label: localizations.moreLabell,
+      icon: wIcon,
+      selectedIcon: wIcon,
+      onTap: () {
+        showBarModalBottomSheet(
+          context: context,
+          builder: (_) => DiscoveryFloatingModal(
+            role: state.role,
+            onAllCompaniesTap: () => context.push(AppRouter.allCompanies),
+            onRecommendedCompaniesTap: () =>
+                context.push(AppRouter.recommendedCompanies),
+            onTrendingCompaniesTap: () =>
+                context.push(AppRouter.trendingCompanies),
+            onRequestsTap: () => context.go(AppRouter.customerRequests),
+            onOffersTap: () => context.go(AppRouter.customerOffers),
+          ),
+        );
+      },
+    );
+
     if (state.isGuest) {
-      return <_ShellNavItem>[
+      return [
         _ShellNavItem(
           label: localizations.navigationCompanies,
-          icon: Icons.grid_view_rounded,
-          selectedIcon: Icons.grid_view_rounded,
-          onTap: () {
-            _openCompaniesDropdown(
-              context: context,
-              localizations: localizations,
-              navigationItemCount: 2,
-            );
-          },
+          icon: const Icon(Icons.grid_view_rounded),
+          selectedIcon: const Icon(
+            Icons.grid_view_rounded,
+            color: AppColors.brandRed,
+          ),
+          onTap: () => context.go(AppRouter.home),
         ),
+        modalItem,
         _ShellNavItem(
           label: localizations.navigationSignIn,
-          icon: Icons.login_rounded,
-          selectedIcon: Icons.login_rounded,
+          icon: const Icon(Icons.login_rounded),
+          selectedIcon: const Icon(
+            Icons.login_rounded,
+            color: AppColors.brandRed,
+          ),
           onTap: () => context.push(AppRouter.signIn),
         ),
       ];
     }
 
-    if (state.isLead) {
-      return <_ShellNavItem>[
-        _ShellNavItem(
-          label: localizations.navigationCompanies,
-          icon: Icons.grid_view_rounded,
-          selectedIcon: Icons.grid_view_rounded,
-          onTap: () {
-            _openCompaniesDropdown(
-              context: context,
-              localizations: localizations,
-              navigationItemCount: 3,
-            );
-          },
-        ),
-        _ShellNavItem(
-          label: localizations.navigationProfile,
-          icon: Icons.person_outline_rounded,
-          selectedIcon: Icons.person_rounded,
-          onTap: () {
-            if (currentTab != DiscoveryTab.profile) {
-              context.go(_routeForTab(DiscoveryTab.profile, state));
-            }
-          },
-        ),
-        _ShellNavItem(
-          label: localizations.navigationSettings,
-          icon: Icons.settings_outlined,
-          selectedIcon: Icons.settings,
-          onTap: () {
-            if (currentTab != DiscoveryTab.settings) {
-              final route = _settingsRoute(state);
-              if (route != null) {
-                context.go(route);
-              }
-            }
-          },
-        ),
-      ];
-    }
-
-    return <_ShellNavItem>[
+    return [
       _ShellNavItem(
-        label: localizations.navigationCompanies,
-        icon: Icons.grid_view_rounded,
-        selectedIcon: Icons.grid_view_rounded,
-        onTap: () {
-          _openCompaniesDropdown(
-            context: context,
-            localizations: localizations,
-            navigationItemCount: 5,
-          );
-        },
+        label: localizations.navigationHome,
+        icon: const Icon(Icons.grid_view_rounded),
+        selectedIcon: const Icon(
+          Icons.grid_view_rounded,
+          color: AppColors.brandRed,
+        ),
+        onTap: () => context.go(AppRouter.home),
       ),
-      _ShellNavItem(
-        label: localizations.navigationRequests,
-        icon: Icons.assignment_outlined,
-        selectedIcon: Icons.assignment_rounded,
-        onTap: () {
-          if (currentTab != DiscoveryTab.requests) {
-            context.go(_routeForTab(DiscoveryTab.requests, state));
-          }
-        },
-      ),
-      _ShellNavItem(
-        label: localizations.navigationOffers,
-        icon: Icons.local_offer_outlined,
-        selectedIcon: Icons.local_offer,
-        onTap: () {
-          if (currentTab != DiscoveryTab.offers) {
-            context.go(_routeForTab(DiscoveryTab.offers, state));
-          }
-        },
-      ),
+      modalItem,
       _ShellNavItem(
         label: localizations.navigationProfile,
-        icon: Icons.person_outline_rounded,
-        selectedIcon: Icons.person_rounded,
+        icon: const Icon(Icons.person_outline_rounded),
+        selectedIcon: const Icon(
+          Icons.person_rounded,
+          color: AppColors.brandRed,
+        ),
         onTap: () {
           if (currentTab != DiscoveryTab.profile) {
             context.go(_routeForTab(DiscoveryTab.profile, state));
@@ -335,8 +308,8 @@ class DiscoveryShellPage extends StatelessWidget {
       ),
       _ShellNavItem(
         label: localizations.navigationSettings,
-        icon: Icons.settings_outlined,
-        selectedIcon: Icons.settings,
+        icon: const Icon(Icons.settings_outlined),
+        selectedIcon: const Icon(Icons.settings, color: AppColors.brandRed),
         onTap: () {
           if (currentTab != DiscoveryTab.settings) {
             final route = _settingsRoute(state);
@@ -347,33 +320,6 @@ class DiscoveryShellPage extends StatelessWidget {
         },
       ),
     ];
-  }
-
-  Future<void> _openCompaniesDropdown({
-    required BuildContext context,
-    required AppLocalizations localizations,
-    required int navigationItemCount,
-  }) async {
-    final rootContext = Navigator.of(context, rootNavigator: true).context;
-
-    if (currentTab != DiscoveryTab.home) {
-      context.go(AppRouter.home);
-      await WidgetsBinding.instance.endOfFrame;
-    }
-
-    final selectedRoute = await CompaniesNavDropdown.show(
-      // ignore: use_build_context_synchronously
-      context: rootContext,
-      localizations: localizations,
-      navigationItemCount: navigationItemCount,
-    );
-
-    if (selectedRoute == null) {
-      return;
-    }
-
-    // ignore: use_build_context_synchronously
-    GoRouter.of(rootContext).go(selectedRoute);
   }
 
   String? _settingsRoute(LeadAccessState state) {
@@ -390,14 +336,14 @@ class DiscoveryShellPage extends StatelessWidget {
 
 class _ShellNavItem {
   final String label;
-  final IconData icon;
-  final IconData selectedIcon;
+  final Widget icon;
+  final Widget? selectedIcon;
   final VoidCallback onTap;
 
   const _ShellNavItem({
     required this.label,
     required this.icon,
-    required this.selectedIcon,
+    this.selectedIcon,
     required this.onTap,
   });
 }

@@ -326,5 +326,7 @@
   "requestsFullPageEmptyTitle": "No requests in this category",
   "requestsFullPageEmptyMessage": "Try switching to a different filter or browse companies.",
   "requestsFullPageLoadingMore": "Loading more...",
-  "requestsDateNotAvailable": "N/A"
+  "requestsDateNotAvailable": "N/A",
+  "homeServices": "Services",
+  "moreLabell": "More"
 }

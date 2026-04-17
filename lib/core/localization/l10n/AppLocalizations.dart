@@ -1735,6 +1735,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'N/A'**
   String get requestsDateNotAvailable;
+
+  /// No description provided for @homeServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get homeServices;
+
+  /// No description provided for @moreLabell.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get moreLabell;
 }
 
 class _AppLocalizationsDelegate
