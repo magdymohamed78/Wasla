@@ -21,6 +21,7 @@ import '../../features/requests/presentation/pages/request_details_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/companies/presentation/pages/recommended_companies_page.dart';
 import '../../features/companies/presentation/pages/trending_companies_page.dart';
+import '../../features/offers/presentation/pages/offer_details_page.dart';
 import '../../features/home/presentation/cubit/lead_access_state.dart';
 import '../../features/home/domain/use_cases/customer_portal_use_cases.dart';
 import '../../features/profile/presentation/cubit/profile_edit_cubit.dart';
@@ -65,6 +66,7 @@ class AppRouter {
   static const String notifications = '/notifications';
   static const String requestDetails = '/my/service-requests/:requestId';
   static const String requestsFullList = '/my/service-requests/list';
+  static const String offerDetailsPath = '/my/offers/:offerId';
 
   static const List<String> _protectedRoutePrefixes = <String>[requestActions];
 
@@ -106,6 +108,9 @@ class AppRouter {
   static String newServiceRequestLocation({required int companyId}) {
     return '$newServiceRequest?companyId=$companyId';
   }
+
+  static String offerDetailsLocation(int offerId) =>
+      '/my/offers/$offerId';
 
   static GoRouter router(AuthRepository authRepository) {
     return GoRouter(
@@ -355,6 +360,14 @@ class AppRouter {
             final requestIdRaw = state.pathParameters['requestId'];
             final requestId = int.tryParse(requestIdRaw ?? '') ?? -1;
             return RequestDetailsPage(serviceRequestId: requestId);
+          },
+        ),
+        GoRoute(
+          path: '/my/offers/:offerId',
+          builder: (context, state) {
+            final offerIdRaw = state.pathParameters['offerId'];
+            final offerId = int.tryParse(offerIdRaw ?? '') ?? -1;
+            return OfferDetailsPage(offerId: offerId);
           },
         ),
       ],

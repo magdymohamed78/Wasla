@@ -36,6 +36,12 @@ abstract class CustomerPortalRemoteDataSource {
     String? status,
   });
 
+  Future<Map<String, dynamic>> getMyOffersPaged({
+    int pageIndex,
+    int pageSize,
+    String? status,
+  });
+
   Future<CustomerProfileDto> getMyProfile();
 
   Future<LeadProfileDto> getMyLeadProfile();
@@ -103,6 +109,17 @@ class CustomerPortalRemoteDataSourceImpl
     int pageSize = 20,
     String? status,
   }) => _offers.getMyOffers(
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+    status: status,
+  );
+
+  @override
+  Future<Map<String, dynamic>> getMyOffersPaged({
+    int pageIndex = 1,
+    int pageSize = 20,
+    String? status,
+  }) => _offers.getMyOffersPaged(
     pageIndex: pageIndex,
     pageSize: pageSize,
     status: status,

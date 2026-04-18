@@ -1,10 +1,10 @@
 import '../../../../core/types/load_status.dart';
-import '../../domain/entities/request_details_compact.dart';
+import '../../domain/entities/service_request_details.dart';
 
 class RequestDetailsState {
   final int serviceRequestId;
   final LoadStatus status;
-  final RequestDetailsCompact? details;
+  final ServiceRequestDetails? details;
   final String? errorCode;
 
   static const String notFoundError = 'request_not_found';
@@ -20,7 +20,7 @@ class RequestDetailsState {
 
   RequestDetailsState copyWith({
     LoadStatus? status,
-    RequestDetailsCompact? details,
+    ServiceRequestDetails? details,
     String? errorCode,
   }) {
     return RequestDetailsState(

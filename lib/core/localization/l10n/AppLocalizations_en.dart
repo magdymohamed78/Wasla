@@ -883,6 +883,86 @@ class AppLocalizationsEn extends AppLocalizations {
   String get requestsDateNotAvailable => 'N/A';
 
   @override
+  String get requestDetailsFromPickup => 'FROM (PICKUP)';
+
+  @override
+  String get requestDetailsToDropoff => 'TO (DROP-OFF)';
+
+  @override
+  String get requestDetailsPreferredDate => 'Preferred Date';
+
+  @override
+  String get requestDetailsTimeSlot => 'Time Slot';
+
+  @override
+  String get requestDetailsCustomerNotes => 'Customer Notes';
+
+  @override
+  String get requestDetailsLinkedOffer => 'Linked Offer';
+
+  @override
+  String get requestDetailsEstimatedTotal => 'Estimated Total';
+
+  @override
+  String get requestDetailsViewOffer => 'View Offer Details';
+
+  @override
+  String get offerDetailsTitle => 'Offer Details';
+
+  @override
+  String get requestDetailsNotAvailable => 'N/A';
+
+  @override
+  String get offersPageTitle => 'Offers';
+
+  @override
+  String get offersEmptyTitle => 'No offers yet';
+
+  @override
+  String get offersEmptyMessage =>
+      'You don\'t have any offers yet. Submit a service request to receive quotes!';
+
+  @override
+  String get offersExploreCompanies => 'Explore Companies';
+
+  @override
+  String get offersBackToRequests => 'Back to Requests';
+
+  @override
+  String get offersFilterAll => 'All';
+
+  @override
+  String get offersFilterPending => 'Pending';
+
+  @override
+  String get offersFilterAccepted => 'Accepted';
+
+  @override
+  String get offersFilterRejected => 'Rejected';
+
+  @override
+  String get offersFilterExpired => 'Expired';
+
+  @override
+  String get offersTotalAmount => 'Total Amount';
+
+  @override
+  String get offersIssueDate => 'Issue Date';
+
+  @override
+  String get offersAcceptDate => 'Accept Date';
+
+  @override
+  String get offersErrorTitle => 'Something went wrong';
+
+  @override
+  String get offersErrorMessage =>
+      'Unable to load your offers. Please try again.';
+
+  @override
+  String get offersRetry => 'Retry';
+
+  @override
   String get homeServices => 'Services';
 
   @override

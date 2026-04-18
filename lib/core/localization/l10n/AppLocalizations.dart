@@ -1736,6 +1736,162 @@ abstract class AppLocalizations {
   /// **'N/A'**
   String get requestsDateNotAvailable;
 
+  /// No description provided for @requestDetailsFromPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'FROM (PICKUP)'**
+  String get requestDetailsFromPickup;
+
+  /// No description provided for @requestDetailsToDropoff.
+  ///
+  /// In en, this message translates to:
+  /// **'TO (DROP-OFF)'**
+  String get requestDetailsToDropoff;
+
+  /// No description provided for @requestDetailsPreferredDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Date'**
+  String get requestDetailsPreferredDate;
+
+  /// No description provided for @requestDetailsTimeSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Slot'**
+  String get requestDetailsTimeSlot;
+
+  /// No description provided for @requestDetailsCustomerNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Notes'**
+  String get requestDetailsCustomerNotes;
+
+  /// No description provided for @requestDetailsLinkedOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked Offer'**
+  String get requestDetailsLinkedOffer;
+
+  /// No description provided for @requestDetailsEstimatedTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Total'**
+  String get requestDetailsEstimatedTotal;
+
+  /// No description provided for @requestDetailsViewOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'View Offer Details'**
+  String get requestDetailsViewOffer;
+
+  /// No description provided for @offerDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer Details'**
+  String get offerDetailsTitle;
+
+  /// No description provided for @requestDetailsNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'N/A'**
+  String get requestDetailsNotAvailable;
+
+  /// No description provided for @offersPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get offersPageTitle;
+
+  /// No description provided for @offersEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No offers yet'**
+  String get offersEmptyTitle;
+
+  /// No description provided for @offersEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any offers yet. Submit a service request to receive quotes!'**
+  String get offersEmptyMessage;
+
+  /// No description provided for @offersExploreCompanies.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Companies'**
+  String get offersExploreCompanies;
+
+  /// No description provided for @offersBackToRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Requests'**
+  String get offersBackToRequests;
+
+  /// No description provided for @offersFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get offersFilterAll;
+
+  /// No description provided for @offersFilterPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get offersFilterPending;
+
+  /// No description provided for @offersFilterAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get offersFilterAccepted;
+
+  /// No description provided for @offersFilterRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get offersFilterRejected;
+
+  /// No description provided for @offersFilterExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get offersFilterExpired;
+
+  /// No description provided for @offersTotalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get offersTotalAmount;
+
+  /// No description provided for @offersIssueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue Date'**
+  String get offersIssueDate;
+
+  /// No description provided for @offersAcceptDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Date'**
+  String get offersAcceptDate;
+
+  /// No description provided for @offersErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get offersErrorTitle;
+
+  /// No description provided for @offersErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your offers. Please try again.'**
+  String get offersErrorMessage;
+
+  /// No description provided for @offersRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get offersRetry;
+
   /// No description provided for @homeServices.
   ///
   /// In en, this message translates to:

@@ -1,9 +1,9 @@
 import '../../domain/entities/request_filter.dart';
 import '../../../home/data/models/json_helpers.dart';
-import 'request_details_compact_dto.dart';
+import 'service_request_details_dto.dart';
 
 class RequestPageResultDto {
-  final List<RequestDetailsCompactDto> items;
+  final List<ServiceRequestDetailsDto> items;
   final int pageIndex;
   final int pageSize;
   final int totalCount;
@@ -27,7 +27,7 @@ class RequestPageResultDto {
 
     return RequestPageResultDto(
       items: itemList
-          .map(RequestDetailsCompactDto.fromJson)
+          .map(ServiceRequestDetailsDto.fromJson)
           .toList(growable: false),
       pageIndex: asInt(json['pageIndex']),
       pageSize: asInt(json['pageSize']),

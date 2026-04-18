@@ -15,6 +15,7 @@ class AppColors {
   static const Color cardShadow = Color(0x1A000000);
 
   static const Color statusPending = Color(0xFFF59E0B);
+  static const Color statusAccepted = Color(0xFF22C55E);
   static const Color statusOfferSent = Color(0xFF3B82F6);
   static const Color statusDeclined = Color(0xFFEF4444);
   static const Color statusExpired = Color(0xFF9CA3AF);

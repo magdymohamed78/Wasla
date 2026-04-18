@@ -1,11 +1,13 @@
 import 'package:waslaapp/features/home/data/models/customer_portal_models.dart';
-import 'package:waslaapp/features/requests/data/models/request_details_compact_dto.dart';
+import 'package:waslaapp/features/requests/data/models/service_request_details_dto.dart';
 import 'package:waslaapp/features/requests/data/models/request_page_result_dto.dart';
-import 'package:waslaapp/features/requests/domain/entities/request_details_compact.dart';
+import 'package:waslaapp/features/requests/domain/entities/service_request_details.dart';
 import 'package:waslaapp/features/requests/domain/entities/request_filter.dart';
 import 'package:waslaapp/features/requests/domain/entities/request_page_result.dart';
 import 'package:waslaapp/features/requests/domain/entities/request_status_counts.dart';
 import 'package:waslaapp/features/requests/domain/use_cases/request_status_normalization_use_case.dart';
+import 'package:waslaapp/features/offers/data/models/offer_page_result_dto.dart';
+import 'package:waslaapp/features/offers/domain/entities/offer_page_result.dart';
 
 import '../../domain/entities/customer_portal_content.dart';
 import '../../domain/repositories/customer_portal_repository.dart';
@@ -84,30 +86,19 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   }
 
   @override
-  Future<RequestDetailsCompact> getCustomerServiceRequestDetails({
+  Future<ServiceRequestDetails> getCustomerServiceRequestDetails({
     required int serviceRequestId,
   }) async {
     final rawJson = await _remote.getServiceRequestDetails(
       serviceRequestId: serviceRequestId,
     );
 
-    final dto = RequestDetailsCompactDto.fromJson(
+    final dto = ServiceRequestDetailsDto.fromJson(
       rawJson,
       normalizer: _normalizer,
     );
 
-    return RequestDetailsCompact(
-      serviceRequestId: dto.serviceRequestId,
-      referenceNumber: dto.referenceNumber,
-      companyId: dto.companyId,
-      companyName: dto.companyName,
-      companyLogoUrl: dto.companyLogoUrl,
-      serviceType: dto.serviceType,
-      rawStatus: dto.rawStatus,
-      normalizedFilter: dto.normalizedFilter,
-      preferredDate: dto.preferredDate,
-      createdAt: dto.createdAt,
-    );
+    return dto.toDomain();
   }
 
   RequestStatusCounts _buildStatusCounts(
@@ -156,6 +147,22 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
     );
 
     return items.map((item) => item.toDomain()).toList(growable: false);
+  }
+
+  @override
+  Future<OfferPageResult> getCustomerOffersPaged({
+    required int pageIndex,
+    required int pageSize,
+    String? status,
+  }) async {
+    final rawJson = await _remote.getMyOffersPaged(
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+      status: status,
+    );
+
+    final dto = OfferPageResultDto.fromJson(rawJson);
+    return dto.toDomain();
   }
 
   @override

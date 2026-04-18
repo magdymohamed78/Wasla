@@ -34,4 +34,32 @@ class CustomerOffersRemoteDataSource {
         .map(CustomerOfferSummaryDto.fromJson)
         .toList(growable: false);
   }
+
+  Future<Map<String, dynamic>> getMyOffersPaged({
+    int pageIndex = 1,
+    int pageSize = 20,
+    String? status,
+  }) async {
+    final response = await _dio.get<dynamic>(
+      _endpoint,
+      queryParameters: <String, dynamic>{
+        'pageIndex': pageIndex,
+        'pageSize': pageSize,
+        if (status != null && status.trim().isNotEmpty) 'status': status.trim(),
+      },
+    );
+
+    final payload = response.data;
+    if (payload is Map<String, dynamic>) {
+      return payload;
+    }
+
+    return <String, dynamic>{
+      'items': <dynamic>[],
+      'pageIndex': pageIndex,
+      'pageSize': pageSize,
+      'totalCount': 0,
+      'totalPages': 0,
+    };
+  }
 }

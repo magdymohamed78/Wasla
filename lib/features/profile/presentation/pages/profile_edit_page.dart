@@ -258,7 +258,7 @@ class _ProfileEditSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
       baseColor: AppColors.buttonSecondary,
-      highlightColor: AppColors.surface,
+      highlightColor: AppColors.cardShadow,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingMd),
         child: Column(

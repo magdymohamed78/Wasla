@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -169,7 +171,12 @@ class _ConnectedCompaniesListState extends State<_ConnectedCompaniesList> {
         for (final company in visible)
           Padding(
             padding: const EdgeInsets.only(bottom: AppDimensions.spacingSm),
-            child: ConnectedCompanyCard(company: company),
+            child: ConnectedCompanyCard(
+              company: company,
+              onTap: () => context.push(
+                AppRouter.companyLocation(company.companyId),
+              ),
+            ),
           ),
         if (remaining > 0)
           Padding(

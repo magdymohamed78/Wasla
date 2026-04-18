@@ -873,6 +873,85 @@ class AppLocalizationsAr extends AppLocalizations {
   String get requestsDateNotAvailable => 'غير متوفر';
 
   @override
+  String get requestDetailsFromPickup => 'من (الاستلام)';
+
+  @override
+  String get requestDetailsToDropoff => 'إلى (التسليم)';
+
+  @override
+  String get requestDetailsPreferredDate => 'التاريخ المفضل';
+
+  @override
+  String get requestDetailsTimeSlot => 'الفترة الزمنية';
+
+  @override
+  String get requestDetailsCustomerNotes => 'ملاحظات العميل';
+
+  @override
+  String get requestDetailsLinkedOffer => 'العرض المرتبط';
+
+  @override
+  String get requestDetailsEstimatedTotal => 'الإجمالي المقدر';
+
+  @override
+  String get requestDetailsViewOffer => 'عرض تفاصيل العرض';
+
+  @override
+  String get offerDetailsTitle => 'تفاصيل العرض';
+
+  @override
+  String get requestDetailsNotAvailable => 'غير متوفر';
+
+  @override
+  String get offersPageTitle => 'العروض';
+
+  @override
+  String get offersEmptyTitle => 'لا توجد عروض بعد';
+
+  @override
+  String get offersEmptyMessage =>
+      'ليس لديك أي عروض بعد. قدّم طلب خدمة لتلقي عروض الأسعار!';
+
+  @override
+  String get offersExploreCompanies => 'استكشاف الشركات';
+
+  @override
+  String get offersBackToRequests => 'العودة إلى الطلبات';
+
+  @override
+  String get offersFilterAll => 'الكل';
+
+  @override
+  String get offersFilterPending => 'قيد الانتظار';
+
+  @override
+  String get offersFilterAccepted => 'مقبول';
+
+  @override
+  String get offersFilterRejected => 'مرفوض';
+
+  @override
+  String get offersFilterExpired => 'منتهية';
+
+  @override
+  String get offersTotalAmount => 'المبلغ الإجمالي';
+
+  @override
+  String get offersIssueDate => 'تاريخ الإصدار';
+
+  @override
+  String get offersAcceptDate => 'تاريخ القبول';
+
+  @override
+  String get offersErrorTitle => 'حدث خطأ ما';
+
+  @override
+  String get offersErrorMessage => 'تعذر تحميل عروضك. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get offersRetry => 'إعادة المحاولة';
+
+  @override
   String get homeServices => 'الخدمات';
 
   @override

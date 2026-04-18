@@ -30,3 +30,4 @@ void main() async {
   await _clearLegacyAuthData(sharedPreferences);
   runApp(App(sharedPreferences: sharedPreferences));
 }
+ 

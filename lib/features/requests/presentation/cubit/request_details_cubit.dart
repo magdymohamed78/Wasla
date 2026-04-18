@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/types/load_status.dart';
-import '../../../home/domain/use_cases/customer_portal_use_cases.dart';
+import '../../../home/domain/use_cases/get_customer_service_request_details_use_case.dart';
 import 'request_details_state.dart';
 
 class RequestDetailsCubit extends Cubit<RequestDetailsState> {

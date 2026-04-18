@@ -1,5 +1,5 @@
 import '../../domain/entities/request_filter.dart';
-import '../models/request_details_compact_dto.dart';
+import '../models/service_request_details_dto.dart';
 import '../models/request_page_result_dto.dart';
 
 abstract class RequestsRepository {
@@ -9,7 +9,7 @@ abstract class RequestsRepository {
     RequestFilter? filter,
   });
 
-  Future<RequestDetailsCompactDto> getRequestDetails({
+  Future<ServiceRequestDetailsDto> getRequestDetails({
     required int serviceRequestId,
   });
 }

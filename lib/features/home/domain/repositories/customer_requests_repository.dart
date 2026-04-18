@@ -1,5 +1,5 @@
 import '../entities/customer_service_request_summary.dart';
-import '../../../requests/domain/entities/request_details_compact.dart';
+import '../../../requests/domain/entities/service_request_details.dart';
 import '../../../requests/domain/entities/request_filter.dart';
 import '../../../requests/domain/entities/request_page_result.dart';
 
@@ -16,7 +16,7 @@ abstract class CustomerRequestsRepository {
     RequestFilter? filter,
   });
 
-  Future<RequestDetailsCompact> getCustomerServiceRequestDetails({
+  Future<ServiceRequestDetails> getCustomerServiceRequestDetails({
     required int serviceRequestId,
   });
 }
