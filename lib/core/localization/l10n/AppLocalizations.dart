@@ -1892,6 +1892,204 @@ abstract class AppLocalizations {
   /// **'Retry'**
   String get offersRetry;
 
+  /// No description provided for @newRequestPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Service Request'**
+  String get newRequestPageTitle;
+
+  /// No description provided for @newRequestStepServiceType.
+  ///
+  /// In en, this message translates to:
+  /// **'Service Type'**
+  String get newRequestStepServiceType;
+
+  /// No description provided for @newRequestStepLocations.
+  ///
+  /// In en, this message translates to:
+  /// **'Locations'**
+  String get newRequestStepLocations;
+
+  /// No description provided for @newRequestStepSchedule.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule & Details'**
+  String get newRequestStepSchedule;
+
+  /// No description provided for @newRequestStepProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of {total}'**
+  String newRequestStepProgress(int step, int total);
+
+  /// No description provided for @newRequestChooseCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a category'**
+  String get newRequestChooseCategory;
+
+  /// No description provided for @newRequestHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick one or more services. A separate request is created for each.'**
+  String get newRequestHelperText;
+
+  /// No description provided for @newRequestServiceTypesPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose service types'**
+  String get newRequestServiceTypesPlaceholder;
+
+  /// No description provided for @newRequestServiceTypesHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Select one or more services to request from this company.'**
+  String get newRequestServiceTypesHelper;
+
+  /// No description provided for @newRequestServiceTypesDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get newRequestServiceTypesDone;
+
+  /// No description provided for @newRequestNoServicesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No services available'**
+  String get newRequestNoServicesAvailable;
+
+  /// No description provided for @newRequestValidationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get newRequestValidationRequired;
+
+  /// No description provided for @newRequestValidationServiceType.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one service'**
+  String get newRequestValidationServiceType;
+
+  /// No description provided for @newRequestFromTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'From (Pickup)'**
+  String get newRequestFromTitle;
+
+  /// No description provided for @newRequestToTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'To (Drop-off)'**
+  String get newRequestToTitle;
+
+  /// No description provided for @newRequestStreetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Street'**
+  String get newRequestStreetLabel;
+
+  /// No description provided for @newRequestCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get newRequestCityLabel;
+
+  /// No description provided for @newRequestZipCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip Code'**
+  String get newRequestZipCodeLabel;
+
+  /// No description provided for @newRequestCountryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get newRequestCountryLabel;
+
+  /// No description provided for @newRequestPreferredDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Date'**
+  String get newRequestPreferredDate;
+
+  /// No description provided for @newRequestTimeSlot.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferred Time Slot'**
+  String get newRequestTimeSlot;
+
+  /// No description provided for @newRequestMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning (8:00 - 12:00)'**
+  String get newRequestMorning;
+
+  /// No description provided for @newRequestAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Afternoon (12:00 - 17:00)'**
+  String get newRequestAfternoon;
+
+  /// No description provided for @newRequestEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening (17:00 - 20:00)'**
+  String get newRequestEvening;
+
+  /// No description provided for @newRequestNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get newRequestNotes;
+
+  /// No description provided for @newRequestNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add any additional details...'**
+  String get newRequestNotesHint;
+
+  /// No description provided for @newRequestInfoBox.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request will be sent to the company for review. You\'ll receive an offer if approved.'**
+  String get newRequestInfoBox;
+
+  /// No description provided for @newRequestButtonNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get newRequestButtonNext;
+
+  /// No description provided for @newRequestButtonBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get newRequestButtonBack;
+
+  /// No description provided for @newRequestButtonSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Request'**
+  String get newRequestButtonSubmit;
+
+  /// No description provided for @newRequestSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Service request(s) submitted successfully!'**
+  String get newRequestSuccessMessage;
+
+  /// No description provided for @newRequestSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting...'**
+  String get newRequestSubmitting;
+
+  /// No description provided for @newRequestServicesLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load services. Please try again.'**
+  String get newRequestServicesLoadFailed;
+
   /// No description provided for @homeServices.
   ///
   /// In en, this message translates to:

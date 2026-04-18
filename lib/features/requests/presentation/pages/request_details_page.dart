@@ -196,8 +196,9 @@ class _DetailsContent extends StatelessWidget {
   }
 
   String _formatDate(BuildContext context, DateTime? date) {
-    if (date == null)
+    if (date == null) {
       return AppLocalizations.of(context).requestDetailsNotAvailable;
+    }
     final locale = Localizations.localeOf(context).languageCode;
     return DateFormat('d/M/yyyy', locale).format(date);
   }
@@ -708,7 +709,7 @@ class _LinkedOfferSection extends StatelessWidget {
   Color _resolveOfferStatusColor(String? status) {
     if (status == null) return AppColors.textSecondary;
     final lower = status.toLowerCase();
-    if (lower.contains('accept')) return AppColors.statusOfferSent;
+    if (lower.contains('accept')) return AppColors.statusAccepted;
     if (lower.contains('reject') || lower.contains('declin')) {
       return AppColors.statusDeclined;
     }

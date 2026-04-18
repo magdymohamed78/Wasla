@@ -963,6 +963,113 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offersRetry => 'Retry';
 
   @override
+  String get newRequestPageTitle => 'New Service Request';
+
+  @override
+  String get newRequestStepServiceType => 'Service Type';
+
+  @override
+  String get newRequestStepLocations => 'Locations';
+
+  @override
+  String get newRequestStepSchedule => 'Schedule & Details';
+
+  @override
+  String newRequestStepProgress(int step, int total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get newRequestChooseCategory => 'Choose a category';
+
+  @override
+  String get newRequestHelperText =>
+      'Pick one or more services. A separate request is created for each.';
+
+  @override
+  String get newRequestServiceTypesPlaceholder => 'Choose service types';
+
+  @override
+  String get newRequestServiceTypesHelper =>
+      'Select one or more services to request from this company.';
+
+  @override
+  String get newRequestServiceTypesDone => 'Done';
+
+  @override
+  String get newRequestNoServicesAvailable => 'No services available';
+
+  @override
+  String get newRequestValidationRequired => 'This field is required';
+
+  @override
+  String get newRequestValidationServiceType =>
+      'Please select at least one service';
+
+  @override
+  String get newRequestFromTitle => 'From (Pickup)';
+
+  @override
+  String get newRequestToTitle => 'To (Drop-off)';
+
+  @override
+  String get newRequestStreetLabel => 'Street';
+
+  @override
+  String get newRequestCityLabel => 'City';
+
+  @override
+  String get newRequestZipCodeLabel => 'Zip Code';
+
+  @override
+  String get newRequestCountryLabel => 'Country';
+
+  @override
+  String get newRequestPreferredDate => 'Preferred Date';
+
+  @override
+  String get newRequestTimeSlot => 'Preferred Time Slot';
+
+  @override
+  String get newRequestMorning => 'Morning (8:00 - 12:00)';
+
+  @override
+  String get newRequestAfternoon => 'Afternoon (12:00 - 17:00)';
+
+  @override
+  String get newRequestEvening => 'Evening (17:00 - 20:00)';
+
+  @override
+  String get newRequestNotes => 'Notes';
+
+  @override
+  String get newRequestNotesHint => 'Add any additional details...';
+
+  @override
+  String get newRequestInfoBox =>
+      'Your request will be sent to the company for review. You\'ll receive an offer if approved.';
+
+  @override
+  String get newRequestButtonNext => 'Next';
+
+  @override
+  String get newRequestButtonBack => 'Back';
+
+  @override
+  String get newRequestButtonSubmit => 'Submit Request';
+
+  @override
+  String get newRequestSuccessMessage =>
+      'Service request(s) submitted successfully!';
+
+  @override
+  String get newRequestSubmitting => 'Submitting...';
+
+  @override
+  String get newRequestServicesLoadFailed =>
+      'Failed to load services. Please try again.';
+
+  @override
   String get homeServices => 'Services';
 
   @override

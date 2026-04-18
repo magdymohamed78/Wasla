@@ -22,8 +22,15 @@ import 'restricted_tab_page.dart';
 
 class DiscoveryShellPage extends StatelessWidget {
   final DiscoveryTab currentTab;
+  final int? requestsEnsureRequestId;
+  final String? requestsRefreshToken;
 
-  const DiscoveryShellPage({super.key, required this.currentTab});
+  const DiscoveryShellPage({
+    super.key,
+    required this.currentTab,
+    this.requestsEnsureRequestId,
+    this.requestsRefreshToken,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +119,10 @@ class DiscoveryShellPage extends StatelessWidget {
       case DiscoveryTab.home:
         return const HomePlaceholderPage();
       case DiscoveryTab.requests:
-        return const CustomerRequestsPage();
+        return CustomerRequestsPage(
+          ensureRequestId: requestsEnsureRequestId,
+          refreshToken: requestsRefreshToken,
+        );
       case DiscoveryTab.offers:
         return const CustomerOffersPage();
       case DiscoveryTab.profile:

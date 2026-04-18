@@ -952,6 +952,112 @@ class AppLocalizationsAr extends AppLocalizations {
   String get offersRetry => 'إعادة المحاولة';
 
   @override
+  String get newRequestPageTitle => 'طلب خدمة جديد';
+
+  @override
+  String get newRequestStepServiceType => 'نوع الخدمة';
+
+  @override
+  String get newRequestStepLocations => 'المواقع';
+
+  @override
+  String get newRequestStepSchedule => 'الموعد والتفاصيل';
+
+  @override
+  String newRequestStepProgress(int step, int total) {
+    return 'الخطوة $step من $total';
+  }
+
+  @override
+  String get newRequestChooseCategory => 'اختر فئة';
+
+  @override
+  String get newRequestHelperText =>
+      'اختر خدمة واحدة أو أكثر. يتم إنشاء طلب منفصل لكل خدمة.';
+
+  @override
+  String get newRequestServiceTypesPlaceholder => 'اختر أنواع الخدمات';
+
+  @override
+  String get newRequestServiceTypesHelper =>
+      'اختر خدمة واحدة أو أكثر لطلبها من هذه الشركة.';
+
+  @override
+  String get newRequestServiceTypesDone => 'تم';
+
+  @override
+  String get newRequestNoServicesAvailable => 'لا توجد خدمات متاحة';
+
+  @override
+  String get newRequestValidationRequired => 'هذا الحقل مطلوب';
+
+  @override
+  String get newRequestValidationServiceType =>
+      'يرجى اختيار خدمة واحدة على الأقل';
+
+  @override
+  String get newRequestFromTitle => 'من (الاستلام)';
+
+  @override
+  String get newRequestToTitle => 'إلى (التسليم)';
+
+  @override
+  String get newRequestStreetLabel => 'الشارع';
+
+  @override
+  String get newRequestCityLabel => 'المدينة';
+
+  @override
+  String get newRequestZipCodeLabel => 'الرمز البريدي';
+
+  @override
+  String get newRequestCountryLabel => 'الدولة';
+
+  @override
+  String get newRequestPreferredDate => 'التاريخ المفضل';
+
+  @override
+  String get newRequestTimeSlot => 'الفترة الزمنية المفضلة';
+
+  @override
+  String get newRequestMorning => 'صباحاً (8:00 - 12:00)';
+
+  @override
+  String get newRequestAfternoon => 'ظهراً (12:00 - 17:00)';
+
+  @override
+  String get newRequestEvening => 'مساءً (17:00 - 20:00)';
+
+  @override
+  String get newRequestNotes => 'ملاحظات';
+
+  @override
+  String get newRequestNotesHint => 'أضف أي تفاصيل إضافية...';
+
+  @override
+  String get newRequestInfoBox =>
+      'سيتم إرسال طلبك إلى الشركة للمراجعة. ستتلقى عرض سعر في حال الموافقة.';
+
+  @override
+  String get newRequestButtonNext => 'التالي';
+
+  @override
+  String get newRequestButtonBack => 'رجوع';
+
+  @override
+  String get newRequestButtonSubmit => 'إرسال الطلب';
+
+  @override
+  String get newRequestSuccessMessage => 'تم إرسال الطلب/الطلبات بنجاح!';
+
+  @override
+  String get newRequestSubmitting => 'جارٍ الإرسال...';
+
+  @override
+  String get newRequestServicesLoadFailed =>
+      'فشل تحميل الخدمات. يرجى المحاولة مرة أخرى.';
+
+  @override
   String get homeServices => 'الخدمات';
 
   @override

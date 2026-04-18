@@ -98,6 +98,27 @@ class AppRouter {
   static String requestDetailsLocation(int serviceRequestId) =>
       '/my/service-requests/$serviceRequestId';
 
+  static String customerRequestsLocation({
+    int? ensureRequestId,
+    String? refreshToken,
+  }) {
+    final query = <String, String>{};
+
+    if (ensureRequestId != null && ensureRequestId > 0) {
+      query['ensureRequestId'] = ensureRequestId.toString();
+    }
+
+    if (refreshToken != null && refreshToken.isNotEmpty) {
+      query['refresh'] = refreshToken;
+    }
+
+    if (query.isEmpty) {
+      return customerRequests;
+    }
+
+    return Uri(path: customerRequests, queryParameters: query).toString();
+  }
+
   static String requestsFullListLocation({String? filter}) {
     if (filter != null && filter.isNotEmpty) {
       return '$requestsFullList?filter=${Uri.encodeComponent(filter)}';
@@ -109,8 +130,7 @@ class AppRouter {
     return '$newServiceRequest?companyId=$companyId';
   }
 
-  static String offerDetailsLocation(int offerId) =>
-      '/my/offers/$offerId';
+  static String offerDetailsLocation(int offerId) => '/my/offers/$offerId';
 
   static GoRouter router(AuthRepository authRepository) {
     return GoRouter(
@@ -192,8 +212,18 @@ class AppRouter {
         ),
         GoRoute(
           path: customerRequests,
-          builder: (context, state) =>
-              const DiscoveryShellPage(currentTab: DiscoveryTab.requests),
+          builder: (context, state) {
+            final ensureRequestIdRaw =
+                state.uri.queryParameters['ensureRequestId'];
+            final ensureRequestId = int.tryParse(ensureRequestIdRaw ?? '');
+            final refreshToken = state.uri.queryParameters['refresh'];
+
+            return DiscoveryShellPage(
+              currentTab: DiscoveryTab.requests,
+              requestsEnsureRequestId: ensureRequestId,
+              requestsRefreshToken: refreshToken,
+            );
+          },
         ),
         GoRoute(
           path: offers,

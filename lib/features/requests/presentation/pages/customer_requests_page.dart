@@ -18,7 +18,14 @@ import '../widgets/request_card_skeleton.dart';
 import '../widgets/request_filter_tabs.dart';
 
 class CustomerRequestsPage extends StatelessWidget {
-  const CustomerRequestsPage({super.key});
+  final int? ensureRequestId;
+  final String? refreshToken;
+
+  const CustomerRequestsPage({
+    super.key,
+    this.ensureRequestId,
+    this.refreshToken,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +33,63 @@ class CustomerRequestsPage extends StatelessWidget {
       create: (context) => CustomerRequestsCubit(
         getCustomerServiceRequestsUseCase: context
             .read<GetCustomerServiceRequestsUseCase>(),
-      )..load(),
-      child: const _CustomerRequestsView(),
+        getCustomerServiceRequestDetailsUseCase: context
+            .read<GetCustomerServiceRequestDetailsUseCase>(),
+      ),
+      child: _CustomerRequestsView(
+        ensureRequestId: ensureRequestId,
+        refreshToken: refreshToken,
+      ),
     );
   }
 }
 
-class _CustomerRequestsView extends StatelessWidget {
-  const _CustomerRequestsView();
+class _CustomerRequestsView extends StatefulWidget {
+  final int? ensureRequestId;
+  final String? refreshToken;
+
+  const _CustomerRequestsView({
+    required this.ensureRequestId,
+    required this.refreshToken,
+  });
+
+  @override
+  State<_CustomerRequestsView> createState() => _CustomerRequestsViewState();
+}
+
+class _CustomerRequestsViewState extends State<_CustomerRequestsView> {
+  @override
+  void initState() {
+    super.initState();
+    _loadOnOpen();
+  }
+
+  @override
+  void didUpdateWidget(covariant _CustomerRequestsView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.refreshToken != widget.refreshToken ||
+        oldWidget.ensureRequestId != widget.ensureRequestId) {
+      debugPrint(
+        '[CustomerRequestsPage] route refresh trigger '
+        'oldRefresh=${oldWidget.refreshToken} '
+        'newRefresh=${widget.refreshToken} '
+        'oldEnsure=${oldWidget.ensureRequestId} '
+        'newEnsure=${widget.ensureRequestId}',
+      );
+      _loadOnOpen();
+    }
+  }
+
+  void _loadOnOpen() {
+    debugPrint(
+      '[CustomerRequestsPage] loading requests on open '
+      'ensureRequestId=${widget.ensureRequestId} '
+      'refreshToken=${widget.refreshToken}',
+    );
+    context.read<CustomerRequestsCubit>().onPageOpened(
+      ensureRequestId: widget.ensureRequestId,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +197,7 @@ class _RequestListState extends State<_RequestList> {
     final localizations = AppLocalizations.of(context);
     return RefreshIndicator(
       color: AppColors.brandRed,
-      onRefresh: context.read<CustomerRequestsCubit>().load,
+      onRefresh: () => context.read<CustomerRequestsCubit>().refresh(),
       child: ListView.builder(
         controller: _scrollController,
         padding: const EdgeInsets.symmetric(
