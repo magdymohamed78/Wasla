@@ -1,5 +1,6 @@
 export 'connected_company_dto.dart';
 export 'customer_offer_summary_dto.dart';
+export 'customer_review_dto.dart';
 export 'customer_profile_dto.dart';
 export 'customer_service_request_summary_dto.dart';
 export 'json_helpers.dart';

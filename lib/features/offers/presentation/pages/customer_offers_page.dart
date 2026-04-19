@@ -9,20 +9,26 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../home/domain/repositories/customer_offers_repository.dart';
+import '../../domain/entities/offer_filter.dart';
 import '../cubit/customer_offers_cubit.dart';
 import '../widgets/offer_card.dart';
 import '../widgets/offer_card_skeleton.dart';
 import '../widgets/offer_filter_tabs.dart';
 
 class CustomerOffersPage extends StatelessWidget {
-  const CustomerOffersPage({super.key});
+  final OfferFilter initialFilter;
+
+  const CustomerOffersPage({
+    super.key,
+    this.initialFilter = OfferFilter.all,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CustomerOffersCubit>(
       create: (context) => CustomerOffersCubit(
         repository: context.read<CustomerOffersRepository>(),
-      )..load(),
+      )..load(initialFilter: initialFilter),
       child: const _CustomerOffersView(),
     );
   }
@@ -125,7 +131,7 @@ class _OfferListState extends State<_OfferList> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       color: AppColors.brandRed,
-      onRefresh: context.read<CustomerOffersCubit>().load,
+      onRefresh: () => context.read<CustomerOffersCubit>().load(),
       child: ListView.builder(
         controller: _scrollController,
         padding: const EdgeInsets.symmetric(

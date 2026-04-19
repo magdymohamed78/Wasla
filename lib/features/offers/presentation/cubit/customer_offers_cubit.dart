@@ -64,10 +64,13 @@ class CustomerOffersCubit extends Cubit<CustomerOffersState> {
   }) : _repository = repository,
        super(const CustomerOffersState());
 
-  Future<void> load() async {
+  Future<void> load({OfferFilter? initialFilter}) async {
+    final requestedFilter = initialFilter ?? state.activeFilter;
+
     emit(
       state.copyWith(
         status: CustomerOffersViewStatus.loading,
+        activeFilter: requestedFilter,
         errorCode: null,
         items: const [],
         nextPageIndex: 1,
@@ -79,11 +82,11 @@ class CustomerOffersCubit extends Cubit<CustomerOffersState> {
       final allResult = await _fetchPaged(filter: null, pageIndex: 1);
       final globalCounts = allResult.statusCounts;
 
-      if (state.activeFilter == OfferFilter.all) {
+      if (requestedFilter == OfferFilter.all) {
         _emitSuccess(allResult.items, allResult.hasReachedEnd, globalCounts);
       } else {
         final filteredResult = await _fetchPaged(
-          filter: state.activeFilter,
+          filter: requestedFilter,
           pageIndex: 1,
         );
         _emitSuccess(
@@ -180,7 +183,7 @@ class CustomerOffersCubit extends Cubit<CustomerOffersState> {
   }
 
   Future<void> retry() async {
-    await load();
+    await load(initialFilter: state.activeFilter);
   }
 
   void _emitSuccess(

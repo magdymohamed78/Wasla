@@ -22,6 +22,8 @@ import '../../features/notifications/presentation/pages/notifications_page.dart'
 import '../../features/companies/presentation/pages/recommended_companies_page.dart';
 import '../../features/companies/presentation/pages/trending_companies_page.dart';
 import '../../features/offers/presentation/pages/offer_details_page.dart';
+import '../../features/reviews/presentation/pages/my_reviews_page.dart';
+import '../../features/offers/domain/entities/offer_filter.dart';
 import '../../features/home/presentation/cubit/lead_access_state.dart';
 import '../../features/home/domain/use_cases/customer_portal_use_cases.dart';
 import '../../features/profile/presentation/cubit/profile_edit_cubit.dart';
@@ -52,6 +54,7 @@ class AppRouter {
   static const String profile = '/profile';
   static const String customerRequests = '/my/service-requests';
   static const String customerOffers = '/my/offers';
+  static const String customerMyReviews = '/my/reviews';
   static const String customerProfile = '/my/profile';
   static const String customerProfileEdit = '/my/profile/edit';
   static const String leadProfile = '/my/lead-profile';
@@ -67,6 +70,7 @@ class AppRouter {
   static const String requestDetails = '/my/service-requests/:requestId';
   static const String requestsFullList = '/my/service-requests/list';
   static const String offerDetailsPath = '/my/offers/:offerId';
+  static const String offersFilterQueryKey = 'filter';
 
   static const List<String> _protectedRoutePrefixes = <String>[requestActions];
 
@@ -83,6 +87,7 @@ class AppRouter {
     profile,
     customerRequests,
     customerOffers,
+    customerMyReviews,
     customerProfile,
     leadProfile,
     leadSettings,
@@ -126,6 +131,25 @@ class AppRouter {
     return requestsFullList;
   }
 
+  static String customerOffersLocation({String? filter}) {
+    if (filter != null && filter.trim().isNotEmpty) {
+      return Uri(
+        path: customerOffers,
+        queryParameters: <String, String>{offersFilterQueryKey: filter.trim()},
+      ).toString();
+    }
+    return customerOffers;
+  }
+
+  static String customerOffersFilteredLocation(OfferFilter filter) {
+    if (filter == OfferFilter.all) {
+      return customerOffersLocation();
+    }
+    return customerOffersLocation(filter: filter.name);
+  }
+
+  static String customerMyReviewsLocation() => customerMyReviews;
+
   static String newServiceRequestLocation({required int companyId}) {
     return '$newServiceRequest?companyId=$companyId';
   }
@@ -138,6 +162,20 @@ class AppRouter {
       initialLocation: splash,
       redirect: (context, state) async {
         final location = state.matchedLocation;
+
+        if (_isMyReviewsLocation(location)) {
+          final session = await authRepository.getStoredSession();
+          if (session == null) {
+            return login;
+          }
+
+          if (session.customerId == null) {
+            return home;
+          }
+
+          return null;
+        }
+
         if (_isBrowseLocation(location)) {
           return null;
         }
@@ -227,13 +265,29 @@ class AppRouter {
         ),
         GoRoute(
           path: offers,
-          builder: (context, state) =>
-              const DiscoveryShellPage(currentTab: DiscoveryTab.offers),
+          builder: (context, state) {
+            final rawFilter = state.uri.queryParameters[offersFilterQueryKey];
+            final initialFilter = OfferFilter.fromQueryValue(rawFilter);
+            return DiscoveryShellPage(
+              currentTab: DiscoveryTab.offers,
+              offersInitialFilter: initialFilter,
+            );
+          },
         ),
         GoRoute(
           path: customerOffers,
-          builder: (context, state) =>
-              const DiscoveryShellPage(currentTab: DiscoveryTab.offers),
+          builder: (context, state) {
+            final rawFilter = state.uri.queryParameters[offersFilterQueryKey];
+            final initialFilter = OfferFilter.fromQueryValue(rawFilter);
+            return DiscoveryShellPage(
+              currentTab: DiscoveryTab.offers,
+              offersInitialFilter: initialFilter,
+            );
+          },
+        ),
+        GoRoute(
+          path: customerMyReviews,
+          builder: (context, state) => const MyReviewsPage(),
         ),
         GoRoute(
           path: profile,
@@ -414,5 +468,10 @@ class AppRouter {
     return _browseRoutePrefixes.any(
       (prefix) => location == prefix || location.startsWith('$prefix/'),
     );
+  }
+
+  static bool _isMyReviewsLocation(String location) {
+    return location == customerMyReviews ||
+        location.startsWith('$customerMyReviews/');
   }
 }

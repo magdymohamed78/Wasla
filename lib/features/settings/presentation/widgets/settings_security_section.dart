@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -61,9 +63,11 @@ class SettingsSecuritySection extends StatelessWidget {
               title: localizations.settingsLogoutCurrent,
               onTap: state.isLoggingOutCurrent
                   ? null
-                  : () async {
-                      await context.read<LogoutCubit>().logoutCurrent();
-                      if (context.mounted) context.go(AppRouter.login);
+                  : () {
+                      unawaited(context.read<LogoutCubit>().logoutCurrent());
+                      if (context.mounted) {
+                        context.go(AppRouter.login);
+                      }
                     },
               isLoading: state.isLoggingOutCurrent,
             );
@@ -89,9 +93,8 @@ class SettingsSecuritySection extends StatelessWidget {
   void _confirmLogoutAll(BuildContext context) async {
     final confirmed = await LogoutConfirmationDialog.show(context);
     if (confirmed == true && context.mounted) {
-      context.read<LogoutCubit>().logoutAll().then((_) {
-        if (context.mounted) context.go(AppRouter.login);
-      });
+      unawaited(context.read<LogoutCubit>().logoutAll());
+      context.go(AppRouter.login);
     }
   }
 }

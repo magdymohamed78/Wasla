@@ -1074,4 +1074,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreLabell => 'More';
+
+  @override
+  String get homeDashboardTotalOffers => 'Total Offers';
+
+  @override
+  String get homeDashboardAcceptedOffers => 'Accepted Offers';
+
+  @override
+  String get homeDashboardPendingOffers => 'Pending Offers';
+
+  @override
+  String get homeDashboardMyReviews => 'My Reviews';
+
+  @override
+  String get homeDashboardLoadFailed => 'Unable to load dashboard metrics.';
+
+  @override
+  String get myReviewsPageTitle => 'My Reviews';
+
+  @override
+  String get myReviewsEmptyTitle => 'No reviews yet';
+
+  @override
+  String get myReviewsEmptyMessage => 'Your posted reviews will appear here.';
+
+  @override
+  String get myReviewsEditAction => 'Edit';
+
+  @override
+  String get myReviewsDeleteAction => 'Delete';
+
+  @override
+  String get myReviewsEditTitle => 'Edit Review';
+
+  @override
+  String get myReviewsRatingLabel => 'Rating';
+
+  @override
+  String get myReviewsCommentLabel => 'Comment';
+
+  @override
+  String get myReviewsCommentHint => 'Share your experience (optional)';
+
+  @override
+  String get myReviewsSubmit => 'Save';
+
+  @override
+  String get myReviewsCancel => 'Cancel';
+
+  @override
+  String get myReviewsDeleteConfirmTitle => 'Delete this review?';
+
+  @override
+  String get myReviewsDeleteConfirmMessage => 'This action cannot be undone.';
+
+  @override
+  String get myReviewsDeleteConfirmYes => 'Yes, Delete';
+
+  @override
+  String get myReviewsDeleteConfirmNo => 'No';
+
+  @override
+  String get myReviewsUpdatedSuccess => 'Review updated successfully.';
+
+  @override
+  String get myReviewsDeletedSuccess => 'Review deleted successfully.';
+
+  @override
+  String get myReviewsValidationRatingRequired => 'Please select a rating.';
+
+  @override
+  String get myReviewsLoadFailed =>
+      'Unable to load your reviews. Please try again.';
 }

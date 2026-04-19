@@ -34,6 +34,7 @@ import 'features/home/data/repositories/discovery_repository_impl.dart';
 import 'features/home/data/repositories/service_request_repository_impl.dart';
 import 'features/home/domain/repositories/customer_offers_repository.dart';
 import 'features/home/domain/repositories/customer_portal_repository.dart';
+import 'features/home/domain/repositories/customer_reviews_repository.dart';
 import 'features/home/domain/repositories/customer_requests_repository.dart';
 import 'features/home/domain/repositories/digital_signature_repository.dart';
 import 'features/home/domain/repositories/discovery_repository.dart';
@@ -306,6 +307,10 @@ class _AppState extends State<App> {
           value: _customerPortalRepository,
         ),
         RepositoryProvider<CustomerOffersRepository>.value(
+          value: _customerPortalRepository,
+        ),
+        // Shared by dashboard metrics and My Reviews management features.
+        RepositoryProvider<CustomerReviewsRepository>.value(
           value: _customerPortalRepository,
         ),
         RepositoryProvider<DigitalSignatureRepository>.value(

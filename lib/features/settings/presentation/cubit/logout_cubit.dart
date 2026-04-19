@@ -20,6 +20,10 @@ class LogoutCubit extends Cubit<LogoutState> {
        super(const LogoutState());
 
   Future<void> logoutCurrent() async {
+    if (isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isLoggingOutCurrent: true, errorMessage: null));
 
     try {
@@ -27,10 +31,19 @@ class LogoutCubit extends Cubit<LogoutState> {
     } catch (_) {}
 
     await _sessionCubit.logout();
+
+    if (isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isLoggingOutCurrent: false));
   }
 
   Future<void> logoutAll() async {
+    if (isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isLoggingOutAll: true, errorMessage: null));
 
     try {
@@ -38,6 +51,11 @@ class LogoutCubit extends Cubit<LogoutState> {
     } catch (_) {}
 
     await _sessionCubit.logout();
+
+    if (isClosed) {
+      return;
+    }
+
     emit(state.copyWith(isLoggingOutAll: false));
   }
 }

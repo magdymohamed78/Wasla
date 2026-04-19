@@ -1,4 +1,5 @@
 import 'customer_offers_repository.dart';
+import 'customer_reviews_repository.dart';
 import 'customer_requests_repository.dart';
 import 'digital_signature_repository.dart';
 import 'logout_repository.dart';
@@ -9,5 +10,6 @@ abstract class CustomerPortalRepository
         ProfileRepository,
         CustomerRequestsRepository,
         CustomerOffersRepository,
+        CustomerReviewsRepository,
         DigitalSignatureRepository,
         LogoutRepository {}

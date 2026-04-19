@@ -2,12 +2,14 @@ import 'package:dio/dio.dart';
 
 import '../models/customer_portal_models.dart';
 import 'customer_offers_remote_data_source.dart';
+import 'customer_reviews_remote_data_source.dart';
 import 'customer_requests_remote_data_source.dart';
 import 'digital_signature_remote_data_source.dart';
 import 'logout_remote_data_source.dart';
 import 'profile_remote_data_source.dart';
 
 export 'customer_offers_remote_data_source.dart';
+export 'customer_reviews_remote_data_source.dart';
 export 'customer_requests_remote_data_source.dart';
 export 'digital_signature_remote_data_source.dart';
 export 'logout_remote_data_source.dart';
@@ -42,6 +44,19 @@ abstract class CustomerPortalRemoteDataSource {
     String? status,
   });
 
+  Future<Map<String, dynamic>> getMyReviewsPaged({
+    int pageIndex,
+    int pageSize,
+  });
+
+  Future<Map<String, dynamic>> updateMyReview({
+    required int companyId,
+    required int rating,
+    String? reviewText,
+  });
+
+  Future<void> deleteMyReview({required int companyId});
+
   Future<CustomerProfileDto> getMyProfile();
 
   Future<LeadProfileDto> getMyLeadProfile();
@@ -66,6 +81,7 @@ class CustomerPortalRemoteDataSourceImpl
   final ProfileRemoteDataSource _profile;
   final CustomerRequestsRemoteDataSource _requests;
   final CustomerOffersRemoteDataSource _offers;
+  final CustomerReviewsRemoteDataSource _reviews;
   final DigitalSignatureRemoteDataSource _signature;
   final LogoutRemoteDataSource _logout;
 
@@ -73,6 +89,7 @@ class CustomerPortalRemoteDataSourceImpl
     : _profile = ProfileRemoteDataSource(dio),
       _requests = CustomerRequestsRemoteDataSource(dio),
       _offers = CustomerOffersRemoteDataSource(dio),
+      _reviews = CustomerReviewsRemoteDataSource(dio),
       _signature = DigitalSignatureRemoteDataSource(dio),
       _logout = LogoutRemoteDataSource(dio);
 
@@ -124,6 +141,30 @@ class CustomerPortalRemoteDataSourceImpl
     pageSize: pageSize,
     status: status,
   );
+
+  @override
+  Future<Map<String, dynamic>> getMyReviewsPaged({
+    int pageIndex = 1,
+    int pageSize = 10,
+  }) => _reviews.getMyReviewsPaged(
+    pageIndex: pageIndex,
+    pageSize: pageSize,
+  );
+
+  @override
+  Future<Map<String, dynamic>> updateMyReview({
+    required int companyId,
+    required int rating,
+    String? reviewText,
+  }) => _reviews.updateMyReview(
+    companyId: companyId,
+    rating: rating,
+    reviewText: reviewText,
+  );
+
+  @override
+  Future<void> deleteMyReview({required int companyId}) =>
+      _reviews.deleteMyReview(companyId: companyId);
 
   @override
   Future<CustomerProfileDto> getMyProfile() => _profile.getMyProfile();

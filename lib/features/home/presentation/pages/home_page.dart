@@ -7,12 +7,16 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../domain/entities/discovery_types.dart';
+import '../../domain/repositories/customer_offers_repository.dart';
+import '../../domain/repositories/customer_reviews_repository.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
+import '../cubit/dashboard_cubit.dart';
 import '../cubit/home_discovery_cubit.dart';
 import '../cubit/home_discovery_state.dart';
 import '../../../companies/presentation/widgets/company_section_carousel.dart';
 import '../widgets/home_header_section.dart';
 import '../widgets/home_section_skeleton.dart';
+import '../widgets/dashboard/customer_dashboard_section.dart';
 import '../../../explore/presentation/widgets/view_all_search_entry.dart';
 
 class HomePlaceholderPage extends StatelessWidget {
@@ -20,14 +24,24 @@ class HomePlaceholderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeDiscoveryCubit>(
-      create: (context) => HomeDiscoveryCubit(
-        getRecommendedCompaniesUseCase: context
-            .read<GetRecommendedCompaniesUseCase>(),
-        getTrendingCompaniesUseCase: context
-            .read<GetTrendingCompaniesUseCase>(),
-        getAllCompaniesUseCase: context.read<GetAllCompaniesUseCase>(),
-      )..loadInitial(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<HomeDiscoveryCubit>(
+          create: (context) => HomeDiscoveryCubit(
+            getRecommendedCompaniesUseCase: context
+                .read<GetRecommendedCompaniesUseCase>(),
+            getTrendingCompaniesUseCase: context
+                .read<GetTrendingCompaniesUseCase>(),
+            getAllCompaniesUseCase: context.read<GetAllCompaniesUseCase>(),
+          )..loadInitial(),
+        ),
+        BlocProvider<DashboardCubit>(
+          create: (context) => DashboardCubit(
+            customerOffersRepository: context.read<CustomerOffersRepository>(),
+            customerReviewsRepository: context.read<CustomerReviewsRepository>(),
+          )..load(),
+        ),
+      ],
       child: const _HomeDiscoveryView(),
     );
   }
@@ -35,6 +49,13 @@ class HomePlaceholderPage extends StatelessWidget {
 
 class _HomeDiscoveryView extends StatelessWidget {
   const _HomeDiscoveryView();
+
+  Future<void> _reloadHomeData(BuildContext context) {
+    return Future.wait<void>([
+      context.read<HomeDiscoveryCubit>().loadInitial(),
+      context.read<DashboardCubit>().load(),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +66,7 @@ class _HomeDiscoveryView extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: cubit.loadInitial,
+          onRefresh: () => _reloadHomeData(context),
           child: BlocBuilder<HomeDiscoveryCubit, HomeDiscoveryState>(
             builder: (context, state) {
               return ListView(
@@ -59,6 +80,7 @@ class _HomeDiscoveryView extends StatelessWidget {
                     onTap: () => context.push(AppRouter.explore),
                   ),
                   const SizedBox(height: AppDimensions.spacingLg),
+                  const CustomerDashboardSection(),
                   _buildSection(
                     localizations: localizations,
                     title: localizations.homeRecommendedCompanies,

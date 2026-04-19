@@ -166,6 +166,78 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   }
 
   @override
+  Future<CustomerReviewsPageResult> getMyReviews({
+    required int pageIndex,
+    required int pageSize,
+  }) async {
+    final rawJson = await _remote.getMyReviewsPaged(
+      pageIndex: pageIndex,
+      pageSize: pageSize,
+    );
+
+    final rawItems = rawJson['items'];
+    final items = rawItems is List
+        ? rawItems
+              .whereType<Map<String, dynamic>>()
+              .map(CustomerReviewDto.fromJson)
+              .map((dto) => dto.toDomain())
+              .toList(growable: false)
+        : const <CustomerReviewItem>[];
+
+    final normalizedPageIndex = asInt(rawJson['pageIndex'], fallback: pageIndex);
+    final normalizedPageSize = asInt(rawJson['pageSize'], fallback: pageSize);
+    final normalizedTotalCount = asInt(
+      rawJson['totalCount'],
+      fallback: items.length,
+    );
+
+    var normalizedTotalPages = asInt(rawJson['totalPages']);
+    if (normalizedTotalPages <= 0) {
+      final safePageSize = normalizedPageSize <= 0 ? pageSize : normalizedPageSize;
+      normalizedTotalPages = safePageSize > 0
+          ? (normalizedTotalCount / safePageSize).ceil()
+          : 1;
+    }
+
+    return CustomerReviewsPageResult(
+      items: items,
+      pageIndex: normalizedPageIndex,
+      pageSize: normalizedPageSize,
+      totalCount: normalizedTotalCount,
+      totalPages: normalizedTotalPages,
+    );
+  }
+
+  @override
+  Future<int> getMyReviewsCount() async {
+    final result = await getMyReviews(pageIndex: 1, pageSize: 1);
+    return result.totalCount;
+  }
+
+  @override
+  Future<CustomerReviewItem> updateReview({
+    required int companyId,
+    required int rating,
+    String? reviewText,
+  }) async {
+    final rawJson = await _remote.updateMyReview(
+      companyId: companyId,
+      rating: rating,
+      reviewText: reviewText,
+    );
+
+    final dto = CustomerReviewDto.fromJson(rawJson);
+    return dto.toDomain();
+  }
+
+  @override
+  Future<void> deleteReview({
+    required int companyId,
+  }) {
+    return _remote.deleteMyReview(companyId: companyId);
+  }
+
+  @override
   Future<CustomerPortalProfile> getCustomerProfile() async {
     final profile = await _remote.getMyProfile();
     return profile.toDomain();

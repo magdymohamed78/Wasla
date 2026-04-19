@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
@@ -10,7 +11,7 @@ import '../../domain/use_cases/role_guard_use_cases.dart';
 import '../cubit/lead_access_cubit.dart';
 import '../cubit/lead_access_state.dart';
 import '../widgets/discovery_floating_modal.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import '../../../offers/domain/entities/offer_filter.dart';
 import '../../../offers/presentation/pages/customer_offers_page.dart';
 import '../../../profile/presentation/pages/customer_profile_page.dart';
 import '../../../requests/presentation/pages/customer_requests_page.dart';
@@ -24,12 +25,14 @@ class DiscoveryShellPage extends StatelessWidget {
   final DiscoveryTab currentTab;
   final int? requestsEnsureRequestId;
   final String? requestsRefreshToken;
+  final OfferFilter offersInitialFilter;
 
   const DiscoveryShellPage({
     super.key,
     required this.currentTab,
     this.requestsEnsureRequestId,
     this.requestsRefreshToken,
+    this.offersInitialFilter = OfferFilter.all,
   });
 
   @override
@@ -124,7 +127,7 @@ class DiscoveryShellPage extends StatelessWidget {
           refreshToken: requestsRefreshToken,
         );
       case DiscoveryTab.offers:
-        return const CustomerOffersPage();
+        return CustomerOffersPage(initialFilter: offersInitialFilter);
       case DiscoveryTab.profile:
         if (state.isLead) {
           return const LeadProfilePage();

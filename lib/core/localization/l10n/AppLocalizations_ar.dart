@@ -1062,4 +1062,77 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get moreLabell => 'المزيد';
+
+  @override
+  String get homeDashboardTotalOffers => 'إجمالي العروض';
+
+  @override
+  String get homeDashboardAcceptedOffers => 'العروض المقبولة';
+
+  @override
+  String get homeDashboardPendingOffers => 'العروض المعلقة';
+
+  @override
+  String get homeDashboardMyReviews => 'مراجعاتي';
+
+  @override
+  String get homeDashboardLoadFailed => 'تعذر تحميل مؤشرات لوحة التحكم.';
+
+  @override
+  String get myReviewsPageTitle => 'مراجعاتي';
+
+  @override
+  String get myReviewsEmptyTitle => 'لا توجد مراجعات بعد';
+
+  @override
+  String get myReviewsEmptyMessage => 'ستظهر مراجعاتك المنشورة هنا.';
+
+  @override
+  String get myReviewsEditAction => 'تعديل';
+
+  @override
+  String get myReviewsDeleteAction => 'حذف';
+
+  @override
+  String get myReviewsEditTitle => 'تعديل المراجعة';
+
+  @override
+  String get myReviewsRatingLabel => 'التقييم';
+
+  @override
+  String get myReviewsCommentLabel => 'التعليق';
+
+  @override
+  String get myReviewsCommentHint => 'شارك تجربتك (اختياري)';
+
+  @override
+  String get myReviewsSubmit => 'حفظ';
+
+  @override
+  String get myReviewsCancel => 'إلغاء';
+
+  @override
+  String get myReviewsDeleteConfirmTitle => 'حذف هذه المراجعة؟';
+
+  @override
+  String get myReviewsDeleteConfirmMessage => 'لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get myReviewsDeleteConfirmYes => 'نعم، حذف';
+
+  @override
+  String get myReviewsDeleteConfirmNo => 'لا';
+
+  @override
+  String get myReviewsUpdatedSuccess => 'تم تحديث المراجعة بنجاح.';
+
+  @override
+  String get myReviewsDeletedSuccess => 'تم حذف المراجعة بنجاح.';
+
+  @override
+  String get myReviewsValidationRatingRequired => 'يرجى اختيار تقييم.';
+
+  @override
+  String get myReviewsLoadFailed =>
+      'تعذر تحميل مراجعاتك. يرجى المحاولة مرة أخرى.';
 }

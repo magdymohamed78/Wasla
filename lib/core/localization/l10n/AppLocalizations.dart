@@ -2101,6 +2101,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More'**
   String get moreLabell;
+
+  /// No description provided for @homeDashboardTotalOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Offers'**
+  String get homeDashboardTotalOffers;
+
+  /// No description provided for @homeDashboardAcceptedOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted Offers'**
+  String get homeDashboardAcceptedOffers;
+
+  /// No description provided for @homeDashboardPendingOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Offers'**
+  String get homeDashboardPendingOffers;
+
+  /// No description provided for @homeDashboardMyReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'My Reviews'**
+  String get homeDashboardMyReviews;
+
+  /// No description provided for @homeDashboardLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load dashboard metrics.'**
+  String get homeDashboardLoadFailed;
+
+  /// No description provided for @myReviewsPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Reviews'**
+  String get myReviewsPageTitle;
+
+  /// No description provided for @myReviewsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet'**
+  String get myReviewsEmptyTitle;
+
+  /// No description provided for @myReviewsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your posted reviews will appear here.'**
+  String get myReviewsEmptyMessage;
+
+  /// No description provided for @myReviewsEditAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get myReviewsEditAction;
+
+  /// No description provided for @myReviewsDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get myReviewsDeleteAction;
+
+  /// No description provided for @myReviewsEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Review'**
+  String get myReviewsEditTitle;
+
+  /// No description provided for @myReviewsRatingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get myReviewsRatingLabel;
+
+  /// No description provided for @myReviewsCommentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get myReviewsCommentLabel;
+
+  /// No description provided for @myReviewsCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your experience (optional)'**
+  String get myReviewsCommentHint;
+
+  /// No description provided for @myReviewsSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get myReviewsSubmit;
+
+  /// No description provided for @myReviewsCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get myReviewsCancel;
+
+  /// No description provided for @myReviewsDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this review?'**
+  String get myReviewsDeleteConfirmTitle;
+
+  /// No description provided for @myReviewsDeleteConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone.'**
+  String get myReviewsDeleteConfirmMessage;
+
+  /// No description provided for @myReviewsDeleteConfirmYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Delete'**
+  String get myReviewsDeleteConfirmYes;
+
+  /// No description provided for @myReviewsDeleteConfirmNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get myReviewsDeleteConfirmNo;
+
+  /// No description provided for @myReviewsUpdatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Review updated successfully.'**
+  String get myReviewsUpdatedSuccess;
+
+  /// No description provided for @myReviewsDeletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Review deleted successfully.'**
+  String get myReviewsDeletedSuccess;
+
+  /// No description provided for @myReviewsValidationRatingRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a rating.'**
+  String get myReviewsValidationRatingRequired;
+
+  /// No description provided for @myReviewsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load your reviews. Please try again.'**
+  String get myReviewsLoadFailed;
 }
 
 class _AppLocalizationsDelegate
