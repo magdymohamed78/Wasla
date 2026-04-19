@@ -20,6 +20,8 @@ class AppTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? hintText;
+  final bool isRequired;
+  final bool reserveErrorSpace;
 
   const AppTextField({
     super.key,
@@ -37,6 +39,8 @@ class AppTextField extends StatefulWidget {
     this.suffixIcon,
     this.prefixIcon,
     this.hintText,
+    this.isRequired = false,
+    this.reserveErrorSpace = false,
   });
 
   @override
@@ -74,11 +78,23 @@ class _AppTextFieldState extends State<AppTextField> {
         if (widget.label.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(bottom: AppDimensions.spacingXs),
-            child: Text(
-              widget.label,
-              style: AppTypography.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+            child: RichText(
+              text: TextSpan(
+                style: AppTypography.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                ),
+                children: [
+                  TextSpan(text: widget.label),
+                  if (widget.isRequired)
+                    TextSpan(
+                      text: ' *',
+                      style: AppTypography.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.error,
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -123,17 +139,17 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.0,
-              ),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.0),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.5,
-              ),
+              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+            ),
+            helperText: widget.reserveErrorSpace && widget.errorText == null
+                ? ' '
+                : null,
+            helperStyle: AppTypography.bodySmall.copyWith(
+              color: Colors.transparent,
             ),
             errorText: widget.errorText,
             errorStyle: AppTypography.bodySmall.copyWith(

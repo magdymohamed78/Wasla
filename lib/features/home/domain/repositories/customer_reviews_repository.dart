@@ -15,7 +15,11 @@ abstract class CustomerReviewsRepository {
     String? reviewText,
   });
 
-  Future<void> deleteReview({
+  Future<CustomerReviewItem> createReview({
     required int companyId,
+    required int rating,
+    String? reviewText,
   });
+
+  Future<void> deleteReview({required int companyId});
 }

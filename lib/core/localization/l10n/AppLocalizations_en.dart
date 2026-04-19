@@ -588,6 +588,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get companyDetailsViewAllReviews => 'View All Reviews';
 
   @override
+  String companyDetailsReviewsSectionTitle(int count) {
+    return 'Reviews ($count)';
+  }
+
+  @override
   String companyDetailsPlaceholderBody(String companyId) {
     return 'Company details for ID: $companyId';
   }
@@ -597,6 +602,68 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get companyReviewsPageTitle => 'All Reviews';
+
+  @override
+  String get companyReviewsSortLabel => 'Sort reviews';
+
+  @override
+  String get companyReviewsSortNewestFirst => 'Newest first';
+
+  @override
+  String get companyReviewsSortOldestFirst => 'Oldest first';
+
+  @override
+  String get companyReviewsSortHighestRating => 'Highest rating';
+
+  @override
+  String get companyReviewsSortLowestRating => 'Lowest rating';
+
+  @override
+  String get companyReviewsWriteReview => 'Write a Review';
+
+  @override
+  String get companyReviewsWriteHint => 'Write your review...';
+
+  @override
+  String get companyReviewsWriteSubmit => 'Submit';
+
+  @override
+  String get companyReviewsWriteSuccess => 'Review submitted successfully.';
+
+  @override
+  String get companyReviewsWriteErrorBadRequest =>
+      'Review not submitted due to inappropriate language. Please edit and try again.';
+
+  @override
+  String get companyReviewsWriteErrorUnauthorized =>
+      'Please sign in to submit a review.';
+
+  @override
+  String get companyReviewsWriteErrorForbidden =>
+      'Only customers can submit reviews.';
+
+  @override
+  String get companyReviewsWriteErrorNotFound =>
+      'This company could not be found.';
+
+  @override
+  String get companyReviewsWriteErrorConflict =>
+      'You already reviewed this company.';
+
+  @override
+  String get companyReviewsWriteErrorServer =>
+      'Unable to submit review right now. Please try again.';
+
+  @override
+  String get companyReviewsWriteErrorNetwork =>
+      'Please check your internet connection and try again.';
+
+  @override
+  String get companyReviewsEligibilityInfo =>
+      'You can only review companies you are connected with. Submit a service request and wait for acceptance, or manage connections from your profile.';
+
+  @override
+  String get companyReviewsViewProfile => 'View Profile';
 
   @override
   String homeGreetingWithName(String firstName) {
@@ -1003,6 +1070,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newRequestValidationRequired => 'This field is required';
 
   @override
+  String get newRequestValidationStreetRequired => 'Street is required';
+
+  @override
+  String get newRequestValidationCityRequired => 'City is required';
+
+  @override
+  String get newRequestValidationCityInvalid => 'Please enter a valid city';
+
+  @override
+  String get newRequestValidationCountryRequired => 'Country is required';
+
+  @override
   String get newRequestValidationServiceType =>
       'Please select at least one service';
 
@@ -1016,13 +1095,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newRequestStreetLabel => 'Street';
 
   @override
+  String get newRequestStreetPlaceholder => 'Enter street name';
+
+  @override
   String get newRequestCityLabel => 'City';
+
+  @override
+  String get newRequestCityPlaceholder => 'Enter city';
 
   @override
   String get newRequestZipCodeLabel => 'Zip Code';
 
   @override
+  String get newRequestZipCodePlaceholder => 'Enter zip code (optional)';
+
+  @override
   String get newRequestCountryLabel => 'Country';
+
+  @override
+  String get newRequestCountryPlaceholder => 'Enter country';
 
   @override
   String get newRequestPreferredDate => 'Preferred Date';

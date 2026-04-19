@@ -11,13 +11,20 @@ import '../../../../core/session/session_cubit.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../home/domain/entities/discovery_types.dart';
+import '../../../home/domain/repositories/customer_reviews_repository.dart';
+import '../../../home/domain/use_cases/customer_profile_use_cases.dart';
 import '../../../home/domain/use_cases/discovery_use_cases.dart';
 import '../../../home/domain/use_cases/role_guard_use_cases.dart';
 import '../cubit/company_details_cubit.dart';
 import '../cubit/company_details_state.dart';
+import '../cubit/company_review_action_cubit.dart';
+import '../cubit/company_review_action_state.dart';
+import '../widgets/company_review_action_panel.dart';
 import '../widgets/company_details_sections.dart';
+import '../widgets/write_review_modal.dart';
 import '../../../home/presentation/widgets/restricted_request_prompt_card.dart';
 
 class CompanyDetailsPage extends StatelessWidget {
@@ -27,13 +34,26 @@ class CompanyDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CompanyDetailsCubit>(
-      create: (context) => CompanyDetailsCubit(
-        companyId: companyId,
-        getCompanyDetailsUseCase: context.read<GetCompanyDetailsUseCase>(),
-        sessionCubit: context.read<SessionCubit>(),
-        roleGuardUseCases: context.read<RoleGuardUseCases>(),
-      )..loadDetails(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CompanyDetailsCubit>(
+          create: (context) => CompanyDetailsCubit(
+            companyId: companyId,
+            getCompanyDetailsUseCase: context.read<GetCompanyDetailsUseCase>(),
+            sessionCubit: context.read<SessionCubit>(),
+            roleGuardUseCases: context.read<RoleGuardUseCases>(),
+          )..loadDetails(),
+        ),
+        BlocProvider<CompanyReviewActionCubit>(
+          create: (context) => CompanyReviewActionCubit(
+            companyId: companyId,
+            sessionCubit: context.read<SessionCubit>(),
+            getCustomerProfileUseCase: context
+                .read<GetCustomerProfileUseCase>(),
+            reviewsRepository: context.read<CustomerReviewsRepository>(),
+          )..loadEligibility(),
+        ),
+      ],
       child: const _CompanyDetailsView(),
     );
   }
@@ -45,6 +65,7 @@ class _CompanyDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
+    final reviewActionState = context.watch<CompanyReviewActionCubit>().state;
 
     return MultiBlocListener(
       listeners: [
@@ -145,7 +166,10 @@ class _CompanyDetailsView extends StatelessWidget {
                         ),
                         const SizedBox(height: AppDimensions.spacingMd),
                         CompanyReviewsSection(
-                          title: localizations.companyDetailsRecentReviews,
+                          title: localizations
+                              .companyDetailsReviewsSectionTitle(
+                                state.reviewCount,
+                              ),
                           reviews: state.reviews,
                           emptyMessage:
                               localizations.companyDetailsNoReviewsYet,
@@ -154,6 +178,14 @@ class _CompanyDetailsView extends StatelessWidget {
                           noCommentLabel: localizations.companyDetailsNoComment,
                           viewAllLabel:
                               localizations.companyDetailsViewAllReviews,
+                          headerAction: _buildReviewHeaderAction(
+                            context,
+                            reviewActionState,
+                          ),
+                          actionContent: _buildReviewActionContent(
+                            context,
+                            reviewActionState,
+                          ),
                           maxReviews: 3,
                           onViewAll: () => context.push(
                             AppRouter.companyReviewsLocation(state.companyId),
@@ -175,6 +207,143 @@ class _CompanyDetailsView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget? _buildReviewHeaderAction(
+    BuildContext context,
+    CompanyReviewActionState actionState,
+  ) {
+    if (!actionState.canWriteReview) {
+      return null;
+    }
+
+    final localizations = AppLocalizations.of(context);
+
+    return ElevatedButton(
+      onPressed: actionState.isSubmitting
+          ? null
+          : () => _onWriteReviewTapped(context),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.brandRed,
+        foregroundColor: AppColors.surface,
+        elevation: 0,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.paddingSm,
+          vertical: AppDimensions.paddingXs,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+        ),
+      ),
+      child: actionState.isSubmitting
+          ? const SizedBox(
+              width: 14,
+              height: 14,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: AppColors.surface,
+              ),
+            )
+          : Text(
+              localizations.companyReviewsWriteReview,
+              style: AppTypography.bodySmall.copyWith(
+                color: AppColors.surface,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+    );
+  }
+
+  Widget? _buildReviewActionContent(
+    BuildContext context,
+    CompanyReviewActionState actionState,
+  ) {
+    if (!actionState.isCustomerRole) {
+      return null;
+    }
+
+    if (actionState.canWriteReview) {
+      return null;
+    }
+
+    final localizations = AppLocalizations.of(context);
+
+    return CompanyReviewActionPanel(
+      isEligibilityLoading: actionState.isEligibilityLoading,
+      canWriteReview: false,
+      showNotConnectedInfo: actionState.shouldShowNotConnectedInfo,
+      isSubmitting: actionState.isSubmitting,
+      writeReviewLabel: localizations.companyReviewsWriteReview,
+      infoMessage: localizations.companyReviewsEligibilityInfo,
+      viewProfileLabel: localizations.companyReviewsViewProfile,
+      onWriteReview: () {},
+      onViewProfile: () => context.go(AppRouter.customerProfile),
+    );
+  }
+
+  Future<void> _onWriteReviewTapped(BuildContext context) async {
+    final localizations = AppLocalizations.of(context);
+    final payload = await WriteReviewModal.show(context);
+
+    if (payload == null || !context.mounted) {
+      return;
+    }
+
+    final submitResult = await context
+        .read<CompanyReviewActionCubit>()
+        .submitReview(rating: payload.rating, reviewText: payload.reviewText);
+
+    if (!context.mounted) {
+      return;
+    }
+
+    if (submitResult.success) {
+      await context.read<CompanyDetailsCubit>().loadDetails();
+      if (!context.mounted) {
+        return;
+      }
+      ToastUtils.showSuccess(context, localizations.companyReviewsWriteSuccess);
+      return;
+    }
+
+    ToastUtils.showError(
+      context,
+      _reviewSubmitErrorMessage(localizations, submitResult),
+    );
+  }
+
+  String _reviewSubmitErrorMessage(
+    AppLocalizations localizations,
+    CompanyReviewSubmitResult submitResult,
+  ) {
+    if (submitResult.errorCode == CompanyReviewSubmitErrorCode.badRequest) {
+      return localizations.companyReviewsWriteErrorBadRequest;
+    }
+
+    final problemDetail = submitResult.problemDetail?.trim();
+    if (problemDetail != null && problemDetail.isNotEmpty) {
+      return problemDetail;
+    }
+
+    switch (submitResult.errorCode) {
+      case CompanyReviewSubmitErrorCode.badRequest:
+        return localizations.companyReviewsWriteErrorBadRequest;
+      case CompanyReviewSubmitErrorCode.unauthorized:
+        return localizations.companyReviewsWriteErrorUnauthorized;
+      case CompanyReviewSubmitErrorCode.forbidden:
+        return localizations.companyReviewsWriteErrorForbidden;
+      case CompanyReviewSubmitErrorCode.notFound:
+        return localizations.companyReviewsWriteErrorNotFound;
+      case CompanyReviewSubmitErrorCode.conflict:
+        return localizations.companyReviewsWriteErrorConflict;
+      case CompanyReviewSubmitErrorCode.network:
+        return localizations.companyReviewsWriteErrorNetwork;
+      case CompanyReviewSubmitErrorCode.server:
+      case null:
+        return localizations.companyReviewsWriteErrorServer;
+    }
   }
 
   Future<void> _showRestrictionPromptModal(

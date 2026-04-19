@@ -4,8 +4,7 @@ import '../models/json_helpers.dart';
 
 class CustomerReviewsRemoteDataSource {
   static const String _myReviewsEndpoint = '/api/customer-portal/my/reviews';
-  static const String _companyReviewEndpoint =
-      '/api/customer-portal/companies';
+  static const String _companyReviewEndpoint = '/api/customer-portal/companies';
 
   final Dio _dio;
 
@@ -51,9 +50,28 @@ class CustomerReviewsRemoteDataSource {
     throw Exception('Invalid response for update review');
   }
 
-  Future<void> deleteMyReview({
+  Future<Map<String, dynamic>> createMyReview({
     required int companyId,
+    required int rating,
+    String? reviewText,
   }) async {
+    final response = await _dio.post<dynamic>(
+      '$_companyReviewEndpoint/$companyId/reviews',
+      data: <String, dynamic>{
+        'rating': rating,
+        'reviewText': reviewText?.trim(),
+      },
+    );
+
+    final payload = response.data;
+    if (payload is Map<String, dynamic>) {
+      return payload;
+    }
+
+    throw Exception('Invalid response for create review');
+  }
+
+  Future<void> deleteMyReview({required int companyId}) async {
     await _dio.delete<void>('$_companyReviewEndpoint/$companyId/reviews');
   }
 
@@ -66,9 +84,15 @@ class CustomerReviewsRemoteDataSource {
       final itemsDynamic = _extractItemsFromMap(payload);
       final itemList = itemsDynamic.whereType<Map<String, dynamic>>().toList();
 
-      final pageIndex = asInt(payload['pageIndex'], fallback: requestedPageIndex);
+      final pageIndex = asInt(
+        payload['pageIndex'],
+        fallback: requestedPageIndex,
+      );
       final pageSize = asInt(payload['pageSize'], fallback: requestedPageSize);
-      final totalCount = asInt(payload['totalCount'], fallback: itemList.length);
+      final totalCount = asInt(
+        payload['totalCount'],
+        fallback: itemList.length,
+      );
 
       var totalPages = asInt(payload['totalPages']);
       if (totalPages <= 0) {

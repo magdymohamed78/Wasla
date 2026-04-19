@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/types/load_status.dart';
@@ -8,14 +9,14 @@ import 'my_reviews_state.dart';
 
 class MyReviewsCubit extends Cubit<MyReviewsState> {
   static const String loadFailedError = 'my_reviews_load_failed';
+  static const String updateBadRequestError = 'my_reviews_update_bad_request';
   static const int _pageSize = 10;
 
   final CustomerReviewsRepository _reviewsRepository;
 
-  MyReviewsCubit({
-    required CustomerReviewsRepository reviewsRepository,
-  }) : _reviewsRepository = reviewsRepository,
-       super(const MyReviewsState());
+  MyReviewsCubit({required CustomerReviewsRepository reviewsRepository})
+    : _reviewsRepository = reviewsRepository,
+      super(const MyReviewsState());
 
   Future<void> load() async {
     emit(
@@ -124,7 +125,7 @@ class MyReviewsCubit extends Cubit<MyReviewsState> {
       return false;
     }
 
-    emit(state.copyWith(isMutating: true));
+    emit(state.copyWith(isMutating: true, errorCode: null));
 
     try {
       final updated = await _reviewsRepository.updateReview(
@@ -133,12 +134,14 @@ class MyReviewsCubit extends Cubit<MyReviewsState> {
         reviewText: reviewText,
       );
 
-      final updatedItems = state.items.map((item) {
-        if (item.reviewId == reviewId || item.companyId == companyId) {
-          return updated;
-        }
-        return item;
-      }).toList(growable: false);
+      final updatedItems = state.items
+          .map((item) {
+            if (item.reviewId == reviewId || item.companyId == companyId) {
+              return updated;
+            }
+            return item;
+          })
+          .toList(growable: false);
 
       emit(
         state.copyWith(
@@ -151,8 +154,19 @@ class MyReviewsCubit extends Cubit<MyReviewsState> {
 
       DashboardCubit.publishMyReviewsCount(state.totalCount);
       return true;
+    } on DioException catch (error) {
+      final statusCode = error.response?.statusCode;
+      emit(
+        state.copyWith(
+          isMutating: false,
+          errorCode: statusCode == 400
+              ? updateBadRequestError
+              : loadFailedError,
+        ),
+      );
+      return false;
     } catch (_) {
-      emit(state.copyWith(isMutating: false));
+      emit(state.copyWith(isMutating: false, errorCode: loadFailedError));
       return false;
     }
   }
@@ -165,14 +179,15 @@ class MyReviewsCubit extends Cubit<MyReviewsState> {
       return false;
     }
 
-    emit(state.copyWith(isMutating: true));
+    emit(state.copyWith(isMutating: true, errorCode: null));
 
     try {
       await _reviewsRepository.deleteReview(companyId: companyId);
 
       final remainingItems = state.items
-          .where((item) =>
-              item.reviewId != reviewId && item.companyId != companyId)
+          .where(
+            (item) => item.reviewId != reviewId && item.companyId != companyId,
+          )
           .toList(growable: false);
 
       final nextTotalCount = state.totalCount > 0 ? state.totalCount - 1 : 0;
@@ -190,7 +205,7 @@ class MyReviewsCubit extends Cubit<MyReviewsState> {
       DashboardCubit.publishMyReviewsCount(nextTotalCount);
       return true;
     } catch (_) {
-      emit(state.copyWith(isMutating: false));
+      emit(state.copyWith(isMutating: false, errorCode: loadFailedError));
       return false;
     }
   }

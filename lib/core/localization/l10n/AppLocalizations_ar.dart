@@ -579,6 +579,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get companyDetailsViewAllReviews => 'عرض جميع المراجعات';
 
   @override
+  String companyDetailsReviewsSectionTitle(int count) {
+    return 'المراجعات ($count)';
+  }
+
+  @override
   String companyDetailsPlaceholderBody(String companyId) {
     return 'تفاصيل الشركة للمعرف: $companyId';
   }
@@ -588,6 +593,68 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get companyReviewsPageTitle => 'جميع المراجعات';
+
+  @override
+  String get companyReviewsSortLabel => 'ترتيب المراجعات';
+
+  @override
+  String get companyReviewsSortNewestFirst => 'الأحدث أولاً';
+
+  @override
+  String get companyReviewsSortOldestFirst => 'الأقدم أولاً';
+
+  @override
+  String get companyReviewsSortHighestRating => 'الأعلى تقييماً';
+
+  @override
+  String get companyReviewsSortLowestRating => 'الأقل تقييماً';
+
+  @override
+  String get companyReviewsWriteReview => 'اكتب مراجعة';
+
+  @override
+  String get companyReviewsWriteHint => 'اكتب مراجعتك...';
+
+  @override
+  String get companyReviewsWriteSubmit => 'إرسال';
+
+  @override
+  String get companyReviewsWriteSuccess => 'تم إرسال المراجعة بنجاح.';
+
+  @override
+  String get companyReviewsWriteErrorBadRequest =>
+      'تعذر إرسال مراجعتك. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get companyReviewsWriteErrorUnauthorized =>
+      'يرجى تسجيل الدخول لإرسال مراجعة.';
+
+  @override
+  String get companyReviewsWriteErrorForbidden =>
+      'يمكن للعملاء فقط إرسال المراجعات.';
+
+  @override
+  String get companyReviewsWriteErrorNotFound =>
+      'لم يتم العثور على هذه الشركة.';
+
+  @override
+  String get companyReviewsWriteErrorConflict =>
+      'لقد قمت بمراجعة هذه الشركة بالفعل.';
+
+  @override
+  String get companyReviewsWriteErrorServer =>
+      'تعذر إرسال المراجعة حالياً. يرجى المحاولة لاحقاً.';
+
+  @override
+  String get companyReviewsWriteErrorNetwork =>
+      'يرجى التحقق من اتصال الإنترنت ثم المحاولة مرة أخرى.';
+
+  @override
+  String get companyReviewsEligibilityInfo =>
+      'يمكنك تقييم الشركات المرتبط بها فقط. أرسل طلب خدمة وانتظر القبول، أو قم بإدارة الارتباطات من ملفك الشخصي.';
+
+  @override
+  String get companyReviewsViewProfile => 'عرض الملف الشخصي';
 
   @override
   String homeGreetingWithName(String firstName) {
@@ -992,6 +1059,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get newRequestValidationRequired => 'هذا الحقل مطلوب';
 
   @override
+  String get newRequestValidationStreetRequired => 'الشارع مطلوب';
+
+  @override
+  String get newRequestValidationCityRequired => 'المدينة مطلوبة';
+
+  @override
+  String get newRequestValidationCityInvalid => 'يرجى إدخال مدينة صالحة';
+
+  @override
+  String get newRequestValidationCountryRequired => 'الدولة مطلوبة';
+
+  @override
   String get newRequestValidationServiceType =>
       'يرجى اختيار خدمة واحدة على الأقل';
 
@@ -1005,13 +1084,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get newRequestStreetLabel => 'الشارع';
 
   @override
+  String get newRequestStreetPlaceholder => 'أدخل اسم الشارع';
+
+  @override
   String get newRequestCityLabel => 'المدينة';
+
+  @override
+  String get newRequestCityPlaceholder => 'أدخل المدينة';
 
   @override
   String get newRequestZipCodeLabel => 'الرمز البريدي';
 
   @override
+  String get newRequestZipCodePlaceholder => 'أدخل الرمز البريدي (اختياري)';
+
+  @override
   String get newRequestCountryLabel => 'الدولة';
+
+  @override
+  String get newRequestCountryPlaceholder => 'أدخل الدولة';
 
   @override
   String get newRequestPreferredDate => 'التاريخ المفضل';

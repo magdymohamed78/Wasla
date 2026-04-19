@@ -184,7 +184,10 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
               .toList(growable: false)
         : const <CustomerReviewItem>[];
 
-    final normalizedPageIndex = asInt(rawJson['pageIndex'], fallback: pageIndex);
+    final normalizedPageIndex = asInt(
+      rawJson['pageIndex'],
+      fallback: pageIndex,
+    );
     final normalizedPageSize = asInt(rawJson['pageSize'], fallback: pageSize);
     final normalizedTotalCount = asInt(
       rawJson['totalCount'],
@@ -193,7 +196,9 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
 
     var normalizedTotalPages = asInt(rawJson['totalPages']);
     if (normalizedTotalPages <= 0) {
-      final safePageSize = normalizedPageSize <= 0 ? pageSize : normalizedPageSize;
+      final safePageSize = normalizedPageSize <= 0
+          ? pageSize
+          : normalizedPageSize;
       normalizedTotalPages = safePageSize > 0
           ? (normalizedTotalCount / safePageSize).ceil()
           : 1;
@@ -231,9 +236,23 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   }
 
   @override
-  Future<void> deleteReview({
+  Future<CustomerReviewItem> createReview({
     required int companyId,
-  }) {
+    required int rating,
+    String? reviewText,
+  }) async {
+    final rawJson = await _remote.createMyReview(
+      companyId: companyId,
+      rating: rating,
+      reviewText: reviewText,
+    );
+
+    final dto = CustomerReviewDto.fromJson(rawJson);
+    return dto.toDomain();
+  }
+
+  @override
+  Future<void> deleteReview({required int companyId}) {
     return _remote.deleteMyReview(companyId: companyId);
   }
 

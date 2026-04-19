@@ -201,6 +201,14 @@
   "companyDetailsUnnamedService": "خدمة",
   "companyDetailsInvalidCompanyId": "معرف الشركة غير صالح.",
   "companyDetailsViewAllReviews": "عرض جميع المراجعات",
+  "companyDetailsReviewsSectionTitle": "المراجعات ({count})",
+  "@companyDetailsReviewsSectionTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "companyDetailsPlaceholderBody": "تفاصيل الشركة للمعرف: {companyId}",
   "@companyDetailsPlaceholderBody": {
     "placeholders": {
@@ -211,6 +219,24 @@
   },
   "homeGreeting": "مرحباً",
   "companyReviewsPageTitle": "جميع المراجعات",
+  "companyReviewsSortLabel": "ترتيب المراجعات",
+  "companyReviewsSortNewestFirst": "الأحدث أولاً",
+  "companyReviewsSortOldestFirst": "الأقدم أولاً",
+  "companyReviewsSortHighestRating": "الأعلى تقييماً",
+  "companyReviewsSortLowestRating": "الأقل تقييماً",
+  "companyReviewsWriteReview": "اكتب مراجعة",
+  "companyReviewsWriteHint": "اكتب مراجعتك...",
+  "companyReviewsWriteSubmit": "إرسال",
+  "companyReviewsWriteSuccess": "تم إرسال المراجعة بنجاح.",
+  "companyReviewsWriteErrorBadRequest": "تعذر إرسال مراجعتك. يرجى المحاولة مرة أخرى.",
+  "companyReviewsWriteErrorUnauthorized": "يرجى تسجيل الدخول لإرسال مراجعة.",
+  "companyReviewsWriteErrorForbidden": "يمكن للعملاء فقط إرسال المراجعات.",
+  "companyReviewsWriteErrorNotFound": "لم يتم العثور على هذه الشركة.",
+  "companyReviewsWriteErrorConflict": "لقد قمت بمراجعة هذه الشركة بالفعل.",
+  "companyReviewsWriteErrorServer": "تعذر إرسال المراجعة حالياً. يرجى المحاولة لاحقاً.",
+  "companyReviewsWriteErrorNetwork": "يرجى التحقق من اتصال الإنترنت ثم المحاولة مرة أخرى.",
+  "companyReviewsEligibilityInfo": "يمكنك تقييم الشركات المرتبط بها فقط. أرسل طلب خدمة وانتظر القبول، أو قم بإدارة الارتباطات من ملفك الشخصي.",
+  "companyReviewsViewProfile": "عرض الملف الشخصي",
   "homeGreetingWithName": "مرحباً، {firstName}",
   "@homeGreetingWithName": {
     "placeholders": {
@@ -363,13 +389,21 @@
   "newRequestServiceTypesDone": "تم",
   "newRequestNoServicesAvailable": "لا توجد خدمات متاحة",
   "newRequestValidationRequired": "هذا الحقل مطلوب",
+  "newRequestValidationStreetRequired": "الشارع مطلوب",
+  "newRequestValidationCityRequired": "المدينة مطلوبة",
+  "newRequestValidationCityInvalid": "يرجى إدخال مدينة صالحة",
+  "newRequestValidationCountryRequired": "الدولة مطلوبة",
   "newRequestValidationServiceType": "يرجى اختيار خدمة واحدة على الأقل",
   "newRequestFromTitle": "من (الاستلام)",
   "newRequestToTitle": "إلى (التسليم)",
   "newRequestStreetLabel": "الشارع",
+  "newRequestStreetPlaceholder": "أدخل اسم الشارع",
   "newRequestCityLabel": "المدينة",
+  "newRequestCityPlaceholder": "أدخل المدينة",
   "newRequestZipCodeLabel": "الرمز البريدي",
+  "newRequestZipCodePlaceholder": "أدخل الرمز البريدي (اختياري)",
   "newRequestCountryLabel": "الدولة",
+  "newRequestCountryPlaceholder": "أدخل الدولة",
   "newRequestPreferredDate": "التاريخ المفضل",
   "newRequestTimeSlot": "الفترة الزمنية المفضلة",
   "newRequestMorning": "صباحاً (8:00 - 12:00)",

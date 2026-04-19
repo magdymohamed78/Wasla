@@ -26,9 +26,9 @@ class MyReviewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MyReviewsCubit>(
-      create: (context) =>
-          MyReviewsCubit(reviewsRepository: context.read<CustomerReviewsRepository>())
-            ..load(),
+      create: (context) => MyReviewsCubit(
+        reviewsRepository: context.read<CustomerReviewsRepository>(),
+      )..load(),
       child: const _MyReviewsView(),
     );
   }
@@ -109,7 +109,9 @@ class _MyReviewsViewState extends State<_MyReviewsView> {
               ? AppDimensions.paddingLg
               : AppDimensions.paddingMd);
 
-    final sessionRole = context.select((SessionCubit cubit) => cubit.state.role);
+    final sessionRole = context.select(
+      (SessionCubit cubit) => cubit.state.role,
+    );
     if (sessionRole != SessionRole.customer) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) {
@@ -180,7 +182,6 @@ class _MyReviewsViewState extends State<_MyReviewsView> {
                       children: [
                         _MyReviewsOverviewCard(
                           title: localizations.myReviewsPageTitle,
-                          countLabel: localizations.homeDashboardMyReviews,
                           count: state.totalCount,
                           selectedSort: _selectedDateSort,
                           newestLabel: _sortLabel(_ReviewDateSort.newest),
@@ -212,7 +213,9 @@ class _MyReviewsViewState extends State<_MyReviewsView> {
                         AppDimensions.paddingMd,
                       ),
                       itemCount:
-                          sortedItems.length + (state.hasReachedEnd ? 0 : 1) + 1,
+                          sortedItems.length +
+                          (state.hasReachedEnd ? 0 : 1) +
+                          1,
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return Padding(
@@ -221,7 +224,6 @@ class _MyReviewsViewState extends State<_MyReviewsView> {
                             ),
                             child: _MyReviewsOverviewCard(
                               title: localizations.myReviewsPageTitle,
-                              countLabel: localizations.homeDashboardMyReviews,
                               count: state.totalCount,
                               selectedSort: _selectedDateSort,
                               newestLabel: _sortLabel(_ReviewDateSort.newest),
@@ -301,7 +303,15 @@ class _MyReviewsViewState extends State<_MyReviewsView> {
     if (success) {
       ToastUtils.showSuccess(context, localizations.myReviewsUpdatedSuccess);
     } else {
-      ToastUtils.showError(context, localizations.myReviewsLoadFailed);
+      final errorCode = context.read<MyReviewsCubit>().state.errorCode;
+      if (errorCode == MyReviewsCubit.updateBadRequestError) {
+        ToastUtils.showError(
+          context,
+          localizations.companyReviewsWriteErrorBadRequest,
+        );
+      } else {
+        ToastUtils.showError(context, localizations.myReviewsLoadFailed);
+      }
     }
   }
 
@@ -460,10 +470,7 @@ class _MyReviewsEmptyCard extends StatelessWidget {
   final String title;
   final String message;
 
-  const _MyReviewsEmptyCard({
-    required this.title,
-    required this.message,
-  });
+  const _MyReviewsEmptyCard({required this.title, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -489,10 +496,12 @@ class _MyReviewsEmptyCard extends StatelessWidget {
             height: 58,
             decoration: BoxDecoration(
               color: AppColors.brandRed.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusRound),
+              borderRadius: BorderRadius.circular(
+                AppDimensions.borderRadiusRound,
+              ),
             ),
             child: Icon(
-              Icons.rate_review_outlined,
+              Icons.reviews_rounded,
               size: AppDimensions.iconSizeLg,
               color: AppColors.brandRed,
             ),
@@ -519,7 +528,6 @@ class _MyReviewsEmptyCard extends StatelessWidget {
 
 class _MyReviewsOverviewCard extends StatelessWidget {
   final String title;
-  final String countLabel;
   final int count;
   final _ReviewDateSort selectedSort;
   final String newestLabel;
@@ -528,7 +536,6 @@ class _MyReviewsOverviewCard extends StatelessWidget {
 
   const _MyReviewsOverviewCard({
     required this.title,
-    required this.countLabel,
     required this.count,
     required this.selectedSort,
     required this.newestLabel,
@@ -570,24 +577,20 @@ class _MyReviewsOverviewCard extends StatelessWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   color: AppColors.brandRed.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadiusMd,
+                  ),
                 ),
-                child: const Icon(Icons.reviews_rounded, color: AppColors.brandRed),
+                child: const Icon(
+                  Icons.reviews_rounded,
+                  color: AppColors.brandRed,
+                ),
               ),
               const SizedBox(width: AppDimensions.spacingSm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: AppTypography.bodyMedium),
-                    const SizedBox(height: AppDimensions.spacingXs),
-                    Text(
-                      countLabel,
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
+                  children: [Text(title, style: AppTypography.bodyMedium)],
                 ),
               ),
               Container(
@@ -597,7 +600,9 @@ class _MyReviewsOverviewCard extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.brandRed,
-                  borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadiusLg,
+                  ),
                 ),
                 child: Text(
                   '$count',
@@ -618,13 +623,17 @@ class _MyReviewsOverviewCard extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.background,
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-              border: Border.all(color: AppColors.divider.withValues(alpha: 0.9)),
+              border: Border.all(
+                color: AppColors.divider.withValues(alpha: 0.9),
+              ),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<_ReviewDateSort>(
                 value: selectedSort,
                 isExpanded: true,
-                borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+                borderRadius: BorderRadius.circular(
+                  AppDimensions.borderRadiusMd,
+                ),
                 icon: const Icon(
                   Icons.keyboard_arrow_down_rounded,
                   color: AppColors.textSecondary,

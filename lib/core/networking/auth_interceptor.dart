@@ -173,7 +173,13 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   }
 
   Future<void> _fallbackToGuest() async {
+    final hadAccessToken =
+        (await _authRepository?.getStoredAccessToken())?.isNotEmpty == true;
     await _authRepository?.clearSession(preservePendingIntent: true);
+
+    if (!hadAccessToken) {
+      return;
+    }
 
     final context = AppRouter.navigatorKey.currentContext;
     if (context != null && context.mounted) {

@@ -17,6 +17,15 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
   static const String submitFailedError = 'new_request_submit_failed';
   static const String guestNotAllowedError = 'new_request_guest_not_allowed';
   static const String fieldRequired = 'new_request_field_required';
+  static const String fieldStreetRequired = 'new_request_field_street_required';
+  static const String fieldCityRequired = 'new_request_field_city_required';
+  static const String fieldCityInvalid = 'new_request_field_city_invalid';
+  static const String fieldCountryRequired =
+      'new_request_field_country_required';
+
+  static final RegExp _cityValidationPattern = RegExp(
+    r"^[A-Za-zÀ-ÖØ-öø-ÿ\u0600-\u06FF](?:[A-Za-zÀ-ÖØ-öø-ÿ\u0600-\u06FF\s'-]*[A-Za-zÀ-ÖØ-öø-ÿ\u0600-\u06FF])?$",
+  );
 
   final SubmitServiceRequestUseCase _submitServiceRequestUseCase;
   final GetCompanyDetailsUseCase _getCompanyDetailsUseCase;
@@ -44,10 +53,12 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
 
     try {
       final details = await _getCompanyDetailsUseCase(state.companyId);
-      emit(state.copyWith(
-        servicesLoadStatus: LoadStatus.success,
-        availableServices: details.serviceCatalog,
-      ));
+      emit(
+        state.copyWith(
+          servicesLoadStatus: LoadStatus.success,
+          availableServices: details.serviceCatalog,
+        ),
+      );
     } catch (e, st) {
       debugPrint('[NewServiceRequestCubit] load services error: $e');
       debugPrint('[NewServiceRequestCubit] stack: $st');
@@ -63,10 +74,7 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
     } else {
       current.add(service);
     }
-    emit(state.copyWith(
-      selectedServices: current,
-      serviceTypeError: null,
-    ));
+    emit(state.copyWith(selectedServices: current, serviceTypeError: null));
   }
 
   void removeServiceType(CompanyServiceItem service) {
@@ -139,24 +147,63 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
   }
 
   String? _validateField(String key, String value) {
-    final isOptional = key == 'fromZipCode' || key == 'toZipCode';
-    if (isOptional) return null;
-    if (value.trim().isEmpty) return fieldRequired;
+    final normalized = value.trim();
+
+    if (_isZipCodeField(key)) {
+      return null;
+    }
+
+    if (normalized.isEmpty) {
+      if (_isStreetField(key)) {
+        return fieldStreetRequired;
+      }
+
+      if (_isCityField(key)) {
+        return fieldCityRequired;
+      }
+
+      if (_isCountryField(key)) {
+        return fieldCountryRequired;
+      }
+
+      return fieldRequired;
+    }
+
+    if (_isCityField(key) && !_isValidCity(normalized)) {
+      return fieldCityInvalid;
+    }
+
     return null;
   }
 
+  bool _isZipCodeField(String key) {
+    return key == 'fromZipCode' || key == 'toZipCode';
+  }
+
+  bool _isStreetField(String key) {
+    return key == 'fromStreet' || key == 'toStreet';
+  }
+
+  bool _isCityField(String key) {
+    return key == 'fromCity' || key == 'toCity';
+  }
+
+  bool _isCountryField(String key) {
+    return key == 'fromCountry' || key == 'toCountry';
+  }
+
+  bool _isValidCity(String value) {
+    return _cityValidationPattern.hasMatch(value);
+  }
+
   void preferredDateChanged(DateTime? value) {
-    emit(state.copyWith(
-      preferredDate: value,
-      preferredDateError: null,
-    ));
+    emit(state.copyWith(preferredDate: value, preferredDateError: null));
   }
 
   void preferredTimeSlotChanged(String value) {
-    emit(state.copyWith(
-      preferredTimeSlot: value,
-      preferredTimeSlotError: null,
-    ));
+    emit(
+      state.copyWith(preferredTimeSlot: value, preferredTimeSlotError: null),
+    );
   }
 
   void notesChanged(String value) {
@@ -225,10 +272,12 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
       valid = false;
     }
 
-    emit(state.copyWith(
-      preferredDateError: dateError,
-      preferredTimeSlotError: slotError,
-    ));
+    emit(
+      state.copyWith(
+        preferredDateError: dateError,
+        preferredTimeSlotError: slotError,
+      ),
+    );
     return valid;
   }
 
@@ -248,40 +297,48 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
     final currentRole = _sessionCubit.state.role;
 
     if (state.companyId <= 0) {
-      emit(state.copyWith(
-        status: NewServiceRequestStatus.failure,
-        errorCode: invalidCompanyIdError,
-      ));
+      emit(
+        state.copyWith(
+          status: NewServiceRequestStatus.failure,
+          errorCode: invalidCompanyIdError,
+        ),
+      );
       return;
     }
 
     if (state.selectedServices.isEmpty) {
-      emit(state.copyWith(
-        status: NewServiceRequestStatus.failure,
-        errorCode: serviceTypeRequiredError,
-      ));
+      emit(
+        state.copyWith(
+          status: NewServiceRequestStatus.failure,
+          errorCode: serviceTypeRequiredError,
+        ),
+      );
       return;
     }
 
     if (currentRole == SessionRole.guest) {
-      emit(state.copyWith(
-        status: NewServiceRequestStatus.failure,
-        errorCode: guestNotAllowedError,
-      ));
+      emit(
+        state.copyWith(
+          status: NewServiceRequestStatus.failure,
+          errorCode: guestNotAllowedError,
+        ),
+      );
       return;
     }
 
     final totalCount = state.selectedServices.length;
 
-    emit(state.copyWith(
-      role: currentRole,
-      status: NewServiceRequestStatus.submitting,
-      errorCode: null,
-      isLeadReloginPromptVisible: false,
-      navigateToRequests: false,
-      totalRequests: totalCount,
-      completedRequests: 0,
-    ));
+    emit(
+      state.copyWith(
+        role: currentRole,
+        status: NewServiceRequestStatus.submitting,
+        errorCode: null,
+        isLeadReloginPromptVisible: false,
+        navigateToRequests: false,
+        totalRequests: totalCount,
+        completedRequests: 0,
+      ),
+    );
 
     int completed = 0;
     ServiceRequestSubmission? lastSubmission;
@@ -311,21 +368,25 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
 
       final shouldPromptRelogin = currentRole == SessionRole.lead;
 
-      emit(state.copyWith(
-        role: currentRole,
-        status: NewServiceRequestStatus.success,
-        lastSubmission: lastSubmission,
-        errorCode: null,
-        isLeadReloginPromptVisible: shouldPromptRelogin,
-        navigateToRequests: !shouldPromptRelogin,
-      ));
+      emit(
+        state.copyWith(
+          role: currentRole,
+          status: NewServiceRequestStatus.success,
+          lastSubmission: lastSubmission,
+          errorCode: null,
+          isLeadReloginPromptVisible: shouldPromptRelogin,
+          navigateToRequests: !shouldPromptRelogin,
+        ),
+      );
     } catch (e, st) {
       debugPrint('[NewServiceRequestCubit] submit error: $e');
       debugPrint('[NewServiceRequestCubit] stack: $st');
-      emit(state.copyWith(
-        status: NewServiceRequestStatus.failure,
-        errorCode: submitFailedError,
-      ));
+      emit(
+        state.copyWith(
+          status: NewServiceRequestStatus.failure,
+          errorCode: submitFailedError,
+        ),
+      );
     }
   }
 

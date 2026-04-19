@@ -209,6 +209,14 @@
   "companyDetailsUnnamedService": "Service",
   "companyDetailsInvalidCompanyId": "Invalid company ID.",
   "companyDetailsViewAllReviews": "View All Reviews",
+  "companyDetailsReviewsSectionTitle": "Reviews ({count})",
+  "@companyDetailsReviewsSectionTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "companyDetailsPlaceholderBody": "Company details for ID: {companyId}",
   "@companyDetailsPlaceholderBody": {
     "placeholders": {
@@ -219,6 +227,24 @@
   },
   "homeGreeting": "Hello",
   "companyReviewsPageTitle": "All Reviews",
+  "companyReviewsSortLabel": "Sort reviews",
+  "companyReviewsSortNewestFirst": "Newest first",
+  "companyReviewsSortOldestFirst": "Oldest first",
+  "companyReviewsSortHighestRating": "Highest rating",
+  "companyReviewsSortLowestRating": "Lowest rating",
+  "companyReviewsWriteReview": "Write a Review",
+  "companyReviewsWriteHint": "Write your review...",
+  "companyReviewsWriteSubmit": "Submit",
+  "companyReviewsWriteSuccess": "Review submitted successfully.",
+  "companyReviewsWriteErrorBadRequest": "Review not submitted due to inappropriate language. Please edit and try again.",
+  "companyReviewsWriteErrorUnauthorized": "Please sign in to submit a review.",
+  "companyReviewsWriteErrorForbidden": "Only customers can submit reviews.",
+  "companyReviewsWriteErrorNotFound": "This company could not be found.",
+  "companyReviewsWriteErrorConflict": "You already reviewed this company.",
+  "companyReviewsWriteErrorServer": "Unable to submit review right now. Please try again.",
+  "companyReviewsWriteErrorNetwork": "Please check your internet connection and try again.",
+  "companyReviewsEligibilityInfo": "You can only review companies you are connected with. Submit a service request and wait for acceptance, or manage connections from your profile.",
+  "companyReviewsViewProfile": "View Profile",
   "homeGreetingWithName": "Hello, {firstName}",
   "@homeGreetingWithName": {
     "placeholders": {
@@ -371,13 +397,21 @@
   "newRequestServiceTypesDone": "Done",
   "newRequestNoServicesAvailable": "No services available",
   "newRequestValidationRequired": "This field is required",
+  "newRequestValidationStreetRequired": "Street is required",
+  "newRequestValidationCityRequired": "City is required",
+  "newRequestValidationCityInvalid": "Please enter a valid city",
+  "newRequestValidationCountryRequired": "Country is required",
   "newRequestValidationServiceType": "Please select at least one service",
   "newRequestFromTitle": "From (Pickup)",
   "newRequestToTitle": "To (Drop-off)",
   "newRequestStreetLabel": "Street",
+  "newRequestStreetPlaceholder": "Enter street name",
   "newRequestCityLabel": "City",
+  "newRequestCityPlaceholder": "Enter city",
   "newRequestZipCodeLabel": "Zip Code",
+  "newRequestZipCodePlaceholder": "Enter zip code (optional)",
   "newRequestCountryLabel": "Country",
+  "newRequestCountryPlaceholder": "Enter country",
   "newRequestPreferredDate": "Preferred Date",
   "newRequestTimeSlot": "Preferred Time Slot",
   "newRequestMorning": "Morning (8:00 - 12:00)",

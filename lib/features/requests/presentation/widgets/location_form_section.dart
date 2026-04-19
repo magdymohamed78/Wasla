@@ -45,10 +45,21 @@ class LocationFormSection extends StatelessWidget {
     if (!touchedFields.contains(key)) return null;
     final error = fieldErrors[key];
     if (error == null) return null;
-    if (error == NewServiceRequestCubit.fieldRequired) {
-      return localizations.newRequestValidationRequired;
+
+    switch (error) {
+      case NewServiceRequestCubit.fieldStreetRequired:
+        return localizations.newRequestValidationStreetRequired;
+      case NewServiceRequestCubit.fieldCityRequired:
+        return localizations.newRequestValidationCityRequired;
+      case NewServiceRequestCubit.fieldCityInvalid:
+        return localizations.newRequestValidationCityInvalid;
+      case NewServiceRequestCubit.fieldCountryRequired:
+        return localizations.newRequestValidationCountryRequired;
+      case NewServiceRequestCubit.fieldRequired:
+        return localizations.newRequestValidationRequired;
+      default:
+        return error;
     }
-    return error;
   }
 
   @override
@@ -76,9 +87,7 @@ class LocationFormSection extends StatelessWidget {
               Icon(
                 isPickup ? Icons.location_on : Icons.flag_outlined,
                 size: AppDimensions.iconSizeMd - 2,
-                color: isPickup
-                    ? AppColors.brandRed
-                    : AppColors.textSecondary,
+                color: isPickup ? AppColors.brandRed : AppColors.textSecondary,
               ),
               const SizedBox(width: AppDimensions.spacingSm),
               Text(
@@ -93,6 +102,9 @@ class LocationFormSection extends StatelessWidget {
           AppTextField(
             label: localizations.newRequestStreetLabel,
             initialValue: street,
+            hintText: localizations.newRequestStreetPlaceholder,
+            isRequired: true,
+            reserveErrorSpace: true,
             onChanged: (v) => onFieldChanged(streetKey, v),
             onBlur: () => onFieldBlurred(streetKey),
             errorText: _resolveError(streetKey, localizations),
@@ -105,6 +117,9 @@ class LocationFormSection extends StatelessWidget {
                 child: AppTextField(
                   label: localizations.newRequestCityLabel,
                   initialValue: city,
+                  hintText: localizations.newRequestCityPlaceholder,
+                  isRequired: true,
+                  reserveErrorSpace: true,
                   onChanged: (v) => onFieldChanged(cityKey, v),
                   onBlur: () => onFieldBlurred(cityKey),
                   errorText: _resolveError(cityKey, localizations),
@@ -115,6 +130,8 @@ class LocationFormSection extends StatelessWidget {
                 child: AppTextField(
                   label: localizations.newRequestZipCodeLabel,
                   initialValue: zipCode,
+                  hintText: localizations.newRequestZipCodePlaceholder,
+                  reserveErrorSpace: true,
                   onChanged: (v) => onFieldChanged(zipCodeKey, v),
                 ),
               ),
@@ -124,6 +141,9 @@ class LocationFormSection extends StatelessWidget {
           AppTextField(
             label: localizations.newRequestCountryLabel,
             initialValue: country,
+            hintText: localizations.newRequestCountryPlaceholder,
+            isRequired: true,
+            reserveErrorSpace: true,
             onChanged: (v) => onFieldChanged(countryKey, v),
             onBlur: () => onFieldBlurred(countryKey),
             errorText: _resolveError(countryKey, localizations),

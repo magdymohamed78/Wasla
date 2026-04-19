@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/session/session_cubit.dart';
+import '../../../../core/session/session_state.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../domain/entities/discovery_types.dart';
@@ -38,8 +40,9 @@ class HomePlaceholderPage extends StatelessWidget {
         BlocProvider<DashboardCubit>(
           create: (context) => DashboardCubit(
             customerOffersRepository: context.read<CustomerOffersRepository>(),
-            customerReviewsRepository: context.read<CustomerReviewsRepository>(),
-          )..load(),
+            customerReviewsRepository: context
+                .read<CustomerReviewsRepository>(),
+          ),
         ),
       ],
       child: const _HomeDiscoveryView(),
@@ -51,10 +54,16 @@ class _HomeDiscoveryView extends StatelessWidget {
   const _HomeDiscoveryView();
 
   Future<void> _reloadHomeData(BuildContext context) {
-    return Future.wait<void>([
+    final tasks = <Future<void>>[
       context.read<HomeDiscoveryCubit>().loadInitial(),
-      context.read<DashboardCubit>().load(),
-    ]);
+    ];
+    final role = context.read<SessionCubit>().state.role;
+
+    if (role == SessionRole.customer) {
+      tasks.add(context.read<DashboardCubit>().load());
+    }
+
+    return Future.wait<void>(tasks);
   }
 
   @override

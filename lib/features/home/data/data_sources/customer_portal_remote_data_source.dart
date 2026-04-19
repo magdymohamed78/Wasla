@@ -44,12 +44,15 @@ abstract class CustomerPortalRemoteDataSource {
     String? status,
   });
 
-  Future<Map<String, dynamic>> getMyReviewsPaged({
-    int pageIndex,
-    int pageSize,
-  });
+  Future<Map<String, dynamic>> getMyReviewsPaged({int pageIndex, int pageSize});
 
   Future<Map<String, dynamic>> updateMyReview({
+    required int companyId,
+    required int rating,
+    String? reviewText,
+  });
+
+  Future<Map<String, dynamic>> createMyReview({
     required int companyId,
     required int rating,
     String? reviewText,
@@ -146,10 +149,7 @@ class CustomerPortalRemoteDataSourceImpl
   Future<Map<String, dynamic>> getMyReviewsPaged({
     int pageIndex = 1,
     int pageSize = 10,
-  }) => _reviews.getMyReviewsPaged(
-    pageIndex: pageIndex,
-    pageSize: pageSize,
-  );
+  }) => _reviews.getMyReviewsPaged(pageIndex: pageIndex, pageSize: pageSize);
 
   @override
   Future<Map<String, dynamic>> updateMyReview({
@@ -157,6 +157,17 @@ class CustomerPortalRemoteDataSourceImpl
     required int rating,
     String? reviewText,
   }) => _reviews.updateMyReview(
+    companyId: companyId,
+    rating: rating,
+    reviewText: reviewText,
+  );
+
+  @override
+  Future<Map<String, dynamic>> createMyReview({
+    required int companyId,
+    required int rating,
+    String? reviewText,
+  }) => _reviews.createMyReview(
     companyId: companyId,
     rating: rating,
     reviewText: reviewText,

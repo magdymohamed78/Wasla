@@ -226,6 +226,8 @@ class CompanyReviewsSection extends StatelessWidget {
   final String anonymousReviewerLabel;
   final String noCommentLabel;
   final String viewAllLabel;
+  final Widget? headerAction;
+  final Widget? actionContent;
   final int? maxReviews;
   final VoidCallback? onViewAll;
 
@@ -237,45 +239,56 @@ class CompanyReviewsSection extends StatelessWidget {
     required this.anonymousReviewerLabel,
     required this.noCommentLabel,
     required this.viewAllLabel,
+    this.headerAction,
+    this.actionContent,
     this.maxReviews,
     this.onViewAll,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (reviews.isEmpty) {
-      return _SectionCard(
-        title: title,
-        child: Text(
-          emptyMessage,
-          style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-      );
-    }
-
     final displayReviews = maxReviews != null && reviews.length > maxReviews!
         ? reviews.sublist(0, maxReviews!)
         : reviews;
-   // final hasMore = maxReviews != null && reviews.length > maxReviews!;
 
     return _SectionCard(
-      title: title,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ...displayReviews.map(
-            (review) => Padding(
-              padding: const EdgeInsets.only(bottom: AppDimensions.spacingMd),
-              child: _ReviewTile(
-                review: review,
-                anonymousReviewerLabel: anonymousReviewerLabel,
-                noCommentLabel: noCommentLabel,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: Text(title, style: AppTypography.heading3)),
+              if (headerAction != null) ...[
+                const SizedBox(width: AppDimensions.spacingSm),
+                headerAction!,
+              ],
+            ],
+          ),
+          const SizedBox(height: AppDimensions.spacingMd),
+          if (actionContent != null) ...[
+            actionContent!,
+            const SizedBox(height: AppDimensions.spacingMd),
+          ],
+          if (displayReviews.isEmpty)
+            Text(
+              emptyMessage,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            )
+          else
+            ...displayReviews.map(
+              (review) => Padding(
+                padding: const EdgeInsets.only(bottom: AppDimensions.spacingMd),
+                child: _ReviewTile(
+                  review: review,
+                  anonymousReviewerLabel: anonymousReviewerLabel,
+                  noCommentLabel: noCommentLabel,
+                ),
               ),
             ),
-          ),
-          if (onViewAll != null)
+          if (onViewAll != null && displayReviews.isNotEmpty)
             Center(
               child: TextButton.icon(
                 onPressed: onViewAll,
@@ -509,54 +522,62 @@ class ReviewTile extends StatelessWidget {
         : _formatDate(context, review.createdAt!);
     final initial = _avatarInitial(displayName, anonymousReviewerLabel);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            _ReviewAvatar(initial: initial, isAnonymous: initial == '?'),
-            const SizedBox(width: AppDimensions.spacingSm),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    displayName,
-                    style: AppTypography.bodyMedium.copyWith(
-                      fontWeight: FontWeight.w700,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppDimensions.paddingSm),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _ReviewAvatar(initial: initial, isAnonymous: initial == '?'),
+              const SizedBox(width: AppDimensions.spacingSm),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      displayName,
+                      style: AppTypography.bodyMedium.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (dateLabel != null)
-                    Text(dateLabel, style: AppTypography.bodySmall),
-                ],
-              ),
-            ),
-            if (review.rating != null) ...[
-              const Icon(
-                Icons.star_rounded,
-                color: Color(0xFFFFB300),
-                size: AppDimensions.iconSizeSm,
-              ),
-              const SizedBox(width: AppDimensions.spacingXs),
-              Text(
-                review.rating!.toStringAsFixed(1),
-                style: AppTypography.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w600,
+                    if (dateLabel != null)
+                      Text(dateLabel, style: AppTypography.bodySmall),
+                  ],
                 ),
               ),
+              if (review.rating != null) ...[
+                const Icon(
+                  Icons.star_rounded,
+                  color: Color(0xFFFFB300),
+                  size: AppDimensions.iconSizeSm,
+                ),
+                const SizedBox(width: AppDimensions.spacingXs),
+                Text(
+                  review.rating!.toStringAsFixed(1),
+                  style: AppTypography.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ],
-          ],
-        ),
-        const SizedBox(height: AppDimensions.spacingSm),
-        Text(
-          displayComment,
-          style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.textSecondary,
           ),
-        ),
-      ],
+          const SizedBox(height: AppDimensions.spacingSm),
+          Text(
+            displayComment,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

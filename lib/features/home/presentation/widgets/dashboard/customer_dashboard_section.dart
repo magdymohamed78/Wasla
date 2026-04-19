@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -37,8 +39,32 @@ class CustomerDashboardSection extends StatefulWidget {
 
 class _CustomerDashboardSectionState extends State<CustomerDashboardSection> {
   bool _isNavigating = false;
+  bool _initialCustomerLoadTriggered = false;
 
-  Future<void> _handleProtectedNavigation(Future<void> Function() action) async {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _ensureInitialCustomerLoad();
+  }
+
+  void _ensureInitialCustomerLoad() {
+    final sessionState = context.read<SessionCubit>().state;
+    if (sessionState.role != SessionRole.customer) {
+      _initialCustomerLoadTriggered = false;
+      return;
+    }
+
+    if (_initialCustomerLoadTriggered) {
+      return;
+    }
+
+    _initialCustomerLoadTriggered = true;
+    unawaited(context.read<DashboardCubit>().load());
+  }
+
+  Future<void> _handleProtectedNavigation(
+    Future<void> Function() action,
+  ) async {
     if (_isNavigating) {
       return;
     }
@@ -87,157 +113,169 @@ class _CustomerDashboardSectionState extends State<CustomerDashboardSection> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SessionCubit, SessionState>(
-      builder: (context, sessionState) {
-        if (sessionState.role != SessionRole.customer) {
-          return const SizedBox.shrink();
+    return BlocListener<SessionCubit, SessionState>(
+      listenWhen: (previous, current) => previous.role != current.role,
+      listener: (context, sessionState) {
+        if (sessionState.role == SessionRole.customer) {
+          _initialCustomerLoadTriggered = true;
+          unawaited(context.read<DashboardCubit>().load());
+          return;
         }
 
-        return BlocBuilder<DashboardCubit, DashboardState>(
-          builder: (context, state) {
-            Widget content;
+        _initialCustomerLoadTriggered = false;
+      },
+      child: BlocBuilder<SessionCubit, SessionState>(
+        builder: (context, sessionState) {
+          if (sessionState.role != SessionRole.customer) {
+            return const SizedBox.shrink();
+          }
 
-            if (state.status == LoadStatus.initial ||
-                state.status == LoadStatus.loading) {
-              content = const DashboardSectionSkeleton();
-              return Column(
+          return BlocBuilder<DashboardCubit, DashboardState>(
+            builder: (context, state) {
+              Widget content;
+
+              if (state.status == LoadStatus.initial ||
+                  state.status == LoadStatus.loading) {
+                content = const DashboardSectionSkeleton();
+                return Column(
+                  children: [
+                    content,
+                    const SizedBox(height: AppDimensions.spacingLg),
+                  ],
+                );
+              }
+
+              if (state.status == LoadStatus.error) {
+                content = DashboardSectionInlineError(
+                  onRetry: context.read<DashboardCubit>().retry,
+                );
+                return Column(
+                  children: [
+                    content,
+                    const SizedBox(height: AppDimensions.spacingLg),
+                  ],
+                );
+              }
+
+              final localizations = AppLocalizations.of(context);
+              final metrics = [
+                _DashboardMetric(
+                  label: localizations.homeDashboardTotalOffers,
+                  value: state.totalOffers,
+                  icon: Icons.local_offer_outlined,
+                  color: AppColors.statusOfferSent,
+                  onTap: () => _handleProtectedNavigation(
+                    () => _onTotalOffersTap(context),
+                  ),
+                ),
+                _DashboardMetric(
+                  label: localizations.homeDashboardAcceptedOffers,
+                  value: state.acceptedOffers,
+                  icon: Icons.task_alt_outlined,
+                  color: AppColors.statusAccepted,
+                  onTap: () => _handleProtectedNavigation(
+                    () => _onAcceptedOffersTap(context),
+                  ),
+                ),
+                _DashboardMetric(
+                  label: localizations.homeDashboardPendingOffers,
+                  value: state.pendingOffers,
+                  icon: Icons.pending_actions_outlined,
+                  color: AppColors.statusPending,
+                  onTap: () => _handleProtectedNavigation(
+                    () => _onPendingOffersTap(context),
+                  ),
+                ),
+                _DashboardMetric(
+                  label: localizations.homeDashboardMyReviews,
+                  value: state.myReviews,
+                  icon: Icons.reviews_rounded,
+                  color: AppColors.brandRed,
+                  onTap: () => _handleProtectedNavigation(
+                    () => _onMyReviewsTap(context),
+                  ),
+                ),
+              ];
+
+              content = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  content,
-                  const SizedBox(height: AppDimensions.spacingLg),
-                ],
-              );
-            }
-
-            if (state.status == LoadStatus.error) {
-              content = DashboardSectionInlineError(
-                onRetry: context.read<DashboardCubit>().retry,
-              );
-              return Column(
-                children: [
-                  content,
-                  const SizedBox(height: AppDimensions.spacingLg),
-                ],
-              );
-            }
-
-            final localizations = AppLocalizations.of(context);
-            final metrics = [
-              _DashboardMetric(
-                label: localizations.homeDashboardTotalOffers,
-                value: state.totalOffers,
-                icon: Icons.local_offer_outlined,
-                color: AppColors.statusOfferSent,
-                onTap: () => _handleProtectedNavigation(
-                  () => _onTotalOffersTap(context),
-                ),
-              ),
-              _DashboardMetric(
-                label: localizations.homeDashboardAcceptedOffers,
-                value: state.acceptedOffers,
-                icon: Icons.task_alt_outlined,
-                color: AppColors.statusAccepted,
-                onTap: () => _handleProtectedNavigation(
-                  () => _onAcceptedOffersTap(context),
-                ),
-              ),
-              _DashboardMetric(
-                label: localizations.homeDashboardPendingOffers,
-                value: state.pendingOffers,
-                icon: Icons.pending_actions_outlined,
-                color: AppColors.statusPending,
-                onTap: () => _handleProtectedNavigation(
-                  () => _onPendingOffersTap(context),
-                ),
-              ),
-              _DashboardMetric(
-                label: localizations.homeDashboardMyReviews,
-                value: state.myReviews,
-                icon: Icons.rate_review_outlined,
-                color: AppColors.brandRed,
-                onTap: () => _handleProtectedNavigation(
-                  () => _onMyReviewsTap(context),
-                ),
-              ),
-            ];
-
-            content = Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (state.hasPartialData) ...[
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      bottom: AppDimensions.spacingSm,
+                  if (state.hasPartialData) ...[
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        bottom: AppDimensions.spacingSm,
+                      ),
+                      child: Text(
+                        localizations.homeDashboardLoadFailed,
+                        style: AppTypography.bodySmall,
+                      ),
                     ),
-                    child: Text(
-                      localizations.homeDashboardLoadFailed,
-                      style: AppTypography.bodySmall,
-                    ),
+                  ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = constraints.maxWidth;
+                      final isTablet = width >= 720;
+                      final isMedium = width >= 540 && width < 720;
+                      final crossAxisCount = isTablet ? 4 : (isMedium ? 3 : 2);
+                      final spacing = isMedium || isTablet
+                          ? AppDimensions.spacingMd
+                          : AppDimensions.spacingSm;
+                      final childAspectRatio = isTablet
+                          ? 1.65
+                          : (isMedium ? 1.45 : 1.3);
+
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: metrics.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: spacing,
+                          mainAxisSpacing: spacing,
+                          childAspectRatio: childAspectRatio,
+                        ),
+                        itemBuilder: (context, index) {
+                          final metric = metrics[index];
+                          final durationMs = 240 + (index * 70);
+
+                          return TweenAnimationBuilder<double>(
+                            duration: Duration(milliseconds: durationMs),
+                            curve: Curves.easeOutCubic,
+                            tween: Tween<double>(begin: 0, end: 1),
+                            builder: (context, value, child) {
+                              return Opacity(
+                                opacity: value,
+                                child: Transform.translate(
+                                  offset: Offset(0, 12 * (1 - value)),
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: DashboardMetricCard(
+                              label: metric.label,
+                              value: metric.value,
+                              icon: metric.icon,
+                              iconColor: metric.color,
+                              onTap: metric.onTap,
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ],
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final width = constraints.maxWidth;
-                    final isTablet = width >= 720;
-                    final isMedium = width >= 540 && width < 720;
-                    final crossAxisCount = isTablet ? 4 : (isMedium ? 3 : 2);
-                    final spacing = isMedium || isTablet
-                        ? AppDimensions.spacingMd
-                        : AppDimensions.spacingSm;
-                    final childAspectRatio = isTablet
-                        ? 1.65
-                        : (isMedium ? 1.45 : 1.3);
+              );
 
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: metrics.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        crossAxisSpacing: spacing,
-                        mainAxisSpacing: spacing,
-                        childAspectRatio: childAspectRatio,
-                      ),
-                      itemBuilder: (context, index) {
-                        final metric = metrics[index];
-                        final durationMs = 240 + (index * 70);
-
-                        return TweenAnimationBuilder<double>(
-                          duration: Duration(milliseconds: durationMs),
-                          curve: Curves.easeOutCubic,
-                          tween: Tween<double>(begin: 0, end: 1),
-                          builder: (context, value, child) {
-                            return Opacity(
-                              opacity: value,
-                              child: Transform.translate(
-                                offset: Offset(0, 12 * (1 - value)),
-                                child: child,
-                              ),
-                            );
-                          },
-                          child: DashboardMetricCard(
-                            label: metric.label,
-                            value: metric.value,
-                            icon: metric.icon,
-                            iconColor: metric.color,
-                            onTap: metric.onTap,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            );
-
-            return Column(
-              children: [
-                content,
-                const SizedBox(height: AppDimensions.spacingLg),
-              ],
-            );
-          },
-        );
-      },
+              return Column(
+                children: [
+                  content,
+                  const SizedBox(height: AppDimensions.spacingLg),
+                ],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

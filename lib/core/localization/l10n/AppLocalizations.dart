@@ -1178,6 +1178,12 @@ abstract class AppLocalizations {
   /// **'View All Reviews'**
   String get companyDetailsViewAllReviews;
 
+  /// No description provided for @companyDetailsReviewsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews ({count})'**
+  String companyDetailsReviewsSectionTitle(int count);
+
   /// No description provided for @companyDetailsPlaceholderBody.
   ///
   /// In en, this message translates to:
@@ -1195,6 +1201,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All Reviews'**
   String get companyReviewsPageTitle;
+
+  /// No description provided for @companyReviewsSortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort reviews'**
+  String get companyReviewsSortLabel;
+
+  /// No description provided for @companyReviewsSortNewestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest first'**
+  String get companyReviewsSortNewestFirst;
+
+  /// No description provided for @companyReviewsSortOldestFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest first'**
+  String get companyReviewsSortOldestFirst;
+
+  /// No description provided for @companyReviewsSortHighestRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest rating'**
+  String get companyReviewsSortHighestRating;
+
+  /// No description provided for @companyReviewsSortLowestRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest rating'**
+  String get companyReviewsSortLowestRating;
+
+  /// No description provided for @companyReviewsWriteReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a Review'**
+  String get companyReviewsWriteReview;
+
+  /// No description provided for @companyReviewsWriteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your review...'**
+  String get companyReviewsWriteHint;
+
+  /// No description provided for @companyReviewsWriteSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get companyReviewsWriteSubmit;
+
+  /// No description provided for @companyReviewsWriteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Review submitted successfully.'**
+  String get companyReviewsWriteSuccess;
+
+  /// No description provided for @companyReviewsWriteErrorBadRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Review not submitted due to inappropriate language. Please edit and try again.'**
+  String get companyReviewsWriteErrorBadRequest;
+
+  /// No description provided for @companyReviewsWriteErrorUnauthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in to submit a review.'**
+  String get companyReviewsWriteErrorUnauthorized;
+
+  /// No description provided for @companyReviewsWriteErrorForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Only customers can submit reviews.'**
+  String get companyReviewsWriteErrorForbidden;
+
+  /// No description provided for @companyReviewsWriteErrorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This company could not be found.'**
+  String get companyReviewsWriteErrorNotFound;
+
+  /// No description provided for @companyReviewsWriteErrorConflict.
+  ///
+  /// In en, this message translates to:
+  /// **'You already reviewed this company.'**
+  String get companyReviewsWriteErrorConflict;
+
+  /// No description provided for @companyReviewsWriteErrorServer.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to submit review right now. Please try again.'**
+  String get companyReviewsWriteErrorServer;
+
+  /// No description provided for @companyReviewsWriteErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection and try again.'**
+  String get companyReviewsWriteErrorNetwork;
+
+  /// No description provided for @companyReviewsEligibilityInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'You can only review companies you are connected with. Submit a service request and wait for acceptance, or manage connections from your profile.'**
+  String get companyReviewsEligibilityInfo;
+
+  /// No description provided for @companyReviewsViewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View Profile'**
+  String get companyReviewsViewProfile;
 
   /// No description provided for @homeGreetingWithName.
   ///
@@ -1964,6 +2078,30 @@ abstract class AppLocalizations {
   /// **'This field is required'**
   String get newRequestValidationRequired;
 
+  /// No description provided for @newRequestValidationStreetRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Street is required'**
+  String get newRequestValidationStreetRequired;
+
+  /// No description provided for @newRequestValidationCityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'City is required'**
+  String get newRequestValidationCityRequired;
+
+  /// No description provided for @newRequestValidationCityInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid city'**
+  String get newRequestValidationCityInvalid;
+
+  /// No description provided for @newRequestValidationCountryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Country is required'**
+  String get newRequestValidationCountryRequired;
+
   /// No description provided for @newRequestValidationServiceType.
   ///
   /// In en, this message translates to:
@@ -1988,11 +2126,23 @@ abstract class AppLocalizations {
   /// **'Street'**
   String get newRequestStreetLabel;
 
+  /// No description provided for @newRequestStreetPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter street name'**
+  String get newRequestStreetPlaceholder;
+
   /// No description provided for @newRequestCityLabel.
   ///
   /// In en, this message translates to:
   /// **'City'**
   String get newRequestCityLabel;
+
+  /// No description provided for @newRequestCityPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter city'**
+  String get newRequestCityPlaceholder;
 
   /// No description provided for @newRequestZipCodeLabel.
   ///
@@ -2000,11 +2150,23 @@ abstract class AppLocalizations {
   /// **'Zip Code'**
   String get newRequestZipCodeLabel;
 
+  /// No description provided for @newRequestZipCodePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter zip code (optional)'**
+  String get newRequestZipCodePlaceholder;
+
   /// No description provided for @newRequestCountryLabel.
   ///
   /// In en, this message translates to:
   /// **'Country'**
   String get newRequestCountryLabel;
+
+  /// No description provided for @newRequestCountryPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter country'**
+  String get newRequestCountryPlaceholder;
 
   /// No description provided for @newRequestPreferredDate.
   ///
