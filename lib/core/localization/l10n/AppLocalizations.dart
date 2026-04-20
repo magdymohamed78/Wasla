@@ -2407,6 +2407,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to load your reviews. Please try again.'**
   String get myReviewsLoadFailed;
+
+  /// No description provided for @loadMoreButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Load More'**
+  String get loadMoreButton;
+
+  /// No description provided for @noMoreItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No more items'**
+  String get noMoreItems;
 }
 
 class _AppLocalizationsDelegate

@@ -6,6 +6,7 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/logo_preload_helper.dart';
 import '../../../home/domain/entities/customer_portal_content.dart';
 import '../helpers/profile_helpers.dart';
 import '../widgets/connected_company_card.dart';
@@ -157,6 +158,50 @@ class _ConnectedCompaniesList extends StatefulWidget {
 class _ConnectedCompaniesListState extends State<_ConnectedCompaniesList> {
   static const int _initialCount = 2;
   bool _expanded = false;
+  String _lastPreloadSignature = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _precacheConnectedCompanyLogos();
+  }
+
+  @override
+  void didUpdateWidget(covariant _ConnectedCompaniesList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_logoSignature(oldWidget.companies) !=
+        _logoSignature(widget.companies)) {
+      _precacheConnectedCompanyLogos();
+    }
+  }
+
+  void _precacheConnectedCompanyLogos() {
+    final logoUrls = widget.companies
+        .map((company) => company.companyLogoUrl)
+        .toList(growable: false);
+    final signature = _logoSignature(widget.companies);
+
+    if (signature.isEmpty || signature == _lastPreloadSignature) {
+      return;
+    }
+
+    _lastPreloadSignature = signature;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      precacheCompanyLogos(context, logoUrls, maxCount: logoUrls.length);
+    });
+  }
+
+  String _logoSignature(List<ConnectedCompany> companies) {
+    return companies
+        .map(
+          (company) =>
+              '${company.companyId}:${company.companyLogoUrl?.trim() ?? ''}',
+        )
+        .join('|');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,9 +218,8 @@ class _ConnectedCompaniesListState extends State<_ConnectedCompaniesList> {
             padding: const EdgeInsets.only(bottom: AppDimensions.spacingSm),
             child: ConnectedCompanyCard(
               company: company,
-              onTap: () => context.push(
-                AppRouter.companyLocation(company.companyId),
-              ),
+              onTap: () =>
+                  context.push(AppRouter.companyLocation(company.companyId)),
             ),
           ),
         if (remaining > 0)

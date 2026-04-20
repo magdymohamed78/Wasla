@@ -443,5 +443,7 @@
   "myReviewsUpdatedSuccess": "تم تحديث المراجعة بنجاح.",
   "myReviewsDeletedSuccess": "تم حذف المراجعة بنجاح.",
   "myReviewsValidationRatingRequired": "يرجى اختيار تقييم.",
-  "myReviewsLoadFailed": "تعذر تحميل مراجعاتك. يرجى المحاولة مرة أخرى."
+  "myReviewsLoadFailed": "تعذر تحميل مراجعاتك. يرجى المحاولة مرة أخرى.",
+   "loadMoreButton": "تحميل المزيد",
+   "noMoreItems": "لا توجد عناصر أخرى"
 }

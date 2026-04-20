@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,6 +5,7 @@ import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/company_logo_widget.dart';
 import '../../../home/domain/entities/customer_portal_content.dart';
 
 class ConnectedCompanyCard extends StatelessWidget {
@@ -54,7 +54,7 @@ class ConnectedCompanyCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            _CompanyLogo(url: company.companyLogoUrl),
+                            CompanyLogoWidget(logoUrl: company.companyLogoUrl),
                             const SizedBox(width: AppDimensions.spacingSm),
                             Expanded(
                               child: Column(
@@ -145,55 +145,6 @@ class ConnectedCompanyCard extends StatelessWidget {
       return localizations.profileCompanyStatusRejected;
     }
     return localizations.profileCompanyStatusUnknown;
-  }
-}
-
-class _CompanyLogo extends StatelessWidget {
-  final String? url;
-
-  const _CompanyLogo({this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    const size = AppDimensions.logoSizeSmall;
-
-    if (url != null && url!.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-        child: CachedNetworkImage(
-          imageUrl: url!,
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorWidget: (_, _, _) => _PlaceholderLogo(size: size),
-        ),
-      );
-    }
-
-    return _PlaceholderLogo(size: size);
-  }
-}
-
-class _PlaceholderLogo extends StatelessWidget {
-  final double size;
-
-  const _PlaceholderLogo({required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: AppColors.buttonSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-      ),
-      child: Icon(
-        Icons.business_rounded,
-        size: size * 0.5,
-        color: AppColors.textSecondary,
-      ),
-    );
   }
 }
 

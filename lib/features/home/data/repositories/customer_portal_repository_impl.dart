@@ -81,7 +81,7 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
       pageSize: dto.pageSize,
       totalCount: dto.totalCount,
       totalPages: dto.totalPages,
-      statusCounts: _buildStatusCounts(dto.statusCounts, items),
+      statusCounts: _buildRequestStatusCounts(dto.statusCounts),
     );
   }
 
@@ -101,36 +101,15 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
     return dto.toDomain();
   }
 
-  RequestStatusCounts _buildStatusCounts(
-    Map<RequestFilter, int> _,
-    List<RequestSummaryItem> items,
+  RequestStatusCounts _buildRequestStatusCounts(
+    Map<RequestFilter, int> counts,
   ) {
-    int pending = 0;
-    int offerSent = 0;
-    int declined = 0;
-    int expired = 0;
-
-    for (final item in items) {
-      switch (item.normalizedFilter) {
-        case RequestFilter.pending:
-          pending++;
-        case RequestFilter.offerSent:
-          offerSent++;
-        case RequestFilter.declined:
-          declined++;
-        case RequestFilter.expired:
-          expired++;
-        case RequestFilter.all:
-          break;
-      }
-    }
-
     return RequestStatusCounts(
-      all: items.length,
-      pending: pending,
-      offerSent: offerSent,
-      declined: declined,
-      expired: expired,
+      all: counts[RequestFilter.all] ?? 0,
+      pending: counts[RequestFilter.pending] ?? 0,
+      offerSent: counts[RequestFilter.offerSent] ?? 0,
+      declined: counts[RequestFilter.declined] ?? 0,
+      expired: counts[RequestFilter.expired] ?? 0,
     );
   }
 

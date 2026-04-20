@@ -10,7 +10,7 @@ import 'customer_requests_state.dart';
 
 class CustomerRequestsCubit extends Cubit<CustomerRequestsState> {
   static const String loadFailedError = 'customer_requests_load_failed';
-  static const int _pageSize = 20;
+  static const int _pageSize = 5;
   static const int _ensureDetailsMaxAttempts = 3;
   static const Duration _ensureDetailsRetryDelay = Duration(milliseconds: 300);
 
