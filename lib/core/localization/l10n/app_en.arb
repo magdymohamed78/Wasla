@@ -451,5 +451,7 @@
   "myReviewsUpdatedSuccess": "Review updated successfully.",
   "myReviewsDeletedSuccess": "Review deleted successfully.",
   "myReviewsValidationRatingRequired": "Please select a rating.",
-  "myReviewsLoadFailed": "Unable to load your reviews. Please try again."
+  "myReviewsLoadFailed": "Unable to load your reviews. Please try again.",
+   "loadMoreButton": "Load More",
+   "noMoreItems": "No more items"
 }

@@ -8,6 +8,7 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/logo_preload_helper.dart';
 import '../../../home/domain/entities/company_summary.dart';
 import '../../../home/domain/entities/explore_pagination.dart';
 import 'company_summary_card.dart';
@@ -49,6 +50,8 @@ class _CompaniesListingViewState extends State<CompaniesListingView> {
         return;
       }
 
+      _precachePageLogos(page.items);
+
       if (page.hasReachedEnd || page.items.isEmpty) {
         _pagingController.appendLastPage(page.items);
       } else {
@@ -60,6 +63,23 @@ class _CompaniesListingViewState extends State<CompaniesListingView> {
       }
       _pagingController.error = error;
     }
+  }
+
+  void _precachePageLogos(List<CompanySummary> companies) {
+    if (companies.isEmpty) {
+      return;
+    }
+
+    final logoUrls = companies
+        .map((company) => company.companyLogoUrl)
+        .toList(growable: false);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      precacheCompanyLogos(context, logoUrls, maxCount: 10);
+    });
   }
 
   @override

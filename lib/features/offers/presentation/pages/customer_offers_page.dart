@@ -7,6 +7,8 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/utils/logo_preload_helper.dart';
+import '../../../../core/widgets/load_more_footer.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../home/domain/repositories/customer_offers_repository.dart';
 import '../../domain/entities/offer_filter.dart';
@@ -18,10 +20,7 @@ import '../widgets/offer_filter_tabs.dart';
 class CustomerOffersPage extends StatelessWidget {
   final OfferFilter initialFilter;
 
-  const CustomerOffersPage({
-    super.key,
-    this.initialFilter = OfferFilter.all,
-  });
+  const CustomerOffersPage({super.key, this.initialFilter = OfferFilter.all});
 
   @override
   Widget build(BuildContext context) {
@@ -105,68 +104,77 @@ class _OfferList extends StatefulWidget {
 }
 
 class _OfferListState extends State<_OfferList> {
-  final _scrollController = ScrollController();
+  String _lastPreloadSignature = '';
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    _precacheVisibleLogos();
   }
 
   @override
-  void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    super.dispose();
+  void didUpdateWidget(covariant _OfferList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_itemsSignature(oldWidget.state) != _itemsSignature(widget.state)) {
+      _precacheVisibleLogos();
+    }
   }
 
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      context.read<CustomerOffersCubit>().loadMore();
+  void _precacheVisibleLogos() {
+    final logoUrls = widget.state.items
+        .map((item) => item.companyLogoUrl)
+        .toList(growable: false);
+    final signature = _itemsSignature(widget.state);
+
+    if (signature.isEmpty || signature == _lastPreloadSignature) {
+      return;
     }
+
+    _lastPreloadSignature = signature;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      precacheCompanyLogos(context, logoUrls, maxCount: 5);
+    });
+  }
+
+  String _itemsSignature(CustomerOffersState state) {
+    return state.items
+        .map((item) => '${item.offerId}:${item.companyLogoUrl?.trim() ?? ''}')
+        .join('|');
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return RefreshIndicator(
       color: AppColors.brandRed,
       onRefresh: () => context.read<CustomerOffersCubit>().load(),
       child: ListView.builder(
-        controller: _scrollController,
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.paddingMd,
         ),
-        itemCount:
-            widget.state.items.length + (widget.state.hasReachedEnd ? 0 : 1),
+        itemCount: widget.state.items.length + 1,
         itemBuilder: (context, index) {
-          if (index >= widget.state.items.length) {
+          if (index < widget.state.items.length) {
+            final item = widget.state.items[index];
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: AppDimensions.paddingMd,
-              ),
-              child: const Center(
-                child: SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.brandRed,
-                  ),
-                ),
+              padding: const EdgeInsets.only(bottom: AppDimensions.spacingSm),
+              child: OfferCard(
+                offer: item,
+                onTap: () {
+                  context.push(AppRouter.offerDetailsLocation(item.offerId));
+                },
               ),
             );
           }
 
-          final item = widget.state.items[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: AppDimensions.spacingSm),
-            child: OfferCard(
-              offer: item,
-              onTap: () {
-                context.push(AppRouter.offerDetailsLocation(item.offerId));
-              },
-            ),
+          return LoadMoreFooter(
+            isLoadingMore: widget.state.isLoadingMore,
+            hasReachedEnd: widget.state.hasReachedEnd,
+            onLoadMore: () => context.read<CustomerOffersCubit>().loadMore(),
+            noMoreItemsLabel: localizations.noMoreItems,
           );
         },
       ),
@@ -295,8 +303,9 @@ class _ErrorState extends StatelessWidget {
                   backgroundColor: AppColors.buttonPrimary,
                   foregroundColor: AppColors.background,
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(AppDimensions.borderRadiusMd),
+                    borderRadius: BorderRadius.circular(
+                      AppDimensions.borderRadiusMd,
+                    ),
                   ),
                 ),
                 child: Text(localizations.offersRetry),

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,6 +6,7 @@ import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/company_logo_widget.dart';
 import '../../../home/domain/entities/company_summary.dart';
 import '../../../home/domain/entities/discovery_types.dart';
 
@@ -75,7 +75,11 @@ class CompanySummaryCard extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _CompanyLogo(url: company.companyLogoUrl),
+                      CompanyLogoWidget(
+                        logoUrl: company.companyLogoUrl,
+                        size: 56,
+                        borderRadius: AppDimensions.borderRadiusMd,
+                      ),
                       const SizedBox(width: AppDimensions.spacingMd),
                       Expanded(
                         child: Column(
@@ -197,55 +201,6 @@ class CompanySummaryCard extends StatelessWidget {
       return country;
     }
     return null;
-  }
-}
-
-class _CompanyLogo extends StatelessWidget {
-  final String? url;
-
-  const _CompanyLogo({this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 56.0;
-
-    if (url != null && url!.trim().isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-        child: CachedNetworkImage(
-          imageUrl: url!,
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorWidget: (_, _, _) => _PlaceholderLogo(size: size),
-        ),
-      );
-    }
-
-    return _PlaceholderLogo(size: size);
-  }
-}
-
-class _PlaceholderLogo extends StatelessWidget {
-  final double size;
-
-  const _PlaceholderLogo({required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: AppColors.buttonSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-      ),
-      child: Icon(
-        Icons.business_rounded,
-        size: size * 0.45,
-        color: AppColors.textSecondary.withValues(alpha: 0.5),
-      ),
-    );
   }
 }
 

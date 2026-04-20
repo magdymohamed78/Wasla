@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,6 +5,7 @@ import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/company_logo_widget.dart';
 import '../../../home/domain/entities/company_details.dart';
 
 class CompanyDetailsHeaderSection extends StatelessWidget {
@@ -30,7 +30,6 @@ class CompanyDetailsHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasLogo = companyLogoUrl != null && companyLogoUrl!.isNotEmpty;
     final hasReviews = averageRating != null && reviewCount > 0;
     final displayName = companyName.trim().isEmpty
         ? unknownCompanyLabel
@@ -39,21 +38,10 @@ class CompanyDetailsHeaderSection extends StatelessWidget {
     return _SectionCard(
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-            child: SizedBox(
-              width: 80,
-              height: 80,
-              child: hasLogo
-                  ? CachedNetworkImage(
-                      imageUrl: companyLogoUrl!,
-                      fit: BoxFit.cover,
-                      placeholder: (_, _) =>
-                          const _CompanyLogoPlaceholder(icon: Icons.image),
-                      errorWidget: (_, _, _) => const _CompanyLogoPlaceholder(),
-                    )
-                  : const _CompanyLogoPlaceholder(),
-            ),
+          CompanyLogoWidget(
+            logoUrl: companyLogoUrl,
+            size: AppDimensions.logoSizeMedium,
+            borderRadius: AppDimensions.borderRadiusMd,
           ),
           const SizedBox(height: AppDimensions.spacingMd),
           Text(
@@ -346,21 +334,6 @@ class _SectionCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _CompanyLogoPlaceholder extends StatelessWidget {
-  final IconData icon;
-
-  const _CompanyLogoPlaceholder({this.icon = Icons.business_rounded});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.buttonSecondary,
-      alignment: Alignment.center,
-      child: Icon(icon, color: AppColors.textSecondary, size: 36),
     );
   }
 }

@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/company_logo_widget.dart';
 
 class RequestCard extends StatelessWidget {
   final String? companyLogoUrl;
@@ -67,7 +67,7 @@ class RequestCard extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _CompanyLogo(logoUrl: companyLogoUrl),
+                            CompanyLogoWidget(logoUrl: companyLogoUrl),
                             const SizedBox(width: AppDimensions.spacingSm),
                             Expanded(
                               child: Column(
@@ -106,11 +106,7 @@ class RequestCard extends StatelessWidget {
                             ),
                             const SizedBox(width: AppDimensions.spacingSm),
                             Spacer(),
-                               _ChipBadge(
-                                label: statusLabel,
-                                color: statusColor,
-                              ),
-                            
+                            _ChipBadge(label: statusLabel, color: statusColor),
                           ],
                         ),
                         if (_hasDates) ...[
@@ -152,55 +148,6 @@ class RequestCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _CompanyLogo extends StatelessWidget {
-  final String? logoUrl;
-
-  const _CompanyLogo({this.logoUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    const size = AppDimensions.logoSizeSmall;
-
-    if (logoUrl != null && logoUrl!.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-        child: CachedNetworkImage(
-          imageUrl: logoUrl!,
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorWidget: (_, _, _) => _PlaceholderLogo(size: size),
-        ),
-      );
-    }
-
-    return _PlaceholderLogo(size: size);
-  }
-}
-
-class _PlaceholderLogo extends StatelessWidget {
-  final double size;
-
-  const _PlaceholderLogo({required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: AppColors.buttonSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-      ),
-      child: Icon(
-        Icons.business_rounded,
-        size: size * 0.5,
-        color: AppColors.textSecondary,
       ),
     );
   }

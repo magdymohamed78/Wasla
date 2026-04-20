@@ -1226,4 +1226,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get myReviewsLoadFailed =>
       'تعذر تحميل مراجعاتك. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get loadMoreButton => 'تحميل المزيد';
+
+  @override
+  String get noMoreItems => 'لا توجد عناصر أخرى';
 }

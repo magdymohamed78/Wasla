@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +6,7 @@ import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/company_logo_widget.dart';
 import '../../../home/domain/entities/customer_review_item.dart';
 
 class MyReviewCard extends StatelessWidget {
@@ -64,7 +64,10 @@ class MyReviewCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _CompanyLogo(url: review.companyLogoUrl),
+              CompanyLogoWidget(
+                logoUrl: review.companyLogoUrl,
+                size: AppDimensions.logoSizeSmall + 4,
+              ),
               const SizedBox(width: AppDimensions.spacingSm),
               Expanded(
                 child: Column(
@@ -268,51 +271,4 @@ class _RatingBadge extends StatelessWidget {
   }
 }
 
-class _CompanyLogo extends StatelessWidget {
-  final String? url;
 
-  const _CompanyLogo({this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    const size = AppDimensions.logoSizeSmall + 4;
-
-    if (url != null && url!.isNotEmpty) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-        child: CachedNetworkImage(
-          imageUrl: url!,
-          width: size,
-          height: size,
-          fit: BoxFit.cover,
-          errorWidget: (_, _, _) => const _LogoPlaceholder(),
-        ),
-      );
-    }
-
-    return const _LogoPlaceholder();
-  }
-}
-
-class _LogoPlaceholder extends StatelessWidget {
-  const _LogoPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    const size = AppDimensions.logoSizeSmall + 4;
-
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: AppColors.buttonSecondary,
-        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
-      ),
-      child: Icon(
-        Icons.business_rounded,
-        size: AppDimensions.logoSizeSmall * 0.5,
-        color: AppColors.textSecondary,
-      ),
-    );
-  }
-}

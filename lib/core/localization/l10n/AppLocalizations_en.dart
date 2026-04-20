@@ -1238,4 +1238,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get myReviewsLoadFailed =>
       'Unable to load your reviews. Please try again.';
+
+  @override
+  String get loadMoreButton => 'Load More';
+
+  @override
+  String get noMoreItems => 'No more items';
 }

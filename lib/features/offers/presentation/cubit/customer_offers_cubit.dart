@@ -55,7 +55,7 @@ class CustomerOffersState {
 
 class CustomerOffersCubit extends Cubit<CustomerOffersState> {
   static const String loadFailedError = 'customer_offers_load_failed';
-  static const int _pageSize = 20;
+  static const int _pageSize = 5;
 
   final CustomerOffersRepository _repository;
 

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../models/discovery_api_models.dart';
 
@@ -54,10 +55,14 @@ class DiscoveryRemoteDataSourceImpl implements DiscoveryRemoteDataSource {
       return const <PublicCompanyListDto>[];
     }
 
-    return items
+    final companies = items
         .whereType<Map<String, dynamic>>()
         .map(PublicCompanyListDto.fromJson)
         .toList(growable: false);
+
+    _debugLogLogoUrls(source: 'all-companies', companies: companies);
+
+    return companies;
   }
 
   @override
@@ -69,10 +74,17 @@ class DiscoveryRemoteDataSourceImpl implements DiscoveryRemoteDataSource {
       queryParameters: queryParameters,
     );
 
-    return DiscoveryPaginatedDto<RecommendedCompanyDto>.fromJson(
+    final page = DiscoveryPaginatedDto<RecommendedCompanyDto>.fromJson(
       response.data,
       RecommendedCompanyDto.fromJson,
     );
+
+    _debugLogLogoUrls(
+      source: 'recommended-companies',
+      companies: page.items.map((item) => item.base),
+    );
+
+    return page;
   }
 
   @override
@@ -84,10 +96,17 @@ class DiscoveryRemoteDataSourceImpl implements DiscoveryRemoteDataSource {
       queryParameters: queryParameters,
     );
 
-    return DiscoveryPaginatedDto<TrendingCompanyDto>.fromJson(
+    final page = DiscoveryPaginatedDto<TrendingCompanyDto>.fromJson(
       response.data,
       TrendingCompanyDto.fromJson,
     );
+
+    _debugLogLogoUrls(
+      source: 'trending-companies',
+      companies: page.items.map((item) => item.base),
+    );
+
+    return page;
   }
 
   @override
@@ -126,5 +145,21 @@ class DiscoveryRemoteDataSourceImpl implements DiscoveryRemoteDataSource {
         .whereType<Map<String, dynamic>>()
         .map(CompanyReviewDto.fromJson)
         .toList(growable: false);
+  }
+
+  void _debugLogLogoUrls({
+    required String source,
+    required Iterable<PublicCompanyListDto> companies,
+  }) {
+    if (!kDebugMode) {
+      return;
+    }
+
+    for (final company in companies) {
+      debugPrint(
+        '[LogoDebug][$source] Company "${company.companyName}": '
+        'logoUrl = ${company.companyLogoUrl}',
+      );
+    }
   }
 }
