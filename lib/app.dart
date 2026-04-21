@@ -10,6 +10,7 @@ import 'core/localization/locale_cubit/locale_cubit.dart';
 import 'core/localization/locale_cubit/locale_state.dart';
 import 'core/localization/locale_repository_impl.dart';
 import 'core/networking/auth_interceptor.dart';
+import 'core/networking/chatbot_auth_interceptor.dart';
 import 'core/routing/app_router.dart';
 import 'core/session/pending_intent_store.dart';
 import 'core/session/role_resolver.dart';
@@ -48,6 +49,11 @@ import 'features/home/domain/use_cases/logout_use_case.dart';
 import 'features/home/domain/use_cases/reveal_signature_use_case.dart';
 import 'features/home/domain/use_cases/role_guard_use_cases.dart';
 import 'features/home/domain/use_cases/service_request_use_cases.dart';
+import 'features/chatbot/data/data_sources/chatbot_remote_data_source.dart';
+import 'features/chatbot/data/data_sources/chat_history_local_data_source.dart';
+import 'features/chatbot/data/repositories/chatbot_repository_impl.dart';
+import 'features/chatbot/domain/repositories/chatbot_repository.dart';
+import 'features/chatbot/domain/use_cases/send_message_use_case.dart';
 import 'features/splash/presentation/cubit/splash_cubit.dart';
 
 class App extends StatefulWidget {
@@ -121,6 +127,15 @@ class _AppState extends State<App> {
   late final LogoutUseCase _logoutUseCase;
   late final LogoutAllUseCase _logoutAllUseCase;
 
+  // ── Chatbot ─────────────────────────────────────────────────────
+  late final Dio _chatbotDio;
+  late final ChatbotAuthInterceptor _chatbotAuthInterceptor =
+      ChatbotAuthInterceptor();
+  late final ChatbotRemoteDataSource _chatbotRemoteDataSource;
+  late final ChatHistoryLocalDataSource _chatbotHistoryLocalDataSource;
+  late final ChatbotRepository _chatbotRepository;
+  late final SendMessageUseCase _sendMessageUseCase;
+
   @override
   void initState() {
     super.initState();
@@ -160,6 +175,7 @@ class _AppState extends State<App> {
       inMemoryLocalDataSource: _inMemoryAuthLocalDataSource,
     );
     _authInterceptor.setAuthRepository(_authRepository);
+    _chatbotAuthInterceptor.setAuthRepository(_authRepository);
 
     _sessionCubit = SessionCubit(
       authRepository: _authRepository,
@@ -239,6 +255,27 @@ class _AppState extends State<App> {
       _serviceRequestRepository,
     );
 
+    // ── Chatbot ────────────────────────────────────────────────────
+    _chatbotDio = Dio(
+      BaseOptions(
+        baseUrl: 'https://mohameddda-wasla-ai-agent.hf.space/',
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {'Content-Type': 'application/json'},
+      ),
+    );
+    _chatbotDio.interceptors.add(_chatbotAuthInterceptor);
+    _chatbotRemoteDataSource = ChatbotRemoteDataSourceImpl(_chatbotDio);
+    _chatbotHistoryLocalDataSource = ChatHistoryLocalDataSourceImpl(
+      sharedPreferences: widget.sharedPreferences,
+    );
+    _chatbotRepository = ChatbotRepositoryImpl(
+      remote: _chatbotRemoteDataSource,
+      historyLocal: _chatbotHistoryLocalDataSource,
+      sharedPreferences: widget.sharedPreferences,
+    );
+    _sendMessageUseCase = SendMessageUseCase(_chatbotRepository);
+
     // ── Routing ─────────────────────────────────────────────────
     _router = AppRouter.router(_authRepository);
   }
@@ -251,6 +288,7 @@ class _AppState extends State<App> {
     _splashCubit.close();
     _sessionCubit.close();
     _dio.close();
+    _chatbotDio.close();
     super.dispose();
   }
 
@@ -359,6 +397,12 @@ class _AppState extends State<App> {
         ),
         RepositoryProvider<LogoutUseCase>.value(value: _logoutUseCase),
         RepositoryProvider<LogoutAllUseCase>.value(value: _logoutAllUseCase),
+
+        // ── Chatbot ──────────────────────────────────────────────
+        RepositoryProvider<ChatbotRepository>.value(value: _chatbotRepository),
+        RepositoryProvider<SendMessageUseCase>.value(
+          value: _sendMessageUseCase,
+        ),
       ],
       child: MultiBlocProvider(
         providers: [

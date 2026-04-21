@@ -444,6 +444,18 @@
   "myReviewsDeletedSuccess": "تم حذف المراجعة بنجاح.",
   "myReviewsValidationRatingRequired": "يرجى اختيار تقييم.",
   "myReviewsLoadFailed": "تعذر تحميل مراجعاتك. يرجى المحاولة مرة أخرى.",
-   "loadMoreButton": "تحميل المزيد",
-   "noMoreItems": "لا توجد عناصر أخرى"
+  "loadMoreButton": "تحميل المزيد",
+  "noMoreItems": "لا توجد عناصر أخرى",
+  "chatbotTabLabel": "المساعد",
+  "chatbotTitle": "مساعد وسلة",
+  "chatbotHint": "اسأل عن الشركات، العروض، والخدمات...",
+  "chatbotNewConversation": "محادثة جديدة",
+  "chatbotWelcomeMessage": "مرحباً! أنا مساعد وسلة الذكي. كيف يمكنني مساعدتك اليوم؟",
+  "chatbotRestrictedTitle": "المساعد الذكي",
+  "chatbotRestrictedMessage": "سجل الدخول للتحدث مع المساعد الذكي والحصول على مساعدة مخصصة.",
+  "chatbotNewChat": "محادثة جديدة",
+  "chatbotHistoryTitle": "سجل المحادثات",
+  "chatbotNoHistory": "لا توجد محادثات سابقة",
+  "chatbotDeleteChat": "حذف المحادثة؟",
+  "chatbotDeleteConfirm": "لا يمكن التراجع عن هذا."
 }

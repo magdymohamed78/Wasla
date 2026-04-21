@@ -2419,6 +2419,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No more items'**
   String get noMoreItems;
+
+  /// No description provided for @chatbotTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Assistant'**
+  String get chatbotTabLabel;
+
+  /// No description provided for @chatbotTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Wasla Assistant'**
+  String get chatbotTitle;
+
+  /// No description provided for @chatbotHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask about companies, offers, and services...'**
+  String get chatbotHint;
+
+  /// No description provided for @chatbotNewConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'New Conversation'**
+  String get chatbotNewConversation;
+
+  /// No description provided for @chatbotWelcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! I\'m your Wasla AI assistant. How can I help you today?'**
+  String get chatbotWelcomeMessage;
+
+  /// No description provided for @chatbotRestrictedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get chatbotRestrictedTitle;
+
+  /// No description provided for @chatbotRestrictedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to chat with our AI assistant and get personalized help.'**
+  String get chatbotRestrictedMessage;
+
+  /// No description provided for @chatbotNewChat.
+  ///
+  /// In en, this message translates to:
+  /// **'New Chat'**
+  String get chatbotNewChat;
+
+  /// No description provided for @chatbotHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat History'**
+  String get chatbotHistoryTitle;
+
+  /// No description provided for @chatbotNoHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous chats'**
+  String get chatbotNoHistory;
+
+  /// No description provided for @chatbotDeleteChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete chat?'**
+  String get chatbotDeleteChat;
+
+  /// No description provided for @chatbotDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This cannot be undone.'**
+  String get chatbotDeleteConfirm;
 }
 
 class _AppLocalizationsDelegate

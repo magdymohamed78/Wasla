@@ -1232,4 +1232,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noMoreItems => 'لا توجد عناصر أخرى';
+
+  @override
+  String get chatbotTabLabel => 'المساعد';
+
+  @override
+  String get chatbotTitle => 'مساعد وسلة';
+
+  @override
+  String get chatbotHint => 'اسأل عن الشركات، العروض، والخدمات...';
+
+  @override
+  String get chatbotNewConversation => 'محادثة جديدة';
+
+  @override
+  String get chatbotWelcomeMessage =>
+      'مرحباً! أنا مساعد وسلة الذكي. كيف يمكنني مساعدتك اليوم؟';
+
+  @override
+  String get chatbotRestrictedTitle => 'المساعد الذكي';
+
+  @override
+  String get chatbotRestrictedMessage =>
+      'سجل الدخول للتحدث مع المساعد الذكي والحصول على مساعدة مخصصة.';
+
+  @override
+  String get chatbotNewChat => 'محادثة جديدة';
+
+  @override
+  String get chatbotHistoryTitle => 'سجل المحادثات';
+
+  @override
+  String get chatbotNoHistory => 'لا توجد محادثات سابقة';
+
+  @override
+  String get chatbotDeleteChat => 'حذف المحادثة؟';
+
+  @override
+  String get chatbotDeleteConfirm => 'لا يمكن التراجع عن هذا.';
 }

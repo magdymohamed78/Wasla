@@ -11,14 +11,21 @@ import '../../domain/use_cases/role_guard_use_cases.dart';
 import '../cubit/lead_access_cubit.dart';
 import '../cubit/lead_access_state.dart';
 import '../widgets/discovery_floating_modal.dart';
+import '../../../chatbot/domain/repositories/chatbot_repository.dart';
+import '../../../chatbot/domain/use_cases/send_message_use_case.dart';
+import '../../../chatbot/presentation/cubit/chatbot_cubit.dart';
 import '../../../offers/domain/entities/offer_filter.dart';
 import '../../../offers/presentation/pages/customer_offers_page.dart';
 import '../../../profile/presentation/pages/customer_profile_page.dart';
 import '../../../requests/presentation/pages/customer_requests_page.dart';
+import '../../../home/domain/use_cases/customer_profile_use_cases.dart';
+import '../../../home/domain/use_cases/lead_profile_use_cases.dart';
+import '../../../settings/presentation/cubit/settings_cubit.dart';
 import '../../../settings/presentation/pages/customer_settings_page.dart';
 import 'home_page.dart';
 import '../../../profile/presentation/pages/lead_profile_page.dart';
 import '../../../settings/presentation/pages/lead_settings_page.dart';
+import '../../../chatbot/presentation/pages/chatbot_page.dart';
 import 'restricted_tab_page.dart';
 
 class DiscoveryShellPage extends StatelessWidget {
@@ -121,6 +128,14 @@ class DiscoveryShellPage extends StatelessWidget {
     switch (currentTab) {
       case DiscoveryTab.home:
         return const HomePlaceholderPage();
+      case DiscoveryTab.chatbot:
+        return BlocProvider<ChatbotCubit>(
+          create: (context) => ChatbotCubit(
+            sendMessageUseCase: context.read<SendMessageUseCase>(),
+            repository: context.read<ChatbotRepository>(),
+          )..loadSession(),
+          child: const ChatbotPage(),
+        );
       case DiscoveryTab.requests:
         return CustomerRequestsPage(
           ensureRequestId: requestsEnsureRequestId,
@@ -136,9 +151,22 @@ class DiscoveryShellPage extends StatelessWidget {
       case DiscoveryTab.settings:
         switch (state.settingsDestination) {
           case SettingsDestination.lead:
-            return const LeadSettingsPage();
+            return BlocProvider<SettingsCubit>(
+              create: (context) => SettingsCubit(
+                sessionCubit: context.read<SessionCubit>(),
+                getLeadProfileUseCase: context.read<GetLeadProfileUseCase>(),
+              )..loadProfile(),
+              child: const LeadSettingsPage(),
+            );
           case SettingsDestination.customer:
-            return const CustomerSettingsPage();
+            return BlocProvider<SettingsCubit>(
+              create: (context) => SettingsCubit(
+                sessionCubit: context.read<SessionCubit>(),
+                getCustomerProfileUseCase: context
+                    .read<GetCustomerProfileUseCase>(),
+              )..loadProfile(),
+              child: const CustomerSettingsPage(),
+            );
           case SettingsDestination.unavailable:
             return RestrictedTabPage(
               title: localizations.navigationSettings,
@@ -154,6 +182,8 @@ class DiscoveryShellPage extends StatelessWidget {
     switch (currentTab) {
       case DiscoveryTab.home:
         return localizations.homeAllCompanies;
+      case DiscoveryTab.chatbot:
+        return localizations.chatbotRestrictedTitle;
       case DiscoveryTab.requests:
         return localizations.restrictionRequestsTitle;
       case DiscoveryTab.offers:
@@ -169,6 +199,8 @@ class DiscoveryShellPage extends StatelessWidget {
     switch (currentTab) {
       case DiscoveryTab.home:
         return localizations.restrictionLoginOrRegister;
+      case DiscoveryTab.chatbot:
+        return localizations.chatbotRestrictedMessage;
       case DiscoveryTab.requests:
         return localizations.restrictionRequestsMessage;
       case DiscoveryTab.offers:
@@ -184,6 +216,8 @@ class DiscoveryShellPage extends StatelessWidget {
     switch (tab) {
       case DiscoveryTab.home:
         return AppRouter.home;
+      case DiscoveryTab.chatbot:
+        return AppRouter.chatbot;
       case DiscoveryTab.requests:
         return state.isCustomer
             ? AppRouter.customerRequests
@@ -207,6 +241,7 @@ class DiscoveryShellPage extends StatelessWidget {
           return 0;
         case DiscoveryTab.requests:
         case DiscoveryTab.offers:
+        case DiscoveryTab.chatbot:
           return 1;
         case DiscoveryTab.profile:
         case DiscoveryTab.settings:
@@ -214,16 +249,34 @@ class DiscoveryShellPage extends StatelessWidget {
       }
     }
 
+    if (state.isLead) {
+      switch (currentTab) {
+        case DiscoveryTab.home:
+          return 0;
+        case DiscoveryTab.requests:
+        case DiscoveryTab.offers:
+          return 1;
+        case DiscoveryTab.chatbot:
+          return 0;
+        case DiscoveryTab.profile:
+          return 2;
+        case DiscoveryTab.settings:
+          return 3;
+      }
+    }
+
     switch (currentTab) {
       case DiscoveryTab.home:
         return 0;
+      case DiscoveryTab.chatbot:
+        return 1;
       case DiscoveryTab.requests:
       case DiscoveryTab.offers:
-        return 1;
-      case DiscoveryTab.profile:
         return 2;
-      case DiscoveryTab.settings:
+      case DiscoveryTab.profile:
         return 3;
+      case DiscoveryTab.settings:
+        return 4;
     }
   }
 
@@ -305,6 +358,17 @@ class DiscoveryShellPage extends StatelessWidget {
         ),
         onTap: () => context.go(AppRouter.home),
       ),
+      if (state.isCustomer)
+        _ShellNavItem(
+          label: localizations.chatbotTabLabel,
+          icon: const Icon(Icons.smart_toy_outlined),
+          selectedIcon: const Icon(Icons.smart_toy, color: AppColors.brandRed),
+          onTap: () {
+            if (currentTab != DiscoveryTab.chatbot) {
+              context.go(AppRouter.chatbot);
+            }
+          },
+        ),
       modalItem,
       _ShellNavItem(
         label: localizations.navigationProfile,

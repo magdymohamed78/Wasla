@@ -452,6 +452,18 @@
   "myReviewsDeletedSuccess": "Review deleted successfully.",
   "myReviewsValidationRatingRequired": "Please select a rating.",
   "myReviewsLoadFailed": "Unable to load your reviews. Please try again.",
-   "loadMoreButton": "Load More",
-   "noMoreItems": "No more items"
+  "loadMoreButton": "Load More",
+  "noMoreItems": "No more items",
+  "chatbotTabLabel": "Assistant",
+  "chatbotTitle": "Wasla Assistant",
+  "chatbotHint": "Ask about companies, offers, and services...",
+  "chatbotNewConversation": "New Conversation",
+  "chatbotWelcomeMessage": "Hello! I'm your Wasla AI assistant. How can I help you today?",
+  "chatbotRestrictedTitle": "AI Assistant",
+  "chatbotRestrictedMessage": "Sign in to chat with our AI assistant and get personalized help.",
+  "chatbotNewChat": "New Chat",
+  "chatbotHistoryTitle": "Chat History",
+  "chatbotNoHistory": "No previous chats",
+  "chatbotDeleteChat": "Delete chat?",
+  "chatbotDeleteConfirm": "This cannot be undone."
 }

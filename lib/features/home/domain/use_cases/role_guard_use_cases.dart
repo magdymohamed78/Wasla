@@ -95,6 +95,23 @@ class RoleGuardUseCases {
         }
 
         return const GuardDecision.allow();
+      case RestrictionScope.chatbotTab:
+        if (role == SessionRole.customer) {
+          return const GuardDecision.allow();
+        }
+
+        if (role == SessionRole.lead) {
+          return const GuardDecision.deny(
+            reason: GuardReason.leadRestricted,
+            fallbackRoute: AppRouter.home,
+          );
+        }
+
+        return GuardDecision.deny(
+          reason: GuardReason.unauthenticated,
+          fallbackRoute: AppRouter.home,
+          modal: _guestSignInModal(),
+        );
       case RestrictionScope.requestAction:
         return const GuardDecision.allow();
     }

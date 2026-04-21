@@ -18,7 +18,6 @@ import '../../features/explore/presentation/pages/explore_page.dart';
 import '../../features/profile/presentation/pages/profile_edit_page.dart';
 import '../../features/requests/presentation/pages/new_service_request_page.dart';
 import '../../features/requests/presentation/pages/request_details_page.dart';
-import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/companies/presentation/pages/recommended_companies_page.dart';
 import '../../features/companies/presentation/pages/trending_companies_page.dart';
 import '../../features/offers/presentation/pages/offer_details_page.dart';
@@ -46,6 +45,7 @@ class AppRouter {
   static const String changePassword = '/change-password';
   static const String registerSuccess = '/register-success';
   static const String home = '/home';
+  static const String chatbot = '/chatbot';
   static const String explore = '/explore';
   static const String company = '/company';
 
@@ -76,12 +76,12 @@ class AppRouter {
 
   static const List<String> _browseRoutePrefixes = <String>[
     home,
+    chatbot,
     explore,
     company,
     allCompanies,
     recommendedCompanies,
     trendingCompanies,
-    notifications,
     requests,
     offers,
     profile,
@@ -242,6 +242,11 @@ class AppRouter {
           path: home,
           builder: (context, state) =>
               const DiscoveryShellPage(currentTab: DiscoveryTab.home),
+        ),
+        GoRoute(
+          path: chatbot,
+          builder: (context, state) =>
+              const DiscoveryShellPage(currentTab: DiscoveryTab.chatbot),
         ),
         GoRoute(
           path: requests,
@@ -416,10 +421,7 @@ class AppRouter {
           path: explore,
           builder: (context, state) => const ExplorePage(),
         ),
-        GoRoute(
-          path: notifications,
-          builder: (context, state) => const NotificationsPage(),
-        ),
+        
         GoRoute(
           path: '$company/:companyId',
           builder: (context, state) {

@@ -6,6 +6,7 @@ class SettingsState {
   final String fullName;
   final String initials;
   final SessionRole role;
+  final bool isLoading;
 
   const SettingsState({
     this.firstName,
@@ -13,6 +14,7 @@ class SettingsState {
     this.fullName = '',
     this.initials = '',
     this.role = SessionRole.guest,
+    this.isLoading = false,
   });
 
   SettingsState copyWith({
@@ -21,6 +23,7 @@ class SettingsState {
     String? fullName,
     String? initials,
     SessionRole? role,
+    bool? isLoading,
   }) {
     return SettingsState(
       firstName: firstName ?? this.firstName,
@@ -28,6 +31,7 @@ class SettingsState {
       fullName: fullName ?? this.fullName,
       initials: initials ?? this.initials,
       role: role ?? this.role,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

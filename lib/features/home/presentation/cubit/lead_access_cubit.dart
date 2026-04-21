@@ -45,6 +45,10 @@ class LeadAccessCubit extends Cubit<LeadAccessState> {
             sessionState.status == SessionLifecycleStatus.initial ||
             sessionState.status == SessionLifecycleStatus.loading,
         role: role,
+        chatbotTabDecision: _roleGuardUseCases.guardTabAccess(
+          role: role,
+          scope: RestrictionScope.chatbotTab,
+        ),
         requestsTabDecision: _roleGuardUseCases.guardTabAccess(
           role: role,
           scope: RestrictionScope.requestsTab,

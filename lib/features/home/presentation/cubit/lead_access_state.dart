@@ -2,7 +2,7 @@ import '../../../../core/session/session_state.dart';
 import '../../domain/entities/discovery_types.dart';
 import '../../domain/use_cases/role_guard_use_cases.dart';
 
-enum DiscoveryTab { home, requests, offers, profile, settings }
+enum DiscoveryTab { home, chatbot, requests, offers, profile, settings }
 
 enum SettingsDestination { unavailable, lead, customer }
 
@@ -11,6 +11,7 @@ class LeadAccessState {
 
   final bool isLoading;
   final SessionRole role;
+  final GuardDecision chatbotTabDecision;
   final GuardDecision requestsTabDecision;
   final GuardDecision offersTabDecision;
   final GuardDecision profileTabDecision;
@@ -19,6 +20,7 @@ class LeadAccessState {
   const LeadAccessState({
     this.isLoading = true,
     this.role = SessionRole.guest,
+    this.chatbotTabDecision = const GuardDecision.allow(),
     this.requestsTabDecision = const GuardDecision.allow(),
     this.offersTabDecision = const GuardDecision.allow(),
     this.profileTabDecision = const GuardDecision.allow(),
@@ -60,6 +62,8 @@ class LeadAccessState {
     switch (tab) {
       case DiscoveryTab.home:
         return false;
+      case DiscoveryTab.chatbot:
+        return !chatbotTabDecision.allowed;
       case DiscoveryTab.requests:
         return !requestsTabDecision.allowed;
       case DiscoveryTab.offers:
@@ -75,6 +79,8 @@ class LeadAccessState {
     switch (tab) {
       case DiscoveryTab.home:
         return null;
+      case DiscoveryTab.chatbot:
+        return chatbotTabDecision;
       case DiscoveryTab.requests:
         return requestsTabDecision;
       case DiscoveryTab.offers:
@@ -90,6 +96,8 @@ class LeadAccessState {
     switch (tab) {
       case DiscoveryTab.home:
         return null;
+      case DiscoveryTab.chatbot:
+        return RestrictionScope.chatbotTab;
       case DiscoveryTab.requests:
         return RestrictionScope.requestsTab;
       case DiscoveryTab.offers:
@@ -104,6 +112,7 @@ class LeadAccessState {
   LeadAccessState copyWith({
     bool? isLoading,
     SessionRole? role,
+    Object? chatbotTabDecision = _unset,
     Object? requestsTabDecision = _unset,
     Object? offersTabDecision = _unset,
     Object? profileTabDecision = _unset,
@@ -112,6 +121,9 @@ class LeadAccessState {
     return LeadAccessState(
       isLoading: isLoading ?? this.isLoading,
       role: role ?? this.role,
+      chatbotTabDecision: identical(chatbotTabDecision, _unset)
+          ? this.chatbotTabDecision
+          : chatbotTabDecision as GuardDecision,
       requestsTabDecision: identical(requestsTabDecision, _unset)
           ? this.requestsTabDecision
           : requestsTabDecision as GuardDecision,

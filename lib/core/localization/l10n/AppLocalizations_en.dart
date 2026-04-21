@@ -1244,4 +1244,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noMoreItems => 'No more items';
+
+  @override
+  String get chatbotTabLabel => 'Assistant';
+
+  @override
+  String get chatbotTitle => 'Wasla Assistant';
+
+  @override
+  String get chatbotHint => 'Ask about companies, offers, and services...';
+
+  @override
+  String get chatbotNewConversation => 'New Conversation';
+
+  @override
+  String get chatbotWelcomeMessage =>
+      'Hello! I\'m your Wasla AI assistant. How can I help you today?';
+
+  @override
+  String get chatbotRestrictedTitle => 'AI Assistant';
+
+  @override
+  String get chatbotRestrictedMessage =>
+      'Sign in to chat with our AI assistant and get personalized help.';
+
+  @override
+  String get chatbotNewChat => 'New Chat';
+
+  @override
+  String get chatbotHistoryTitle => 'Chat History';
+
+  @override
+  String get chatbotNoHistory => 'No previous chats';
+
+  @override
+  String get chatbotDeleteChat => 'Delete chat?';
+
+  @override
+  String get chatbotDeleteConfirm => 'This cannot be undone.';
 }

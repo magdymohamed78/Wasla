@@ -13,4 +13,10 @@ enum ServiceFilterOption {
   transport,
 }
 
-enum RestrictionScope { requestAction, requestsTab, offersTab, profileTab }
+enum RestrictionScope {
+  requestAction,
+  requestsTab,
+  offersTab,
+  profileTab,
+  chatbotTab,
+}
