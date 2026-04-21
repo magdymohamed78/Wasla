@@ -1237,7 +1237,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatbotTabLabel => 'المساعد';
 
   @override
-  String get chatbotTitle => 'مساعد وسلة';
+  String get chatbotTitle => 'مساعد وصلة';
 
   @override
   String get chatbotHint => 'اسأل عن الشركات، العروض، والخدمات...';
