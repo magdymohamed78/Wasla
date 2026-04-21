@@ -20,22 +20,51 @@ abstract class ChatHistoryLocalDataSource {
 }
 
 class ChatHistoryLocalDataSourceImpl implements ChatHistoryLocalDataSource {
-  static const String _historyKey = 'chatbot_chat_history';
+  static const String _historyKeyPrefix = 'chatbot_chat_history';
+  static const String _legacyHistoryKey = 'chatbot_chat_history';
+  static const String _migrationFlagKey = 'chat_history_scoped_migrated';
   static const int _maxChats = 20;
 
   final SharedPreferences _sharedPreferences;
+  final String Function() customerIdProvider;
 
-  ChatHistoryLocalDataSourceImpl({required SharedPreferences sharedPreferences})
-    : _sharedPreferences = sharedPreferences;
+  ChatHistoryLocalDataSourceImpl({
+    required SharedPreferences sharedPreferences,
+    required this.customerIdProvider,
+  }) : _sharedPreferences = sharedPreferences;
+
+  String get _scopedHistoryKey {
+    final scope = customerIdProvider();
+    return '${_historyKeyPrefix}_$scope';
+  }
+
+  Future<void> _migrateFromLegacyKey() async {
+    final migrated = _sharedPreferences.getBool(_migrationFlagKey) ?? false;
+    if (migrated) return;
+
+    final legacyData = _sharedPreferences.getString(_legacyHistoryKey);
+    if (legacyData != null && legacyData.isNotEmpty) {
+      final scopedKey = _scopedHistoryKey;
+      final existing = _sharedPreferences.getString(scopedKey);
+      if (existing == null || existing.isEmpty) {
+        await _sharedPreferences.setString(scopedKey, legacyData);
+      }
+      await _sharedPreferences.remove(_legacyHistoryKey);
+    }
+
+    await _sharedPreferences.setBool(_migrationFlagKey, true);
+  }
 
   @override
   Future<List<ChatSession>> getChatSummaries() async {
+    await _migrateFromLegacyKey();
     final sessions = _loadSessions();
     return sessions.map((dto) => dto.toSummary()).toList();
   }
 
   @override
   Future<List<ChatMessage>> getChatMessages(String sessionId) async {
+    await _migrateFromLegacyKey();
     final sessions = _loadSessions();
     final session = sessions.firstWhere(
       (s) => s.sessionId == sessionId,
@@ -56,6 +85,7 @@ class ChatHistoryLocalDataSourceImpl implements ChatHistoryLocalDataSource {
     String title,
     List<ChatMessage> messages,
   ) async {
+    await _migrateFromLegacyKey();
     final sessions = _loadSessions();
     final messageDtos = messages
         .map((m) => ChatMessageDto.fromDomain(m))
@@ -87,6 +117,7 @@ class ChatHistoryLocalDataSourceImpl implements ChatHistoryLocalDataSource {
 
   @override
   Future<void> deleteChat(String sessionId) async {
+    await _migrateFromLegacyKey();
     final sessions = _loadSessions();
     sessions.removeWhere((s) => s.sessionId == sessionId);
     await _saveSessions(sessions);
@@ -94,12 +125,13 @@ class ChatHistoryLocalDataSourceImpl implements ChatHistoryLocalDataSource {
 
   @override
   Future<void> clearAll() async {
-    await _sharedPreferences.remove(_historyKey);
+    await _migrateFromLegacyKey();
+    await _sharedPreferences.remove(_scopedHistoryKey);
   }
 
   List<ChatSessionDto> _loadSessions() {
     try {
-      final raw = _sharedPreferences.getString(_historyKey);
+      final raw = _sharedPreferences.getString(_scopedHistoryKey);
       if (raw == null || raw.isEmpty) return [];
 
       final List<dynamic> jsonList = jsonDecode(raw) as List<dynamic>;
@@ -113,6 +145,6 @@ class ChatHistoryLocalDataSourceImpl implements ChatHistoryLocalDataSource {
 
   Future<void> _saveSessions(List<ChatSessionDto> sessions) async {
     final jsonList = sessions.map((s) => s.toJson()).toList();
-    await _sharedPreferences.setString(_historyKey, jsonEncode(jsonList));
+    await _sharedPreferences.setString(_scopedHistoryKey, jsonEncode(jsonList));
   }
 }

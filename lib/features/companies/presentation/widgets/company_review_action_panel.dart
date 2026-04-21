@@ -10,6 +10,7 @@ class CompanyReviewActionPanel extends StatelessWidget {
   final bool showNotConnectedInfo;
   final bool isSubmitting;
   final String writeReviewLabel;
+  final String submittingMessage;
   final String infoMessage;
   final String viewProfileLabel;
   final VoidCallback onWriteReview;
@@ -22,6 +23,7 @@ class CompanyReviewActionPanel extends StatelessWidget {
     required this.showNotConnectedInfo,
     required this.isSubmitting,
     required this.writeReviewLabel,
+    required this.submittingMessage,
     required this.infoMessage,
     required this.viewProfileLabel,
     required this.onWriteReview,
@@ -48,38 +50,100 @@ class CompanyReviewActionPanel extends StatelessWidget {
     }
 
     if (canWriteReview) {
-      return SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: isSubmitting ? null : onWriteReview,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.brandRed,
-            foregroundColor: AppColors.surface,
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
-            ),
-            padding: const EdgeInsets.symmetric(
-              vertical: AppDimensions.paddingSm,
-            ),
-          ),
-          child: isSubmitting
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.surface,
-                  ),
-                )
-              : Text(
-                  writeReviewLabel,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.surface,
-                    fontWeight: FontWeight.w700,
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: isSubmitting ? null : onWriteReview,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.brandRed,
+                foregroundColor: AppColors.surface,
+                disabledBackgroundColor: AppColors.brandRed.withValues(
+                  alpha: 0.6,
+                ),
+                disabledForegroundColor: AppColors.surface.withValues(
+                  alpha: 0.7,
+                ),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadiusLg,
                   ),
                 ),
-        ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: AppDimensions.paddingSm,
+                ),
+              ),
+              child: isSubmitting
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: AppColors.surface.withValues(alpha: 0.8),
+                          ),
+                        ),
+                        const SizedBox(width: AppDimensions.spacingSm),
+                        Text(
+                          writeReviewLabel,
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.surface.withValues(alpha: 0.8),
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Text(
+                      writeReviewLabel,
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.surface,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+            ),
+          ),
+          if (isSubmitting) ...[
+            const SizedBox(height: AppDimensions.spacingSm),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.paddingSm,
+                vertical: AppDimensions.paddingXs,
+              ),
+              decoration: BoxDecoration(
+                color: AppColors.brandRed.withValues(alpha: 0.06),
+                borderRadius: BorderRadius.circular(
+                  AppDimensions.borderRadiusSm,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.hourglass_top_rounded,
+                    size: AppDimensions.iconSizeSm,
+                    color: AppColors.brandRed,
+                  ),
+                  const SizedBox(width: AppDimensions.spacingXs),
+                  Flexible(
+                    child: Text(
+                      submittingMessage,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.brandRed,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
       );
     }
 

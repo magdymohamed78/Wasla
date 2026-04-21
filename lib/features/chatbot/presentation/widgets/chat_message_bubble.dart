@@ -42,7 +42,7 @@ class ChatMessageBubble extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: isUser ? AppColors.brandRed : AppColors.surface,
-                borderRadius: _buildBorderRadius(isUser),
+                borderRadius: _buildBorderRadius(isUser, context),
                 boxShadow: isUser
                     ? null
                     : [
@@ -105,20 +105,42 @@ class ChatMessageBubble extends StatelessWidget {
     );
   }
 
-  BorderRadius _buildBorderRadius(bool isUser) {
+  BorderRadius _buildBorderRadius(bool isUser, BuildContext context) {
+    const xl = Radius.circular(AppDimensions.borderRadiusXl);
+    const small = Radius.circular(4);
+
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
     if (isUser) {
+      if (isRtl) {
+        return const BorderRadius.only(
+          topLeft: xl,
+          topRight: xl,
+          bottomLeft: small,
+          bottomRight: xl,
+        );
+      }
       return const BorderRadius.only(
-        topLeft: Radius.circular(AppDimensions.borderRadiusXl),
-        topRight: Radius.circular(AppDimensions.borderRadiusXl),
-        bottomLeft: Radius.circular(AppDimensions.borderRadiusXl),
-        bottomRight: Radius.circular(4),
+        topLeft: xl,
+        topRight: xl,
+        bottomLeft: xl,
+        bottomRight: small,
+      );
+    }
+
+    if (isRtl) {
+      return const BorderRadius.only(
+        topLeft: xl,
+        topRight: xl,
+        bottomLeft: xl,
+        bottomRight: small,
       );
     }
     return const BorderRadius.only(
-      topLeft: Radius.circular(AppDimensions.borderRadiusXl),
-      topRight: Radius.circular(AppDimensions.borderRadiusXl),
-      bottomLeft: Radius.circular(4),
-      bottomRight: Radius.circular(AppDimensions.borderRadiusXl),
+      topLeft: xl,
+      topRight: xl,
+      bottomLeft: small,
+      bottomRight: xl,
     );
   }
 }

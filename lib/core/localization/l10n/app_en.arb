@@ -465,5 +465,9 @@
   "chatbotHistoryTitle": "Chat History",
   "chatbotNoHistory": "No previous chats",
   "chatbotDeleteChat": "Delete chat?",
-  "chatbotDeleteConfirm": "This cannot be undone."
+  "chatbotDeleteConfirm": "This cannot be undone.",
+  "chatbotDeleteQuestion": "Are you sure you want to delete this conversation?",
+  "chatbotDeleteYes": "Yes, Delete",
+  "chatbotDeleteNo": "No",
+  "companyReviewsSubmitting": "Your review is under review"
 }

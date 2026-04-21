@@ -268,11 +268,25 @@ class _AppState extends State<App> {
     _chatbotRemoteDataSource = ChatbotRemoteDataSourceImpl(_chatbotDio);
     _chatbotHistoryLocalDataSource = ChatHistoryLocalDataSourceImpl(
       sharedPreferences: widget.sharedPreferences,
+      customerIdProvider: () {
+        final user = _sessionCubit.state.user;
+        if (user?.customerId != null) {
+          return 'customer_${user!.customerId}';
+        }
+        return 'guest';
+      },
     );
     _chatbotRepository = ChatbotRepositoryImpl(
       remote: _chatbotRemoteDataSource,
       historyLocal: _chatbotHistoryLocalDataSource,
       sharedPreferences: widget.sharedPreferences,
+      customerIdProvider: () {
+        final user = _sessionCubit.state.user;
+        if (user?.customerId != null) {
+          return 'customer_${user!.customerId}';
+        }
+        return 'guest';
+      },
     );
     _sendMessageUseCase = SendMessageUseCase(_chatbotRepository);
 

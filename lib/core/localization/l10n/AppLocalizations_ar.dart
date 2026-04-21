@@ -1270,4 +1270,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatbotDeleteConfirm => 'لا يمكن التراجع عن هذا.';
+
+  @override
+  String get chatbotDeleteQuestion => 'هل أنت متأكد أنك تريد حذف هذه المحادثة؟';
+
+  @override
+  String get chatbotDeleteYes => 'نعم، احذف';
+
+  @override
+  String get chatbotDeleteNo => 'لا';
+
+  @override
+  String get companyReviewsSubmitting => 'مراجعتك قيد المراجعة';
 }

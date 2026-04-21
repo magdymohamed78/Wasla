@@ -1282,4 +1282,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatbotDeleteConfirm => 'This cannot be undone.';
+
+  @override
+  String get chatbotDeleteQuestion =>
+      'Are you sure you want to delete this conversation?';
+
+  @override
+  String get chatbotDeleteYes => 'Yes, Delete';
+
+  @override
+  String get chatbotDeleteNo => 'No';
+
+  @override
+  String get companyReviewsSubmitting => 'Your review is under review';
 }

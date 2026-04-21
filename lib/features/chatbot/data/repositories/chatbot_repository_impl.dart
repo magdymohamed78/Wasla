@@ -10,28 +10,57 @@ import '../data_sources/chat_history_local_data_source.dart';
 import '../models/chat_response_dto.dart';
 
 class ChatbotRepositoryImpl implements ChatbotRepository {
-  static const String _sessionIdKey = 'chatbot_session_id';
+  static const String _sessionIdKeyPrefix = 'chatbot_session_id';
+  static const String _legacySessionIdKey = 'chatbot_session_id';
+  static const String _sessionMigrationFlagKey =
+      'chat_session_id_scoped_migrated';
 
   final ChatbotRemoteDataSource _remote;
   final ChatHistoryLocalDataSource _historyLocal;
   final SharedPreferences _sharedPreferences;
+  final String Function() customerIdProvider;
 
   ChatbotRepositoryImpl({
     required ChatbotRemoteDataSource remote,
     required ChatHistoryLocalDataSource historyLocal,
     required SharedPreferences sharedPreferences,
+    required this.customerIdProvider,
   }) : _remote = remote,
        _historyLocal = historyLocal,
        _sharedPreferences = sharedPreferences;
+
+  String get _scopedSessionIdKey {
+    final scope = customerIdProvider();
+    return '${_sessionIdKeyPrefix}_$scope';
+  }
+
+  Future<void> _migrateFromLegacyKey() async {
+    final migrated =
+        _sharedPreferences.getBool(_sessionMigrationFlagKey) ?? false;
+    if (migrated) return;
+
+    final legacyValue = _sharedPreferences.getString(_legacySessionIdKey);
+    if (legacyValue != null && legacyValue.isNotEmpty) {
+      final scopedKey = _scopedSessionIdKey;
+      final existing = _sharedPreferences.getString(scopedKey);
+      if (existing == null || existing.isEmpty) {
+        await _sharedPreferences.setString(scopedKey, legacyValue);
+      }
+      await _sharedPreferences.remove(_legacySessionIdKey);
+    }
+
+    await _sharedPreferences.setBool(_sessionMigrationFlagKey, true);
+  }
 
   @override
   Future<ChatResponse> sendMessage({
     required String message,
     String? sessionId,
   }) async {
+    await _migrateFromLegacyKey();
     try {
       final effectiveSessionId =
-          sessionId ?? _sharedPreferences.getString(_sessionIdKey);
+          sessionId ?? _sharedPreferences.getString(_scopedSessionIdKey);
 
       final ChatResponseDto dto = await _remote.sendMessage(
         message: message,
@@ -39,7 +68,7 @@ class ChatbotRepositoryImpl implements ChatbotRepository {
       );
 
       if (dto.sessionId.isNotEmpty) {
-        await _sharedPreferences.setString(_sessionIdKey, dto.sessionId);
+        await _sharedPreferences.setString(_scopedSessionIdKey, dto.sessionId);
       }
 
       return dto.toDomain();
@@ -52,17 +81,17 @@ class ChatbotRepositoryImpl implements ChatbotRepository {
 
   @override
   String? getStoredSessionId() {
-    return _sharedPreferences.getString(_sessionIdKey);
+    return _sharedPreferences.getString(_scopedSessionIdKey);
   }
 
   @override
   Future<void> saveSessionId(String sessionId) async {
-    await _sharedPreferences.setString(_sessionIdKey, sessionId);
+    await _sharedPreferences.setString(_scopedSessionIdKey, sessionId);
   }
 
   @override
   Future<void> clearSession() async {
-    await _sharedPreferences.remove(_sessionIdKey);
+    await _sharedPreferences.remove(_scopedSessionIdKey);
   }
 
   @override

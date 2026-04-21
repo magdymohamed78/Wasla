@@ -381,6 +381,7 @@ class _CompanyReviewsViewState extends State<_CompanyReviewsView> {
       showNotConnectedInfo: reviewActionState.shouldShowNotConnectedInfo,
       isSubmitting: reviewActionState.isSubmitting,
       writeReviewLabel: localizations.companyReviewsWriteReview,
+      submittingMessage: localizations.companyReviewsSubmitting,
       infoMessage: localizations.companyReviewsEligibilityInfo,
       viewProfileLabel: localizations.companyReviewsViewProfile,
       onWriteReview: _onWriteReviewTapped,

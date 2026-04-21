@@ -2491,6 +2491,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This cannot be undone.'**
   String get chatbotDeleteConfirm;
+
+  /// No description provided for @chatbotDeleteQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this conversation?'**
+  String get chatbotDeleteQuestion;
+
+  /// No description provided for @chatbotDeleteYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Delete'**
+  String get chatbotDeleteYes;
+
+  /// No description provided for @chatbotDeleteNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get chatbotDeleteNo;
+
+  /// No description provided for @companyReviewsSubmitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Your review is under review'**
+  String get companyReviewsSubmitting;
 }
 
 class _AppLocalizationsDelegate

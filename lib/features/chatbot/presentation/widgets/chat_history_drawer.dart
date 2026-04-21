@@ -211,39 +211,101 @@ class _ChatHistoryItem extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        return AlertDialog(
+        return Dialog(
           backgroundColor: AppColors.surface,
-          title: Text(
-            localizations.chatbotDeleteChat,
-            style: AppTypography.heading3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
           ),
-          content: Text(
-            localizations.chatbotDeleteConfirm,
-            style: AppTypography.bodyMedium,
+          child: Padding(
+            padding: const EdgeInsets.all(AppDimensions.paddingLg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: AppColors.error,
+                    size: AppDimensions.iconSizeLg,
+                  ),
+                ),
+                const SizedBox(height: AppDimensions.spacingMd),
+                Text(
+                  localizations.chatbotDeleteChat,
+                  style: AppTypography.heading3,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppDimensions.spacingSm),
+                Text(
+                  localizations.chatbotDeleteQuestion,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppDimensions.spacingLg),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: AppColors.surface,
+                          foregroundColor: AppColors.textPrimary,
+                          minimumSize: const Size.fromHeight(
+                            AppDimensions.buttonHeight,
+                          ),
+                          side: const BorderSide(color: AppColors.divider),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.borderRadiusMd,
+                            ),
+                          ),
+                          textStyle: AppTypography.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        child: Text(localizations.chatbotDeleteNo),
+                      ),
+                    ),
+                    const SizedBox(width: AppDimensions.spacingMd),
+                    Flexible(
+                      flex: 2,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                          onDelete();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.error,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size.fromHeight(
+                            AppDimensions.buttonHeight,
+                          ),
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.borderRadiusMd,
+                            ),
+                          ),
+                          textStyle: AppTypography.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        child: Text(localizations.chatbotDeleteYes),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(
-                MaterialLocalizations.of(context).cancelButtonLabel,
-                style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                onDelete();
-              },
-              child: Text(
-                localizations.chatbotNewConversation,
-                style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.error,
-                ),
-              ),
-            ),
-          ],
         );
       },
     );

@@ -457,5 +457,9 @@
   "chatbotHistoryTitle": "سجل المحادثات",
   "chatbotNoHistory": "لا توجد محادثات سابقة",
   "chatbotDeleteChat": "حذف المحادثة؟",
-  "chatbotDeleteConfirm": "لا يمكن التراجع عن هذا."
+  "chatbotDeleteConfirm": "لا يمكن التراجع عن هذا.",
+  "chatbotDeleteQuestion": "هل أنت متأكد أنك تريد حذف هذه المحادثة؟",
+  "chatbotDeleteYes": "نعم، احذف",
+  "chatbotDeleteNo": "لا",
+  "companyReviewsSubmitting": "مراجعتك قيد المراجعة"
 }

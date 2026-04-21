@@ -226,6 +226,8 @@ class _CompanyDetailsView extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.brandRed,
         foregroundColor: AppColors.surface,
+        disabledBackgroundColor: AppColors.brandRed.withValues(alpha: 0.6),
+        disabledForegroundColor: AppColors.surface.withValues(alpha: 0.7),
         elevation: 0,
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -238,13 +240,26 @@ class _CompanyDetailsView extends StatelessWidget {
         ),
       ),
       child: actionState.isSubmitting
-          ? const SizedBox(
-              width: 14,
-              height: 14,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: AppColors.surface,
-              ),
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.surface.withValues(alpha: 0.8),
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.spacingXs),
+                Text(
+                  localizations.companyReviewsWriteReview,
+                  style: AppTypography.bodySmall.copyWith(
+                    color: AppColors.surface.withValues(alpha: 0.8),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
             )
           : Text(
               localizations.companyReviewsWriteReview,
@@ -264,11 +279,45 @@ class _CompanyDetailsView extends StatelessWidget {
       return null;
     }
 
+    final localizations = AppLocalizations.of(context);
+
+    if (actionState.canWriteReview && actionState.isSubmitting) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.paddingSm,
+          vertical: AppDimensions.paddingXs,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.brandRed.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.hourglass_top_rounded,
+              size: AppDimensions.iconSizeSm,
+              color: AppColors.brandRed,
+            ),
+            const SizedBox(width: AppDimensions.spacingXs),
+            Flexible(
+              child: Text(
+                localizations.companyReviewsSubmitting,
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.brandRed,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     if (actionState.canWriteReview) {
       return null;
     }
-
-    final localizations = AppLocalizations.of(context);
 
     return CompanyReviewActionPanel(
       isEligibilityLoading: actionState.isEligibilityLoading,
@@ -276,6 +325,7 @@ class _CompanyDetailsView extends StatelessWidget {
       showNotConnectedInfo: actionState.shouldShowNotConnectedInfo,
       isSubmitting: actionState.isSubmitting,
       writeReviewLabel: localizations.companyReviewsWriteReview,
+      submittingMessage: localizations.companyReviewsSubmitting,
       infoMessage: localizations.companyReviewsEligibilityInfo,
       viewProfileLabel: localizations.companyReviewsViewProfile,
       onWriteReview: () {},
