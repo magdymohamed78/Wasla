@@ -514,6 +514,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please sign in again to continue and unlock your full customer access.';
 
   @override
+  String get requestFlowUpgradeSuccessMessage =>
+      'Service request submitted. Your account is now fully activated as a customer.';
+
+  @override
+  String get requestFlowUpgradeFailedMessage =>
+      'Service request submitted. We couldn\'t confirm your customer activation yet.';
+
+  @override
   String get requestFlowSuccessGoToRequests => 'Go to Requests';
 
   @override

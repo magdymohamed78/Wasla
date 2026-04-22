@@ -106,6 +106,7 @@ class _AppState extends State<App> {
   late final CustomerPortalRemoteDataSource _customerPortalRemoteDataSource;
   late final CustomerPortalRepository _customerPortalRepository;
   late final GetCustomerProfileUseCase _getCustomerProfileUseCase;
+  late final RefreshCustomerSessionUseCase _refreshCustomerSessionUseCase;
   late final GetLeadProfileUseCase _getLeadProfileUseCase;
   late final UpdateCustomerProfileUseCase _updateCustomerProfileUseCase;
   late final UpdateLeadProfileUseCase _updateLeadProfileUseCase;
@@ -223,6 +224,11 @@ class _AppState extends State<App> {
     _getCustomerProfileUseCase = GetCustomerProfileUseCase(
       _customerPortalRepository,
     );
+    _refreshCustomerSessionUseCase = RefreshCustomerSessionUseCase(
+      repository: _customerPortalRepository,
+      authRepository: _authRepository,
+      roleResolver: _roleResolver,
+    );
     _getLeadProfileUseCase = GetLeadProfileUseCase(_customerPortalRepository);
     _updateCustomerProfileUseCase = UpdateCustomerProfileUseCase(
       _customerPortalRepository,
@@ -270,8 +276,9 @@ class _AppState extends State<App> {
       sharedPreferences: widget.sharedPreferences,
       customerIdProvider: () {
         final user = _sessionCubit.state.user;
-        if (user?.customerId != null) {
-          return 'customer_${user!.customerId}';
+        final tokenCustomerId = _roleResolver.customerIdFromToken(user?.token);
+        if (tokenCustomerId != null) {
+          return 'customer_$tokenCustomerId';
         }
         return 'guest';
       },
@@ -282,8 +289,9 @@ class _AppState extends State<App> {
       sharedPreferences: widget.sharedPreferences,
       customerIdProvider: () {
         final user = _sessionCubit.state.user;
-        if (user?.customerId != null) {
-          return 'customer_${user!.customerId}';
+        final tokenCustomerId = _roleResolver.customerIdFromToken(user?.token);
+        if (tokenCustomerId != null) {
+          return 'customer_$tokenCustomerId';
         }
         return 'guest';
       },
@@ -291,7 +299,7 @@ class _AppState extends State<App> {
     _sendMessageUseCase = SendMessageUseCase(_chatbotRepository);
 
     // ── Routing ─────────────────────────────────────────────────
-    _router = AppRouter.router(_authRepository);
+    _router = AppRouter.router(_authRepository, roleResolver: _roleResolver);
   }
 
   @override
@@ -375,6 +383,9 @@ class _AppState extends State<App> {
         // ── Profile ─────────────────────────────────────────────
         RepositoryProvider<GetCustomerProfileUseCase>.value(
           value: _getCustomerProfileUseCase,
+        ),
+        RepositoryProvider<RefreshCustomerSessionUseCase>.value(
+          value: _refreshCustomerSessionUseCase,
         ),
         RepositoryProvider<GetLeadProfileUseCase>.value(
           value: _getLeadProfileUseCase,

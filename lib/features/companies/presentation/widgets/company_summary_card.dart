@@ -60,7 +60,7 @@ class CompanySummaryCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.cardShadow.withValues(alpha: 0.08),
+                  color: AppColors.surface.withValues(alpha: 0.08),
                   blurRadius: 16,
                   offset: const Offset(0, 6),
                 ),

@@ -1034,6 +1034,18 @@ abstract class AppLocalizations {
   /// **'Please sign in again to continue and unlock your full customer access.'**
   String get requestFlowLeadReloginPromptMessage;
 
+  /// No description provided for @requestFlowUpgradeSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Service request submitted. Your account is now fully activated as a customer.'**
+  String get requestFlowUpgradeSuccessMessage;
+
+  /// No description provided for @requestFlowUpgradeFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Service request submitted. We couldn\'t confirm your customer activation yet.'**
+  String get requestFlowUpgradeFailedMessage;
+
   /// No description provided for @requestFlowSuccessGoToRequests.
   ///
   /// In en, this message translates to:

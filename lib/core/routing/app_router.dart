@@ -27,6 +27,7 @@ import '../../features/home/presentation/cubit/lead_access_state.dart';
 import '../../features/home/domain/use_cases/customer_portal_use_cases.dart';
 import '../../features/profile/presentation/cubit/profile_edit_cubit.dart';
 import '../../core/session/session_cubit.dart';
+import '../../core/session/role_resolver.dart';
 
 class AppRouter {
   AppRouter._();
@@ -71,6 +72,9 @@ class AppRouter {
   static const String requestsFullList = '/my/service-requests/list';
   static const String offerDetailsPath = '/my/offers/:offerId';
   static const String offersFilterQueryKey = 'filter';
+  static const String authReasonQueryKey = 'authReason';
+  static const String authReasonSessionExpired = 'session_expired';
+  static const String authReasonUpgradeRelogin = 'upgrade_reauth_required';
 
   static const List<String> _protectedRoutePrefixes = <String>[requestActions];
 
@@ -148,6 +152,18 @@ class AppRouter {
     return customerOffersLocation(filter: filter.name);
   }
 
+  static String loginLocation({String? authReason}) {
+    final normalized = authReason?.trim();
+    if (normalized == null || normalized.isEmpty) {
+      return login;
+    }
+
+    return Uri(
+      path: login,
+      queryParameters: <String, String>{authReasonQueryKey: normalized},
+    ).toString();
+  }
+
   static String customerMyReviewsLocation() => customerMyReviews;
 
   static String newServiceRequestLocation({required int companyId}) {
@@ -156,7 +172,10 @@ class AppRouter {
 
   static String offerDetailsLocation(int offerId) => '/my/offers/$offerId';
 
-  static GoRouter router(AuthRepository authRepository) {
+  static GoRouter router(
+    AuthRepository authRepository, {
+    RoleResolver roleResolver = const RoleResolver(),
+  }) {
     return GoRouter(
       navigatorKey: navigatorKey,
       initialLocation: splash,
@@ -169,7 +188,7 @@ class AppRouter {
             return login;
           }
 
-          if (session.customerId == null) {
+          if (!roleResolver.hasCustomerAccess(session.token)) {
             return home;
           }
 
@@ -209,7 +228,13 @@ class AppRouter {
           path: support,
           builder: (context, state) => const SupportPage(),
         ),
-        GoRoute(path: login, builder: (context, state) => const LoginPage()),
+        GoRoute(
+          path: login,
+          builder: (context, state) {
+            final authReason = state.uri.queryParameters[authReasonQueryKey];
+            return LoginPage(authReason: authReason);
+          },
+        ),
         GoRoute(
           path: register,
           builder: (context, state) => const SignUpPage(),
@@ -421,7 +446,7 @@ class AppRouter {
           path: explore,
           builder: (context, state) => const ExplorePage(),
         ),
-        
+
         GoRoute(
           path: '$company/:companyId',
           builder: (context, state) {

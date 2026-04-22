@@ -9,6 +9,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../../../home/domain/use_cases/customer_portal_use_cases.dart';
 import '../../../home/domain/use_cases/discovery_use_cases.dart';
 import '../../../home/domain/use_cases/service_request_use_cases.dart';
 import '../cubit/new_service_request_cubit.dart';
@@ -32,6 +33,8 @@ class NewServiceRequestPage extends StatelessWidget {
         submitServiceRequestUseCase: context
             .read<SubmitServiceRequestUseCase>(),
         getCompanyDetailsUseCase: context.read<GetCompanyDetailsUseCase>(),
+        refreshCustomerSessionUseCase: context
+            .read<RefreshCustomerSessionUseCase>(),
         sessionCubit: context.read<SessionCubit>(),
       ),
       child: const _NewServiceRequestView(),
@@ -61,11 +64,33 @@ class _NewServiceRequestView extends StatelessWidget {
         listeners: [
           BlocListener<NewServiceRequestCubit, NewServiceRequestState>(
             listenWhen: (prev, curr) =>
-                prev.isLeadReloginPromptVisible !=
-                curr.isLeadReloginPromptVisible,
+                prev.leadUpgradeStatus != curr.leadUpgradeStatus &&
+                curr.leadUpgradeStatus == LeadUpgradeStatus.reauthRequired,
             listener: (context, state) {
-              if (!state.isLeadReloginPromptVisible) return;
-              _showLeadReloginModal(context);
+              context.go(
+                AppRouter.loginLocation(
+                  authReason: AppRouter.authReasonUpgradeRelogin,
+                ),
+              );
+            },
+          ),
+          BlocListener<NewServiceRequestCubit, NewServiceRequestState>(
+            listenWhen: (prev, curr) =>
+                prev.leadUpgradeStatus != curr.leadUpgradeStatus &&
+                curr.leadUpgradeStatus == LeadUpgradeStatus.failed,
+            listener: (context, state) {
+              ToastUtils.showError(
+                context,
+                localizations.requestFlowUpgradeFailedMessage,
+                action: SnackBarAction(
+                  label: localizations.networkErrorRetry,
+                  onPressed: () {
+                    context
+                        .read<NewServiceRequestCubit>()
+                        .retryRefreshUserProfile();
+                  },
+                ),
+              );
             },
           ),
           BlocListener<NewServiceRequestCubit, NewServiceRequestState>(
@@ -90,7 +115,9 @@ class _NewServiceRequestView extends StatelessWidget {
 
               ToastUtils.showSuccess(
                 context,
-                localizations.newRequestSuccessMessage,
+                state.leadUpgradeStatus == LeadUpgradeStatus.upgraded
+                    ? localizations.requestFlowUpgradeSuccessMessage
+                    : localizations.newRequestSuccessMessage,
               );
               context
                   .read<NewServiceRequestCubit>()
@@ -143,6 +170,13 @@ class _NewServiceRequestView extends StatelessWidget {
                   cubit.nextStep();
                 }
               } else {
+                if (state.isSubmitLocked) {
+                  if (state.leadUpgradeStatus == LeadUpgradeStatus.failed) {
+                    cubit.retryRefreshUserProfile();
+                  }
+                  return;
+                }
+
                 if (cubit.validateStep(2)) {
                   cubit.submit();
                 }
@@ -175,7 +209,10 @@ class _NewServiceRequestView extends StatelessWidget {
                             showBack: false,
                             showExit: true,
                             isLastStep: false,
-                            isSubmitting: state.isSubmitting,
+                            isSubmitting:
+                                state.isSubmitting ||
+                                state.leadUpgradeStatus ==
+                                    LeadUpgradeStatus.refreshing,
                             onExit: handleExit,
                             onBack: handleBack,
                             onNext: handleNext,
@@ -199,7 +236,9 @@ class _NewServiceRequestView extends StatelessWidget {
                     showBack: true,
                     showExit: false,
                     isLastStep: state.currentStep == 2,
-                    isSubmitting: state.isSubmitting,
+                    isSubmitting:
+                        state.isSubmitting ||
+                        state.leadUpgradeStatus == LeadUpgradeStatus.refreshing,
                     onExit: handleExit,
                     onBack: handleBack,
                     onNext: handleNext,
@@ -210,96 +249,6 @@ class _NewServiceRequestView extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-
-  void _showLeadReloginModal(BuildContext context) {
-    final localizations = AppLocalizations.of(context);
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: AppColors.textPrimary.withValues(alpha: 0.45),
-      builder: (dialogContext) {
-        return Dialog(
-          backgroundColor: AppColors.surface,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusXl),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(AppDimensions.paddingLg),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: AppColors.brandRed.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.brandRed.withValues(alpha: 0.18),
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.lock_reset_rounded,
-                    color: AppColors.brandRed,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(height: AppDimensions.spacingLg),
-                Text(
-                  localizations.requestFlowLeadReloginPromptTitle,
-                  style: AppTypography.heading3,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppDimensions.spacingSm),
-                Text(
-                  localizations.requestFlowLeadReloginPromptMessage,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: AppDimensions.spacingXl),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      context
-                          .read<NewServiceRequestCubit>()
-                          .dismissLeadReloginPrompt();
-                      Navigator.of(dialogContext).pop();
-                      context.go(AppRouter.login);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.buttonPrimary,
-                      foregroundColor: AppColors.surface,
-                      elevation: 0,
-                      minimumSize: const Size(
-                        double.infinity,
-                        AppDimensions.buttonHeight,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.borderRadiusMd,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      localizations.restrictionContinue,
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.surface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 

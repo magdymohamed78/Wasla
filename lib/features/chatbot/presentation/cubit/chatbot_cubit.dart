@@ -31,6 +31,10 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       messages = await _repository.getChatMessages(storedSessionId);
     }
 
+    if (isClosed) {
+      return;
+    }
+
     emit(
       state.copyWith(
         sessionId: storedSessionId,
@@ -52,6 +56,10 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     );
 
     final updatedMessages = [...state.messages, userMessage];
+
+    if (isClosed) {
+      return;
+    }
 
     emit(
       state.copyWith(messages: updatedMessages, isLoading: true, error: null),
@@ -95,6 +103,10 @@ class ChatbotCubit extends Cubit<ChatbotState> {
 
       final summaries = await _repository.getChatSummaries();
 
+      if (isClosed) {
+        return;
+      }
+
       emit(
         state.copyWith(
           messages: allMessages,
@@ -115,6 +127,10 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       await _persistCurrentChat([...updatedMessages, errorMessage]);
 
       final summaries = await _repository.getChatSummaries();
+
+      if (isClosed) {
+        return;
+      }
 
       emit(
         state.copyWith(
@@ -137,6 +153,10 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       await _repository.clearSession();
     }
 
+    if (isClosed) {
+      return;
+    }
+
     emit(
       state.copyWith(
         messages: messages,
@@ -150,6 +170,11 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     await _persistCurrentChat(state.messages);
     await _repository.clearSession();
     final summaries = await _repository.getChatSummaries();
+
+    if (isClosed) {
+      return;
+    }
+
     emit(
       state.copyWith(
         messages: [],
@@ -165,8 +190,17 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     await _repository.deleteChat(sessionId);
     final summaries = await _repository.getChatSummaries();
 
+    if (isClosed) {
+      return;
+    }
+
     if (state.sessionId == sessionId) {
       await _repository.clearSession();
+
+      if (isClosed) {
+        return;
+      }
+
       emit(
         state.copyWith(messages: [], sessionId: null, chatSummaries: summaries),
       );
@@ -177,6 +211,9 @@ class ChatbotCubit extends Cubit<ChatbotState> {
 
   Future<void> refreshSummaries() async {
     final summaries = await _repository.getChatSummaries();
+    if (isClosed) {
+      return;
+    }
     emit(state.copyWith(chatSummaries: summaries));
   }
 

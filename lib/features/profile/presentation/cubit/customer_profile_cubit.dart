@@ -39,10 +39,18 @@ class CustomerProfileCubit extends Cubit<CustomerProfileState> {
        super(const CustomerProfileState());
 
   Future<void> load() async {
+    if (isClosed) {
+      return;
+    }
+
     emit(state.copyWith(status: LoadStatus.loading, errorMessage: null));
 
     try {
       final profile = await _getCustomerProfileUseCase();
+      if (isClosed) {
+        return;
+      }
+
       emit(
         state.copyWith(
           status: LoadStatus.success,
@@ -51,6 +59,10 @@ class CustomerProfileCubit extends Cubit<CustomerProfileState> {
         ),
       );
     } catch (_) {
+      if (isClosed) {
+        return;
+      }
+
       emit(
         state.copyWith(status: LoadStatus.error, errorMessage: loadFailedError),
       );

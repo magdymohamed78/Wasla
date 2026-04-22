@@ -185,6 +185,8 @@
   "requestFlowContinuePromptMessage": "Continue to sign in so you can request service from this company.",
   "requestFlowLeadReloginPromptTitle": "Finish setup to continue",
   "requestFlowLeadReloginPromptMessage": "Please sign in again to continue and unlock your full customer access.",
+  "requestFlowUpgradeSuccessMessage": "Service request submitted. Your account is now fully activated as a customer.",
+  "requestFlowUpgradeFailedMessage": "Service request submitted. We couldn't confirm your customer activation yet.",
   "requestFlowSuccessGoToRequests": "Go to Requests",
   "requestFlowMissingCompany": "Please choose a company before submitting your request.",
   "homeNoReviewsYet": "No reviews yet",

@@ -56,7 +56,8 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode != 401) {
+    final statusCode = err.response?.statusCode;
+    if (!_isRecoverableAuthFailure(statusCode)) {
       handler.next(err);
       return;
     }
@@ -71,17 +72,22 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
       return;
     }
 
+    final authReason = _resolveAuthReason(
+      requestOptions: err.requestOptions,
+      statusCode: statusCode,
+    );
+
     final alreadyAttempted =
         err.requestOptions.extra[_refreshAttemptedKey] == true;
     if (alreadyAttempted) {
-      await _fallbackToGuest();
+      await _fallbackToGuest(authReason: authReason);
       handler.next(err);
       return;
     }
 
     final refreshSucceeded = await _refreshAccessToken();
     if (!refreshSucceeded) {
-      await _fallbackToGuest();
+      await _fallbackToGuest(authReason: authReason);
       handler.next(err);
       return;
     }
@@ -90,9 +96,29 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
       final retryResponse = await _retryWithFreshToken(err.requestOptions);
       handler.resolve(retryResponse);
     } catch (_) {
-      await _fallbackToGuest();
+      await _fallbackToGuest(authReason: authReason);
       handler.next(err);
     }
+  }
+
+  bool _isRecoverableAuthFailure(int? statusCode) {
+    return statusCode == 401 || statusCode == 403;
+  }
+
+  String _resolveAuthReason({
+    required RequestOptions requestOptions,
+    required int? statusCode,
+  }) {
+    final path = requestOptions.path.toLowerCase();
+    final isCustomerPortalMyEndpoint = path.contains(
+      '/api/customer-portal/my/',
+    );
+
+    if (statusCode == 403 && isCustomerPortalMyEndpoint) {
+      return AppRouter.authReasonUpgradeRelogin;
+    }
+
+    return AppRouter.authReasonSessionExpired;
   }
 
   bool _shouldSkipRefresh(RequestOptions requestOptions) {
@@ -172,7 +198,7 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
     );
   }
 
-  Future<void> _fallbackToGuest() async {
+  Future<void> _fallbackToGuest({required String authReason}) async {
     final hadAccessToken =
         (await _authRepository?.getStoredAccessToken())?.isNotEmpty == true;
     await _authRepository?.clearSession(preservePendingIntent: true);
@@ -183,7 +209,7 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
 
     final context = AppRouter.navigatorKey.currentContext;
     if (context != null && context.mounted) {
-      context.go(AppRouter.login);
+      context.go(AppRouter.loginLocation(authReason: authReason));
     }
   }
 }

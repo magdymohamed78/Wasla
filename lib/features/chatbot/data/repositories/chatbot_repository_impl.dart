@@ -58,10 +58,10 @@ class ChatbotRepositoryImpl implements ChatbotRepository {
     String? sessionId,
   }) async {
     await _migrateFromLegacyKey();
-    try {
-      final effectiveSessionId =
-          sessionId ?? _sharedPreferences.getString(_scopedSessionIdKey);
+    final effectiveSessionId =
+        sessionId ?? _sharedPreferences.getString(_scopedSessionIdKey);
 
+    try {
       final ChatResponseDto dto = await _remote.sendMessage(
         message: message,
         sessionId: effectiveSessionId,
@@ -73,6 +73,27 @@ class ChatbotRepositoryImpl implements ChatbotRepository {
 
       return dto.toDomain();
     } on DioException catch (e) {
+      if (_shouldRetryWithoutAuth(e)) {
+        try {
+          final fallbackDto = await _remote.sendMessage(
+            message: message,
+            sessionId: effectiveSessionId,
+            skipAuth: true,
+          );
+
+          if (fallbackDto.sessionId.isNotEmpty) {
+            await _sharedPreferences.setString(
+              _scopedSessionIdKey,
+              fallbackDto.sessionId,
+            );
+          }
+
+          return fallbackDto.toDomain();
+        } on DioException catch (fallbackError) {
+          throw _mapDioException(fallbackError);
+        }
+      }
+
       throw _mapDioException(e);
     } catch (e) {
       throw ChatbotException(message: e.toString());
@@ -132,15 +153,27 @@ class ChatbotRepositoryImpl implements ChatbotRepository {
         );
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
+        final detailMessage = _extractServerMessage(e.response?.data);
         if (statusCode == 401) {
           return const ChatbotException(
             message: 'Session expired. Please sign in again.',
           );
         }
-        if (statusCode != null && statusCode >= 500) {
+        if (statusCode == 403) {
           return const ChatbotException(
-            message: 'Server error. Please try again later.',
+            message: 'Access denied. Please sign in with a valid account.',
           );
+        }
+        if (statusCode == 503 && detailMessage != null) {
+          return ChatbotException(message: detailMessage);
+        }
+        if (statusCode != null && statusCode >= 500) {
+          return ChatbotException(
+            message: detailMessage ?? 'Server error. Please try again later.',
+          );
+        }
+        if (detailMessage != null) {
+          return ChatbotException(message: detailMessage);
         }
         return const ChatbotException(
           message: 'Something went wrong. Please try again.',
@@ -150,6 +183,52 @@ class ChatbotRepositoryImpl implements ChatbotRepository {
       default:
         return const ChatbotException(message: 'An unexpected error occurred.');
     }
+  }
+
+  String? _extractServerMessage(dynamic payload) {
+    if (payload == null) {
+      return null;
+    }
+
+    if (payload is String) {
+      final trimmed = payload.trim();
+      return trimmed.isEmpty ? null : trimmed;
+    }
+
+    if (payload is Map<String, dynamic>) {
+      final detail = payload['detail']?.toString().trim();
+      if (detail != null && detail.isNotEmpty) {
+        return detail;
+      }
+
+      final message = payload['message']?.toString().trim();
+      if (message != null && message.isNotEmpty) {
+        return message;
+      }
+
+      final error = payload['error']?.toString().trim();
+      if (error != null && error.isNotEmpty) {
+        return error;
+      }
+    }
+
+    return null;
+  }
+
+  bool _shouldRetryWithoutAuth(DioException error) {
+    final statusCode = error.response?.statusCode;
+    if (statusCode == 401 || statusCode == 403) {
+      return true;
+    }
+
+    if (statusCode == 503) {
+      final detail = _extractServerMessage(error.response?.data)?.toLowerCase();
+      if (detail != null && detail.contains('authentication failed')) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

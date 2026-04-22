@@ -38,10 +38,18 @@ class LeadProfileCubit extends Cubit<LeadProfileState> {
       super(const LeadProfileState());
 
   Future<void> load() async {
+    if (isClosed) {
+      return;
+    }
+
     emit(state.copyWith(status: LoadStatus.loading, errorMessage: null));
 
     try {
       final profile = await _getLeadProfileUseCase();
+      if (isClosed) {
+        return;
+      }
+
       emit(
         state.copyWith(
           status: LoadStatus.success,
@@ -50,6 +58,10 @@ class LeadProfileCubit extends Cubit<LeadProfileState> {
         ),
       );
     } catch (_) {
+      if (isClosed) {
+        return;
+      }
+
       emit(
         state.copyWith(status: LoadStatus.error, errorMessage: loadFailedError),
       );
