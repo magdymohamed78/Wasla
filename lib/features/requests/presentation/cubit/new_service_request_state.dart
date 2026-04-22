@@ -5,6 +5,8 @@ import '../../../home/domain/entities/service_request.dart';
 
 enum NewServiceRequestStatus { initial, submitting, success, failure }
 
+enum LeadUpgradeStatus { idle, refreshing, upgraded, reauthRequired, failed }
+
 class NewServiceRequestState {
   static const Object _unset = Object();
 
@@ -37,7 +39,7 @@ class NewServiceRequestState {
 
   final ServiceRequestSubmission? lastSubmission;
   final String? errorCode;
-  final bool isLeadReloginPromptVisible;
+  final LeadUpgradeStatus leadUpgradeStatus;
   final bool navigateToRequests;
   final int totalRequests;
   final int completedRequests;
@@ -68,13 +70,15 @@ class NewServiceRequestState {
     this.preferredTimeSlotError,
     this.lastSubmission,
     this.errorCode,
-    this.isLeadReloginPromptVisible = false,
+    this.leadUpgradeStatus = LeadUpgradeStatus.idle,
     this.navigateToRequests = false,
     this.totalRequests = 0,
     this.completedRequests = 0,
   });
 
   bool get isSubmitting => status == NewServiceRequestStatus.submitting;
+
+  bool get isSubmitLocked => status == NewServiceRequestStatus.success;
 
   NewServiceRequestState copyWith({
     int? companyId,
@@ -102,7 +106,7 @@ class NewServiceRequestState {
     Object? preferredTimeSlotError = _unset,
     Object? lastSubmission = _unset,
     Object? errorCode = _unset,
-    bool? isLeadReloginPromptVisible,
+    LeadUpgradeStatus? leadUpgradeStatus,
     bool? navigateToRequests,
     int? totalRequests,
     int? completedRequests,
@@ -145,8 +149,7 @@ class NewServiceRequestState {
       errorCode: identical(errorCode, _unset)
           ? this.errorCode
           : errorCode as String?,
-      isLeadReloginPromptVisible:
-          isLeadReloginPromptVisible ?? this.isLeadReloginPromptVisible,
+      leadUpgradeStatus: leadUpgradeStatus ?? this.leadUpgradeStatus,
       navigateToRequests: navigateToRequests ?? this.navigateToRequests,
       totalRequests: totalRequests ?? this.totalRequests,
       completedRequests: completedRequests ?? this.completedRequests,

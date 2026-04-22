@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,6 +14,7 @@ class CompanyReviewActionCubit extends Cubit<CompanyReviewActionState> {
   final SessionCubit _sessionCubit;
   final GetCustomerProfileUseCase _getCustomerProfileUseCase;
   final CustomerReviewsRepository _reviewsRepository;
+  StreamSubscription<SessionState>? _sessionSubscription;
 
   CompanyReviewActionCubit({
     required int companyId,
@@ -22,7 +25,9 @@ class CompanyReviewActionCubit extends Cubit<CompanyReviewActionState> {
        _sessionCubit = sessionCubit,
        _getCustomerProfileUseCase = getCustomerProfileUseCase,
        _reviewsRepository = reviewsRepository,
-       super(CompanyReviewActionState(role: sessionCubit.state.role));
+       super(CompanyReviewActionState(role: sessionCubit.state.role)) {
+    _sessionSubscription = _sessionCubit.stream.listen(_onSessionUpdated);
+  }
 
   Future<void> loadEligibility() async {
     final currentRole = _sessionCubit.state.role;
@@ -63,6 +68,33 @@ class CompanyReviewActionCubit extends Cubit<CompanyReviewActionState> {
         state.copyWith(isEligibilityLoading: false, isConnectedCustomer: false),
       );
     }
+  }
+
+  void _onSessionUpdated(SessionState sessionState) {
+    final nextRole = sessionState.role;
+    if (nextRole == state.role) {
+      return;
+    }
+
+    if (nextRole != SessionRole.customer) {
+      emit(
+        state.copyWith(
+          role: nextRole,
+          isEligibilityLoading: false,
+          isConnectedCustomer: false,
+        ),
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        role: nextRole,
+        isEligibilityLoading: true,
+        isConnectedCustomer: false,
+      ),
+    );
+    loadEligibility();
   }
 
   Future<CompanyReviewSubmitResult> submitReview({
@@ -197,5 +229,11 @@ class CompanyReviewActionCubit extends Cubit<CompanyReviewActionState> {
     }
 
     return normalized;
+  }
+
+  @override
+  Future<void> close() async {
+    await _sessionSubscription?.cancel();
+    return super.close();
   }
 }

@@ -507,6 +507,14 @@ class AppLocalizationsAr extends AppLocalizations {
       'يرجى تسجيل الدخول مرة أخرى للمتابعة وتفعيل صلاحيات العميل الكاملة.';
 
   @override
+  String get requestFlowUpgradeSuccessMessage =>
+      'تم إرسال طلب الخدمة. تم الآن تفعيل حسابك بالكامل كعميل.';
+
+  @override
+  String get requestFlowUpgradeFailedMessage =>
+      'تم إرسال طلب الخدمة. تعذر تأكيد تفعيل حساب العميل حتى الآن.';
+
+  @override
   String get requestFlowSuccessGoToRequests => 'الانتقال إلى الطلبات';
 
   @override

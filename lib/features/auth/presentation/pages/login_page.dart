@@ -20,8 +20,57 @@ import '../widgets/login_form.dart';
 /// - **V.** Figma-compliant layout
 /// - **VI.** All styling from AppColors, AppTypography, AppDimensions
 /// - **VII.** Pure presentation — no business logic
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  final String? authReason;
+
+  const LoginPage({super.key, this.authReason});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _authReasonShown = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _showAuthReasonIfNeeded();
+  }
+
+  void _showAuthReasonIfNeeded() {
+    if (_authReasonShown) {
+      return;
+    }
+
+    final authReason = widget.authReason?.trim();
+    if (authReason == null || authReason.isEmpty) {
+      return;
+    }
+
+    _authReasonShown = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+
+      final localizations = AppLocalizations.of(context);
+      ToastUtils.showError(
+        context,
+        _authReasonMessage(authReason, localizations),
+      );
+    });
+  }
+
+  String _authReasonMessage(String authReason, AppLocalizations localizations) {
+    switch (authReason) {
+      case AppRouter.authReasonUpgradeRelogin:
+        return localizations.requestFlowLeadReloginPromptMessage;
+      case AppRouter.authReasonSessionExpired:
+      default:
+        return localizations.loginSessionExpired;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

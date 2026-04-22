@@ -177,6 +177,8 @@
   "requestFlowContinuePromptMessage": "تابع إلى تسجيل الدخول حتى تتمكن من طلب الخدمة من هذه الشركة.",
   "requestFlowLeadReloginPromptTitle": "أكمل الإعداد للمتابعة",
   "requestFlowLeadReloginPromptMessage": "يرجى تسجيل الدخول مرة أخرى للمتابعة وتفعيل صلاحيات العميل الكاملة.",
+  "requestFlowUpgradeSuccessMessage": "تم إرسال طلب الخدمة. تم الآن تفعيل حسابك بالكامل كعميل.",
+  "requestFlowUpgradeFailedMessage": "تم إرسال طلب الخدمة. تعذر تأكيد تفعيل حساب العميل حتى الآن.",
   "requestFlowSuccessGoToRequests": "الانتقال إلى الطلبات",
   "requestFlowMissingCompany": "يرجى اختيار شركة قبل إرسال الطلب.",
   "homeNoReviewsYet": "لا توجد مراجعات بعد",

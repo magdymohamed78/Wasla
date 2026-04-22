@@ -5,6 +5,7 @@ abstract class ChatbotRemoteDataSource {
   Future<ChatResponseDto> sendMessage({
     required String message,
     String? sessionId,
+    bool skipAuth,
   });
 }
 
@@ -18,13 +19,18 @@ class ChatbotRemoteDataSourceImpl implements ChatbotRemoteDataSource {
   Future<ChatResponseDto> sendMessage({
     required String message,
     String? sessionId,
+    bool skipAuth = false,
   }) async {
     final data = <String, dynamic>{
       'message': message,
       if (sessionId != null && sessionId.isNotEmpty) 'session_id': sessionId,
     };
 
-    final response = await _dio.post<dynamic>(_endpoint, data: data);
+    final response = await _dio.post<dynamic>(
+      _endpoint,
+      data: data,
+      options: Options(extra: <String, dynamic>{'skipAuth': skipAuth}),
+    );
 
     return ChatResponseDto.fromJson(response.data as Map<String, dynamic>);
   }

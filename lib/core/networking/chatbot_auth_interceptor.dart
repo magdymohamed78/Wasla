@@ -16,10 +16,19 @@ class ChatbotAuthInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    final skipAuth = options.extra['skipAuth'] == true;
+    if (skipAuth) {
+      options.headers.remove('Authorization');
+      handler.next(options);
+      return;
+    }
+
     if (_authRepository != null) {
       final token = await _authRepository!.getStoredAccessToken();
       if (token != null && token.isNotEmpty) {
-        options.headers['Authorization'] = token;
+        options.headers['Authorization'] = token.startsWith('Bearer ')
+            ? token
+            : 'Bearer $token';
       }
     }
     handler.next(options);

@@ -6,6 +6,7 @@ import '../../../../core/session/session_state.dart';
 import '../../../../core/types/load_status.dart';
 import '../../../home/domain/entities/company_details.dart';
 import '../../../home/domain/entities/service_request.dart';
+import '../../../home/domain/use_cases/customer_portal_use_cases.dart';
 import '../../../home/domain/use_cases/discovery_use_cases.dart';
 import '../../../home/domain/use_cases/service_request_use_cases.dart';
 import 'new_service_request_state.dart';
@@ -29,15 +30,18 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
 
   final SubmitServiceRequestUseCase _submitServiceRequestUseCase;
   final GetCompanyDetailsUseCase _getCompanyDetailsUseCase;
+  final RefreshCustomerSessionUseCase _refreshCustomerSessionUseCase;
   final SessionCubit _sessionCubit;
 
   NewServiceRequestCubit({
     required int companyId,
     required SubmitServiceRequestUseCase submitServiceRequestUseCase,
     required GetCompanyDetailsUseCase getCompanyDetailsUseCase,
+    required RefreshCustomerSessionUseCase refreshCustomerSessionUseCase,
     required SessionCubit sessionCubit,
   }) : _submitServiceRequestUseCase = submitServiceRequestUseCase,
        _getCompanyDetailsUseCase = getCompanyDetailsUseCase,
+       _refreshCustomerSessionUseCase = refreshCustomerSessionUseCase,
        _sessionCubit = sessionCubit,
        super(
          NewServiceRequestState(
@@ -294,6 +298,10 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
   }
 
   Future<void> submit() async {
+    if (state.isSubmitLocked) {
+      return;
+    }
+
     final currentRole = _sessionCubit.state.role;
 
     if (state.companyId <= 0) {
@@ -333,7 +341,7 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
         role: currentRole,
         status: NewServiceRequestStatus.submitting,
         errorCode: null,
-        isLeadReloginPromptVisible: false,
+        leadUpgradeStatus: LeadUpgradeStatus.idle,
         navigateToRequests: false,
         totalRequests: totalCount,
         completedRequests: 0,
@@ -366,16 +374,19 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
         emit(state.copyWith(completedRequests: completed));
       }
 
-      final shouldPromptRelogin = currentRole == SessionRole.lead;
+      if (currentRole == SessionRole.lead) {
+        await _handleLeadUpgradeFlow(lastSubmission: lastSubmission);
+        return;
+      }
 
       emit(
         state.copyWith(
-          role: currentRole,
+          role: _sessionCubit.state.role,
           status: NewServiceRequestStatus.success,
           lastSubmission: lastSubmission,
           errorCode: null,
-          isLeadReloginPromptVisible: shouldPromptRelogin,
-          navigateToRequests: !shouldPromptRelogin,
+          leadUpgradeStatus: LeadUpgradeStatus.idle,
+          navigateToRequests: true,
         ),
       );
     } catch (e, st) {
@@ -385,14 +396,22 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
         state.copyWith(
           status: NewServiceRequestStatus.failure,
           errorCode: submitFailedError,
+          leadUpgradeStatus: LeadUpgradeStatus.idle,
         ),
       );
     }
   }
 
-  void dismissLeadReloginPrompt() {
-    if (!state.isLeadReloginPromptVisible) return;
-    emit(state.copyWith(isLeadReloginPromptVisible: false));
+  Future<void> retryRefreshUserProfile() async {
+    if (state.status != NewServiceRequestStatus.success) {
+      return;
+    }
+
+    if (state.leadUpgradeStatus == LeadUpgradeStatus.refreshing) {
+      return;
+    }
+
+    await _refreshLeadSessionAndNavigate();
   }
 
   void consumeNavigateToRequests() {
@@ -402,5 +421,72 @@ class NewServiceRequestCubit extends Cubit<NewServiceRequestState> {
 
   void retryLoadServices() {
     _loadAvailableServices();
+  }
+
+  Future<void> _handleLeadUpgradeFlow({
+    required ServiceRequestSubmission? lastSubmission,
+  }) async {
+    emit(
+      state.copyWith(
+        role: _sessionCubit.state.role,
+        status: NewServiceRequestStatus.success,
+        lastSubmission: lastSubmission,
+        errorCode: null,
+        leadUpgradeStatus: LeadUpgradeStatus.refreshing,
+        navigateToRequests: false,
+      ),
+    );
+
+    await _refreshLeadSessionAndNavigate();
+  }
+
+  Future<void> _refreshLeadSessionAndNavigate() async {
+    emit(
+      state.copyWith(
+        leadUpgradeStatus: LeadUpgradeStatus.refreshing,
+        navigateToRequests: false,
+      ),
+    );
+
+    final result = await _refreshCustomerSessionUseCase();
+    if (isClosed) {
+      return;
+    }
+
+    final nextRole = _sessionCubit.state.role;
+    final upgraded =
+        result == RefreshCustomerSessionResult.upgraded ||
+        result == RefreshCustomerSessionResult.alreadyCustomer;
+
+    if (upgraded) {
+      emit(
+        state.copyWith(
+          role: nextRole,
+          leadUpgradeStatus: LeadUpgradeStatus.upgraded,
+          navigateToRequests: true,
+        ),
+      );
+      return;
+    }
+
+    if (result == RefreshCustomerSessionResult.reauthRequired ||
+        result == RefreshCustomerSessionResult.noSession) {
+      emit(
+        state.copyWith(
+          role: nextRole,
+          leadUpgradeStatus: LeadUpgradeStatus.reauthRequired,
+          navigateToRequests: false,
+        ),
+      );
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        role: nextRole,
+        leadUpgradeStatus: LeadUpgradeStatus.failed,
+        navigateToRequests: false,
+      ),
+    );
   }
 }
