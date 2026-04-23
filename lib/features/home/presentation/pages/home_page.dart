@@ -10,8 +10,7 @@ import '../../../../core/session/session_state.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../domain/entities/discovery_types.dart';
-import '../../domain/repositories/customer_offers_repository.dart';
-import '../../domain/repositories/customer_reviews_repository.dart';
+import '../../domain/repositories/customer_portal_repository.dart';
 import '../../domain/use_cases/discovery_use_cases.dart';
 import '../cubit/dashboard_cubit.dart';
 import '../cubit/home_discovery_cubit.dart';
@@ -40,9 +39,7 @@ class HomePlaceholderPage extends StatelessWidget {
         ),
         BlocProvider<DashboardCubit>(
           create: (context) => DashboardCubit(
-            customerOffersRepository: context.read<CustomerOffersRepository>(),
-            customerReviewsRepository: context
-                .read<CustomerReviewsRepository>(),
+            customerPortalRepository: context.read<CustomerPortalRepository>(),
           ),
         ),
       ],

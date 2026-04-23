@@ -8,6 +8,8 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/types/load_status.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/secondary_button.dart';
 import '../../domain/entities/offer_details.dart';
 import '../../domain/use_cases/reject_offer_use_case.dart';
 import '../cubit/reject_offer_cubit.dart';
@@ -54,6 +56,7 @@ class _RejectOfferView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text(l.rejectOfferTitle, style: AppTypography.heading3),
           backgroundColor: AppColors.surface,
           elevation: 0,
@@ -185,60 +188,23 @@ class _RejectOfferView extends StatelessWidget {
                         ],
 
                         const SizedBox(height: 24),
+                        PrimaryButton(
+                          label: l.rejectOfferSubmit,
+                          isLoading: state.isSubmitting,
+                          onPressed: state.isSubmitting
+                              ? null
+                              : () => context.read<RejectOfferCubit>().submit(),
+                        ),
+                        const SizedBox(height: 16),
+                        SecondaryButton(
+                          label: l.rejectOfferCancel.toUpperCase(),
+                          onPressed: state.isSubmitting
+                              ? null
+                              : () => context.pop(),
+                        ),
+                        const SizedBox(height: AppDimensions.spacingMd),
                       ],
                     ),
-                  ),
-                ),
-
-                // Action buttons
-                SafeArea(
-                  minimum: const EdgeInsets.all(AppDimensions.paddingMd),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      FilledButton(
-                        onPressed: state.isSubmitting
-                            ? null
-                            : () => context.read<RejectOfferCubit>().submit(),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.brandRed,
-                          minimumSize: const Size.fromHeight(50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: state.isSubmitting
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Text(
-                                l.rejectOfferSubmit,
-                                style: AppTypography.bodyMedium.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: state.isSubmitting
-                            ? null
-                            : () => context.pop(),
-                        child: Text(
-                          l.rejectOfferCancel.toUpperCase(),
-                          style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.0,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ],

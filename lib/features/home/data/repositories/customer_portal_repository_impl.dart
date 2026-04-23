@@ -8,6 +8,7 @@ import 'package:waslaapp/features/requests/domain/entities/request_status_counts
 import 'package:waslaapp/features/requests/domain/use_cases/request_status_normalization_use_case.dart';
 import 'package:waslaapp/features/offers/data/models/offer_page_result_dto.dart';
 import 'package:waslaapp/features/offers/domain/entities/offer_page_result.dart';
+import 'package:waslaapp/features/home/domain/entities/customer_dashboard_metrics.dart';
 
 import '../../domain/entities/customer_portal_content.dart';
 import '../../domain/repositories/customer_portal_repository.dart';
@@ -22,6 +23,38 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
     RequestStatusNormalizationUseCase? normalizer,
   }) : _remote = remote,
        _normalizer = normalizer ?? RequestStatusNormalizationUseCase();
+
+  @override
+  Future<CustomerDashboardMetrics> getCustomerDashboardMetrics() async {
+    final rawJson = await _remote.getMyDashboard();
+
+    final totalOffers = asInt(rawJson['totalOffers']);
+    final totalReviews = asInt(rawJson['totalReviews']);
+
+    final rawOffersByStatus = rawJson['offersByStatus'];
+    final offersByStatus = rawOffersByStatus is Map
+        ? rawOffersByStatus.map(
+            (key, value) => MapEntry(key.toString(), asInt(value)),
+          )
+        : const <String, int>{};
+
+    final acceptedOffers =
+        _resolveStatusCount(offersByStatus, const ['accepted']) ?? 0;
+    final pendingOffers =
+        _resolveStatusCount(offersByStatus, const [
+          'pending',
+          'sent',
+          'offersent',
+        ]) ??
+        0;
+
+    return CustomerDashboardMetrics(
+      totalOffers: totalOffers < 0 ? 0 : totalOffers,
+      acceptedOffers: acceptedOffers < 0 ? 0 : acceptedOffers,
+      pendingOffers: pendingOffers < 0 ? 0 : pendingOffers,
+      totalReviews: totalReviews < 0 ? 0 : totalReviews,
+    );
+  }
 
   @override
   Future<List<CustomerServiceRequestSummary>> getCustomerServiceRequests({
@@ -81,7 +114,7 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
       pageSize: dto.pageSize,
       totalCount: dto.totalCount,
       totalPages: dto.totalPages,
-      statusCounts: _buildRequestStatusCounts(dto.statusCounts),
+      statusCounts: _buildRequestStatusCounts(dto.statusCounts, dto.totalCount),
     );
   }
 
@@ -103,13 +136,23 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
 
   RequestStatusCounts _buildRequestStatusCounts(
     Map<RequestFilter, int> counts,
+    int fallbackAll,
   ) {
+    final pending = counts[RequestFilter.pending] ?? 0;
+    final offerSent = counts[RequestFilter.offerSent] ?? 0;
+    final declined = counts[RequestFilter.declined] ?? 0;
+    final expired = counts[RequestFilter.expired] ?? 0;
+    final knownSum = pending + offerSent + declined + expired;
+
+    final all =
+        counts[RequestFilter.all] ?? (fallbackAll > 0 ? fallbackAll : knownSum);
+
     return RequestStatusCounts(
-      all: counts[RequestFilter.all] ?? 0,
-      pending: counts[RequestFilter.pending] ?? 0,
-      offerSent: counts[RequestFilter.offerSent] ?? 0,
-      declined: counts[RequestFilter.declined] ?? 0,
-      expired: counts[RequestFilter.expired] ?? 0,
+      all: all < 0 ? 0 : all,
+      pending: pending < 0 ? 0 : pending,
+      offerSent: offerSent < 0 ? 0 : offerSent,
+      declined: declined < 0 ? 0 : declined,
+      expired: expired < 0 ? 0 : expired,
     );
   }
 
@@ -278,5 +321,20 @@ class CustomerPortalRepositoryImpl implements CustomerPortalRepository {
   @override
   Future<void> logoutAll() {
     return _remote.logoutAll();
+  }
+
+  int? _resolveStatusCount(Map<String, int> counts, List<String> aliases) {
+    for (final entry in counts.entries) {
+      final normalizedKey = _normalizeStatusKey(entry.key);
+      if (aliases.contains(normalizedKey)) {
+        return entry.value;
+      }
+    }
+
+    return null;
+  }
+
+  String _normalizeStatusKey(String key) {
+    return key.trim().toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
   }
 }

@@ -1359,6 +1359,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get elevatorLabel => 'Elevator';
 
   @override
+  String get availableLabel => 'Available';
+
+  @override
+  String get notAvailableLabel => 'Not Available';
+
+  @override
   String get yes => 'Yes';
 
   @override

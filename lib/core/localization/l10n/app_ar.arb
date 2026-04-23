@@ -483,6 +483,8 @@
   "buildingTypeLabel": "المبنى",
   "floorLabel": "الطابق",
   "elevatorLabel": "المصعد",
+  "availableLabel": "متاح",
+  "notAvailableLabel": "غير متاح",
   "yes": "نعم",
   "no": "لا",
   "unknownService": "خدمة",

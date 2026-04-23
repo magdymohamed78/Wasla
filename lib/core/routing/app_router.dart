@@ -175,7 +175,18 @@ class AppRouter {
     return '$newServiceRequest?companyId=$companyId';
   }
 
-  static String offerDetailsLocation(int offerId) => '/my/offers/$offerId';
+  static String offerDetailsLocation(int offerId, {int? sourceRequestId}) {
+    if (sourceRequestId != null && sourceRequestId > 0) {
+      return Uri(
+        path: '/my/offers/$offerId',
+        queryParameters: <String, String>{
+          'sourceRequestId': sourceRequestId.toString(),
+        },
+      ).toString();
+    }
+
+    return '/my/offers/$offerId';
+  }
 
   static String acceptOfferLocation(int offerId) =>
       '/my/offers/$offerId/accept';
@@ -489,7 +500,14 @@ class AppRouter {
           builder: (context, state) {
             final offerIdRaw = state.pathParameters['offerId'];
             final offerId = int.tryParse(offerIdRaw ?? '') ?? -1;
-            return OfferDetailsPage(offerId: offerId);
+            final sourceRequestIdRaw =
+                state.uri.queryParameters['sourceRequestId'];
+            final sourceRequestId = int.tryParse(sourceRequestIdRaw ?? '');
+
+            return OfferDetailsPage(
+              offerId: offerId,
+              sourceRequestId: sourceRequestId,
+            );
           },
           routes: [
             GoRoute(
@@ -498,10 +516,7 @@ class AppRouter {
                 final offerIdRaw = state.pathParameters['offerId'];
                 final offerId = int.tryParse(offerIdRaw ?? '') ?? -1;
                 final details = state.extra as OfferDetails?;
-                return AcceptOfferPage(
-                  offerId: offerId,
-                  offerDetails: details,
-                );
+                return AcceptOfferPage(offerId: offerId, offerDetails: details);
               },
             ),
             GoRoute(
@@ -510,10 +525,7 @@ class AppRouter {
                 final offerIdRaw = state.pathParameters['offerId'];
                 final offerId = int.tryParse(offerIdRaw ?? '') ?? -1;
                 final details = state.extra as OfferDetails?;
-                return RejectOfferPage(
-                  offerId: offerId,
-                  offerDetails: details,
-                );
+                return RejectOfferPage(offerId: offerId, offerDetails: details);
               },
             ),
           ],

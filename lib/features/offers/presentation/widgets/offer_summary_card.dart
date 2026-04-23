@@ -5,6 +5,7 @@ import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../domain/entities/offer_filter.dart';
 
 class OfferSummaryCard extends StatelessWidget {
   final String? offerNumber;
@@ -29,6 +30,9 @@ class OfferSummaryCard extends StatelessWidget {
     final l = AppLocalizations.of(context);
     final formatter = NumberFormat('#,##0.00');
     final displayId = offerNumber ?? offerId.toString();
+    final statusColor = OfferFilter.resolveColor(
+      OfferFilter.fromQueryValue(status),
+    );
 
     if (isRejectPage) {
       return Container(
@@ -96,12 +100,13 @@ class OfferSummaryCard extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color: statusColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           status!.toUpperCase(),
                           style: AppTypography.bodySmall.copyWith(
+                            color: statusColor,
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
                           ),
@@ -195,9 +200,7 @@ class OfferSummaryCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             '#$displayId',
-            style: AppTypography.heading2.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+            style: AppTypography.heading2.copyWith(fontWeight: FontWeight.w800),
           ),
           if (companyName != null) ...[
             const SizedBox(height: 4),

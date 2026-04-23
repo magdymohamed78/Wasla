@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/types/load_status.dart';
-import '../../../offers/domain/entities/offer_status_counts.dart';
-import '../../domain/repositories/customer_offers_repository.dart';
-import '../../domain/repositories/customer_reviews_repository.dart';
+import '../../domain/repositories/customer_portal_repository.dart';
 import 'dashboard_state.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
@@ -19,16 +17,12 @@ class DashboardCubit extends Cubit<DashboardState> {
     _myReviewsCountController.add(count);
   }
 
-  final CustomerOffersRepository _customerOffersRepository;
-  final CustomerReviewsRepository _customerReviewsRepository;
+  final CustomerPortalRepository _customerPortalRepository;
   late final StreamSubscription<int> _myReviewsSyncSubscription;
 
-  DashboardCubit({
-    required CustomerOffersRepository customerOffersRepository,
-    required CustomerReviewsRepository customerReviewsRepository,
-  }) : _customerOffersRepository = customerOffersRepository,
-       _customerReviewsRepository = customerReviewsRepository,
-       super(const DashboardState()) {
+  DashboardCubit({required CustomerPortalRepository customerPortalRepository})
+    : _customerPortalRepository = customerPortalRepository,
+      super(const DashboardState()) {
     _myReviewsSyncSubscription = _myReviewsCountController.stream.listen(
       syncMyReviewsCount,
     );
@@ -43,30 +37,24 @@ class DashboardCubit extends Cubit<DashboardState> {
       ),
     );
 
-    OfferStatusCounts? offerStatusCounts;
-    int? reviewsCount;
-
     try {
-      final offerPage = await _customerOffersRepository.getCustomerOffersPaged(
-        pageIndex: 1,
-        pageSize: 1,
+      final metrics = await _customerPortalRepository
+          .getCustomerDashboardMetrics();
+
+      emit(
+        state.copyWith(
+          status: LoadStatus.success,
+          totalOffers: metrics.totalOffers < 0 ? 0 : metrics.totalOffers,
+          acceptedOffers: metrics.acceptedOffers < 0
+              ? 0
+              : metrics.acceptedOffers,
+          pendingOffers: metrics.pendingOffers < 0 ? 0 : metrics.pendingOffers,
+          myReviews: metrics.totalReviews < 0 ? 0 : metrics.totalReviews,
+          hasPartialData: false,
+          errorCode: null,
+        ),
       );
-      offerStatusCounts = offerPage.statusCounts;
     } catch (_) {
-      offerStatusCounts = null;
-    }
-
-    try {
-      reviewsCount = await _customerReviewsRepository.getMyReviewsCount();
-    } catch (_) {
-      reviewsCount = null;
-    }
-
-    final hasOffersData = offerStatusCounts != null;
-    final hasReviewsData = reviewsCount != null;
-    final hasAnyData = hasOffersData || hasReviewsData;
-
-    if (!hasAnyData) {
       emit(
         state.copyWith(
           status: LoadStatus.error,
@@ -74,24 +62,7 @@ class DashboardCubit extends Cubit<DashboardState> {
           errorCode: 'dashboard_load_failed',
         ),
       );
-      return;
     }
-
-    final totalOffers = hasOffersData ? offerStatusCounts.all : 0;
-    final acceptedOffers = hasOffersData ? offerStatusCounts.accepted : 0;
-    final pendingOffers = hasOffersData ? offerStatusCounts.pending : 0;
-
-    emit(
-      state.copyWith(
-        status: LoadStatus.success,
-        totalOffers: totalOffers < 0 ? 0 : totalOffers,
-        acceptedOffers: acceptedOffers < 0 ? 0 : acceptedOffers,
-        pendingOffers: pendingOffers < 0 ? 0 : pendingOffers,
-        myReviews: (reviewsCount ?? 0) < 0 ? 0 : (reviewsCount ?? 0),
-        hasPartialData: !(hasOffersData && hasReviewsData),
-        errorCode: hasOffersData && hasReviewsData ? null : 'dashboard_partial_data',
-      ),
-    );
   }
 
   Future<void> retry() async {
@@ -99,11 +70,7 @@ class DashboardCubit extends Cubit<DashboardState> {
   }
 
   void syncMyReviewsCount(int count) {
-    emit(
-      state.copyWith(
-        myReviews: count < 0 ? 0 : count,
-      ),
-    );
+    emit(state.copyWith(myReviews: count < 0 ? 0 : count));
   }
 
   @override

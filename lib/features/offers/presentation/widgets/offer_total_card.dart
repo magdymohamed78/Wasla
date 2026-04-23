@@ -27,8 +27,15 @@ class OfferTotalCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingMd, vertical: AppDimensions.paddingSm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.paddingMd,
+        vertical: AppDimensions.paddingSm,
+      ),
+
       decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(AppDimensions.borderRadiusXl),
+        ),
         color: AppColors.surface,
       ),
       child: Column(
@@ -105,11 +112,7 @@ class _Badge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 14,
-            color: AppColors.brandRed,
-          ),
+          Icon(icon, size: 14, color: AppColors.brandRed),
           const SizedBox(width: 6),
           Text(
             label,

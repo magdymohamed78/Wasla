@@ -1346,6 +1346,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get elevatorLabel => 'المصعد';
 
   @override
+  String get availableLabel => 'متاح';
+
+  @override
+  String get notAvailableLabel => 'غير متاح';
+
+  @override
   String get yes => 'نعم';
 
   @override

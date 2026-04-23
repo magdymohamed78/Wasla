@@ -491,6 +491,8 @@
   "buildingTypeLabel": "Building",
   "floorLabel": "Floor",
   "elevatorLabel": "Elevator",
+  "availableLabel": "Available",
+  "notAvailableLabel": "Not Available",
   "yes": "Yes",
   "no": "No",
   "unknownService": "Service",

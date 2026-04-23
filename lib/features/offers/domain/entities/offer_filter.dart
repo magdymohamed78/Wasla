@@ -27,10 +27,17 @@ enum OfferFilter {
   static OfferFilter fromQueryValue(String? value) {
     if (value == null || value.trim().isEmpty) return OfferFilter.all;
     final normalized = value.trim().toLowerCase();
+
+    if (normalized == 'sent') {
+      return OfferFilter.pending;
+    }
+    if (normalized == 'declined') {
+      return OfferFilter.rejected;
+    }
+
     return OfferFilter.values.firstWhere(
       (filter) =>
-          filter != OfferFilter.all &&
-          filter.name.toLowerCase() == normalized,
+          filter != OfferFilter.all && filter.name.toLowerCase() == normalized,
       orElse: () => OfferFilter.all,
     );
   }

@@ -28,20 +28,20 @@ class OfferLocationCard extends StatelessWidget {
     final iconData = isOrigin
         ? Icons.location_on_outlined
         : isDestination
-            ? Icons.flag_outlined
-            : Icons.place_outlined;
+        ? Icons.flag_outlined
+        : Icons.place_outlined;
 
     final iconColor = isOrigin
         ? AppColors.brandRed
         : isDestination
-            ? Colors.blueGrey.shade700
-            : AppColors.textSecondary;
+        ? Colors.blueGrey.shade700
+        : AppColors.textSecondary;
 
     final label = isOrigin
         ? 'FROM (PICKUP)'
         : isDestination
-            ? 'TO (DROP-OFF)'
-            : location.locationType?.toUpperCase() ?? 'LOCATION';
+        ? 'TO (DROP-OFF)'
+        : location.locationType?.toUpperCase() ?? 'LOCATION';
 
     return IntrinsicHeight(
       child: Row(
@@ -126,7 +126,7 @@ class OfferLocationCard extends StatelessWidget {
                 if (location.hasLift != null) ...[
                   const SizedBox(height: 2),
                   Text(
-                    '${l.elevatorLabel}: ${location.hasLift! ? l.yes : l.no}',
+                    '${l.elevatorLabel}: ${location.hasLift! ? l.availableLabel : l.notAvailableLabel}',
                     style: AppTypography.bodySmall.copyWith(
                       color: AppColors.textSecondary,
                     ),

@@ -40,26 +40,55 @@ class RequestPageResultDto {
   bool get hasReachedEnd => pageIndex >= totalPages || items.isEmpty;
 
   static Map<RequestFilter, int> _parseStatusCounts(dynamic raw) {
-    if (raw is! Map<String, dynamic>) {
+    if (raw is! Map) {
       return const {};
     }
 
     final result = <RequestFilter, int>{};
     for (final entry in raw.entries) {
-      final key = entry.key;
+      final normalizedKey = _normalizeCountKey(entry.key.toString());
       final value = asInt(entry.value);
-      if (key.toLowerCase() == 'all') {
-        result[RequestFilter.all] = value;
+
+      final filter = _mapCountKeyToFilter(normalizedKey);
+      if (filter == null) {
+        continue;
+      }
+
+      if (filter == RequestFilter.all) {
+        result[filter] = value;
       } else {
-        for (final filter in RequestFilter.values) {
-          if (filter != RequestFilter.all &&
-              filter.name.toLowerCase() == key.toLowerCase()) {
-            result[filter] = value;
-            break;
-          }
-        }
+        result[filter] = (result[filter] ?? 0) + value;
       }
     }
+
     return result;
+  }
+
+  static RequestFilter? _mapCountKeyToFilter(String normalizedKey) {
+    switch (normalizedKey) {
+      case 'all':
+      case 'total':
+      case 'totalcount':
+      case 'requestcount':
+      case 'requestscount':
+        return RequestFilter.all;
+      case 'pending':
+      case 'new':
+      case 'submitted':
+        return RequestFilter.pending;
+      case 'offersent':
+        return RequestFilter.offerSent;
+      case 'declined':
+      case 'rejected':
+        return RequestFilter.declined;
+      case 'expired':
+        return RequestFilter.expired;
+      default:
+        return null;
+    }
+  }
+
+  static String _normalizeCountKey(String key) {
+    return key.trim().toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
   }
 }

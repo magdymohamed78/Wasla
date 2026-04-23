@@ -4,6 +4,7 @@ import 'customer_requests_repository.dart';
 import 'digital_signature_repository.dart';
 import 'logout_repository.dart';
 import 'profile_repository.dart';
+import '../entities/customer_dashboard_metrics.dart';
 
 abstract class CustomerPortalRepository
     implements
@@ -12,4 +13,6 @@ abstract class CustomerPortalRepository
         CustomerOffersRepository,
         CustomerReviewsRepository,
         DigitalSignatureRepository,
-        LogoutRepository {}
+        LogoutRepository {
+  Future<CustomerDashboardMetrics> getCustomerDashboardMetrics();
+}

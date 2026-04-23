@@ -39,19 +39,20 @@ class OfferSavingsCard extends StatelessWidget {
               fontSize: 10,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppDimensions.spacingXs),
           Text(
             '-${formatter.format(discountAmount)} ${l.currencyEgp}',
-            style: AppTypography.heading2.copyWith(
+            style: AppTypography.heading1.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w700,
+              fontSize: 36,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppDimensions.spacingSm),
           const Icon(
             Icons.local_activity,
             color: Colors.white24,
-            size: 24,
+            size: AppDimensions.iconSizeMd,
           ),
         ],
       ),

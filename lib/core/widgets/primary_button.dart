@@ -7,12 +7,14 @@ class PrimaryButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon; // 👈 اختياري
+  final bool isLoading;
 
   const PrimaryButton({
     super.key,
     required this.label,
     this.onPressed,
     this.icon,
+    this.isLoading = false,
   });
 
   @override
@@ -21,32 +23,35 @@ class PrimaryButton extends StatelessWidget {
       width: double.infinity,
       height: AppDimensions.buttonHeight,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.buttonPrimary,
           foregroundColor: AppColors.background,
           elevation: 4,
           shadowColor: AppColors.brandRed.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(AppDimensions.borderRadiusMd),
+            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
           ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              label,
-              style: AppTypography.buttonLabel,
-            ),
-            if (icon != null) ...[
-              const SizedBox(width: 10),
-              Icon(
-                icon,
-                size: 22,
-                
+            if (isLoading) ...[
+              const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.background,
+                ),
               ),
+              const SizedBox(width: 10),
+            ],
+            Text(label, style: AppTypography.buttonLabel),
+            if (!isLoading && icon != null) ...[
+              const SizedBox(width: 10),
+              Icon(icon, size: 22),
             ],
           ],
         ),

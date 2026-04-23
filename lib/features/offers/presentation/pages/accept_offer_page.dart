@@ -10,6 +10,8 @@ import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/types/load_status.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/secondary_button.dart';
 import '../../domain/entities/offer_details.dart';
 import '../../domain/use_cases/accept_offer_use_case.dart';
 import '../cubit/accept_offer_cubit.dart';
@@ -46,12 +48,18 @@ class _AcceptOfferView extends StatelessWidget {
 
     return BlocListener<AcceptOfferCubit, AcceptOfferState>(
       listener: (context, state) {
+        final errorMessage = _errorToastMessage(state.errorCode, l);
+        if (errorMessage != null) {
+          ToastUtils.showError(context, errorMessage);
+          return;
+        }
+
         if (state.status == LoadStatus.success) {
           if (state.checkoutUrl != null) {
-            // Online payment — open checkout URL
+            // Online payment: notify user then open checkout URL.
             _launchCheckoutUrl(context, state.checkoutUrl!);
           } else {
-            // COD — navigate to offers list
+            // COD: show success then navigate back to offers.
             ToastUtils.showSuccess(context, l.acceptOfferSuccessCod);
             context.go(AppRouter.customerOffersLocation());
           }
@@ -60,6 +68,7 @@ class _AcceptOfferView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text(l.acceptOfferTitle, style: AppTypography.heading3),
           backgroundColor: AppColors.surface,
           elevation: 0,
@@ -93,7 +102,6 @@ class _AcceptOfferView extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
 
-                        // Offer summary
                         if (offerDetails != null)
                           OfferSummaryCard(
                             offerNumber: offerDetails!.offerNumber,
@@ -103,7 +111,6 @@ class _AcceptOfferView extends StatelessWidget {
                           ),
                         const SizedBox(height: 20),
 
-                        // Payment method selection
                         Text(
                           l.acceptOfferPaymentRequired,
                           style: AppTypography.bodyMedium.copyWith(
@@ -130,7 +137,6 @@ class _AcceptOfferView extends StatelessWidget {
                         ],
                         const SizedBox(height: 20),
 
-                        // Signature field
                         Text(
                           l.acceptOfferDigitalSignatureLabel,
                           style: AppTypography.bodySmall.copyWith(
@@ -165,7 +171,7 @@ class _AcceptOfferView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide.none,
                             ),
-                            errorText: _signatureError(state.errorCode, l),
+                            errorText: _signatureFieldError(state.errorCode, l),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -190,7 +196,6 @@ class _AcceptOfferView extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
 
-                        // Confirmation checkbox
                         Container(
                           padding: const EdgeInsets.all(
                             AppDimensions.paddingMd,
@@ -239,8 +244,9 @@ class _AcceptOfferView extends StatelessWidget {
                           ),
                         ),
                         if (state.errorCode == 'CONFIRMATION_REQUIRED') ...[
+                          const SizedBox(height: 8),
                           Padding(
-                            padding: const EdgeInsets.only(left: 16),
+                            padding: const EdgeInsetsDirectional.only(start: 8),
                             child: Text(
                               l.acceptOfferConfirmationRequired,
                               style: AppTypography.bodySmall.copyWith(
@@ -249,85 +255,23 @@ class _AcceptOfferView extends StatelessWidget {
                             ),
                           ),
                         ],
-
-                        // API error feedback
-                        if (_isApiError(state.errorCode)) ...[
-                          const SizedBox(height: 12),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(
-                              AppDimensions.paddingSm,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.red.withValues(alpha: 0.06),
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.borderRadiusMd,
-                              ),
-                            ),
-                            child: Text(
-                              _apiErrorMessage(state.errorCode, l),
-                              style: AppTypography.bodySmall.copyWith(
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
                         const SizedBox(height: 24),
+                        PrimaryButton(
+                          label: l.acceptOfferSignAndAccept,
+                          isLoading: state.isSubmitting,
+                          onPressed: state.isSubmitting
+                              ? null
+                              : () => context.read<AcceptOfferCubit>().submit(),
+                          icon: Icons.edit,
+                        ),
+                        const SizedBox(height: 16),
+                        SecondaryButton(
+                          label: l.reviewFullAgreement.toUpperCase(),
+                          onPressed: () => context.pop(),
+                        ),
+                        const SizedBox(height: AppDimensions.spacingMd),
                       ],
                     ),
-                  ),
-                ),
-
-                // Action buttons
-                SafeArea(
-                  minimum: const EdgeInsets.all(AppDimensions.paddingMd),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      FilledButton.icon(
-                        onPressed: state.isSubmitting
-                            ? null
-                            : () => context.read<AcceptOfferCubit>().submit(),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.brandRed,
-                          minimumSize: const Size.fromHeight(50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        icon: state.isSubmitting
-                            ? const SizedBox.shrink()
-                            : const Icon(Icons.edit, size: 18),
-                        label: state.isSubmitting
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Text(
-                                l.acceptOfferSignAndAccept,
-                                style: AppTypography.bodyMedium.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
-                              ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () => context.pop(),
-                        child: Text(
-                          l.reviewFullAgreement.toUpperCase(),
-                          style: AppTypography.bodySmall.copyWith(
-                            color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 1.0,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ],
@@ -338,24 +282,18 @@ class _AcceptOfferView extends StatelessWidget {
     );
   }
 
-  String? _signatureError(String? errorCode, AppLocalizations l) {
+  String? _signatureFieldError(String? errorCode, AppLocalizations l) {
     if (errorCode == 'SIGNATURE_REQUIRED') {
       return l.acceptOfferSignatureRequired;
-    }
-    if (errorCode == 'SIGNATURE_INVALID_PREFIX') {
-      return l.acceptOfferSignatureInvalidPrefix;
     }
     return null;
   }
 
-  bool _isApiError(String? errorCode) {
-    return errorCode == AcceptOfferState.terminalStateError ||
-        errorCode == AcceptOfferState.forbiddenError ||
-        errorCode == AcceptOfferState.paymentConfigMissingError ||
-        errorCode == AcceptOfferState.genericError;
-  }
+  String? _errorToastMessage(String? errorCode, AppLocalizations l) {
+    if (errorCode == 'SIGNATURE_INVALID_PREFIX') {
+      return l.acceptOfferSignatureInvalidPrefix;
+    }
 
-  String _apiErrorMessage(String? errorCode, AppLocalizations l) {
     switch (errorCode) {
       case AcceptOfferState.terminalStateError:
         return l.acceptOfferTerminalState;
@@ -363,8 +301,10 @@ class _AcceptOfferView extends StatelessWidget {
         return l.acceptOfferForbidden;
       case AcceptOfferState.paymentConfigMissingError:
         return l.acceptOfferPaymentConfigMissing;
-      default:
+      case AcceptOfferState.genericError:
         return l.acceptOfferFailed;
+      default:
+        return null;
     }
   }
 

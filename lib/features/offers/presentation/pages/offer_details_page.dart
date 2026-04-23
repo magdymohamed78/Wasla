@@ -9,7 +9,10 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/utils/toast_utils.dart';
+import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/secondary_button.dart';
 import '../../domain/entities/offer_details.dart';
+import '../../domain/entities/offer_filter.dart';
 import '../../domain/use_cases/get_offer_details_use_case.dart';
 import '../cubit/offer_details_cubit.dart';
 import '../cubit/offer_details_state.dart';
@@ -26,8 +29,13 @@ import '../widgets/offer_details_skeleton.dart';
 
 class OfferDetailsPage extends StatelessWidget {
   final int offerId;
+  final int? sourceRequestId;
 
-  const OfferDetailsPage({super.key, required this.offerId});
+  const OfferDetailsPage({
+    super.key,
+    required this.offerId,
+    this.sourceRequestId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +44,15 @@ class OfferDetailsPage extends StatelessWidget {
         offerId: offerId,
         getDetailsUseCase: context.read<GetOfferDetailsUseCase>(),
       )..load(),
-      child: const _OfferDetailsView(),
+      child: _OfferDetailsView(sourceRequestId: sourceRequestId),
     );
   }
 }
 
 class _OfferDetailsView extends StatelessWidget {
-  const _OfferDetailsView();
+  final int? sourceRequestId;
+
+  const _OfferDetailsView({this.sourceRequestId});
 
   @override
   Widget build(BuildContext context) {
@@ -51,27 +61,56 @@ class _OfferDetailsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
+        centerTitle: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+              return;
+            }
+
+            if (sourceRequestId != null && sourceRequestId! > 0) {
+              context.go(AppRouter.requestDetailsLocation(sourceRequestId!));
+              return;
+            }
+
+            context.go(AppRouter.customerOffersLocation());
+          },
+        ),
         title: BlocBuilder<OfferDetailsCubit, OfferDetailsState>(
           buildWhen: (previous, current) =>
               previous.status != current.status ||
               previous.details?.offerNumber != current.details?.offerNumber ||
-              previous.details?.status != current.details?.status,
+              previous.details?.status != current.details?.status ||
+              previous.details?.normalizedFilter !=
+                  current.details?.normalizedFilter,
           builder: (context, state) {
             final details = state.details;
             if (details == null || state.status != LoadStatus.success) {
               return Text(l.offerDetailsTitle, style: AppTypography.heading3);
             }
 
-            final offerTitle = details.offerNumber != null
-                ? '${l.offerNumberLabel}${details.offerNumber}'
-                : '${l.offerNumberLabel}${details.offerId}';
+            final offerIdentifier = details.offerNumber ?? '${details.offerId}';
+            final offerStatus = details.status?.trim() ?? '';
+            final statusColor = OfferFilter.resolveColor(
+              details.normalizedFilter,
+            );
 
-            return Text(
-              offerTitle,
-              style: AppTypography.heading3.copyWith(
-                fontWeight: FontWeight.w700,
-                color: AppColors.textPrimary,
-              ),
+            return Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    offerIdentifier,
+                    style: AppTypography.heading3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (offerStatus.isNotEmpty) ...[
+                  const SizedBox(width: 8),
+                  _StatusBadge(label: offerStatus, color: statusColor),
+                ],
+              ],
             );
           },
         ),
@@ -157,6 +196,31 @@ class _ErrorView extends StatelessWidget {
   }
 }
 
+class _StatusBadge extends StatelessWidget {
+  final String label;
+  final Color color;
+
+  const _StatusBadge({required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        label,
+        style: AppTypography.bodySmall.copyWith(
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+
 class _SuccessBody extends StatelessWidget {
   final OfferDetails details;
 
@@ -166,24 +230,21 @@ class _SuccessBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
 
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppDimensions.paddingMd),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(AppDimensions.paddingMd),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
                 // Company name
                 if (details.companyName != null) ...[
                   Text(
                     details.companyName!,
-                    style: AppTypography.bodyLarge.copyWith(
+                    style: AppTypography.heading3.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
+                      color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppDimensions.spacingMd),
                 ],
 
                 // ── Service type chips ──
@@ -191,7 +252,7 @@ class _SuccessBody extends StatelessWidget {
                   serviceTypeOverall: details.serviceTypeOverall,
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.spacingMd),
 
                 // ── Total card ──
                 OfferTotalCard(
@@ -214,14 +275,14 @@ class _SuccessBody extends StatelessWidget {
 
                 // ── Service line items ──
                 if (details.serviceLineItems.isNotEmpty) ...[
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppDimensions.spacingLg),
                   Text(
                     l.servicesTitle,
                     style: AppTypography.heading3.copyWith(
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppDimensions.spacingSm),
                   ...details.serviceLineItems.map(
                     (item) => Padding(
                       padding: const EdgeInsets.only(bottom: 10),
@@ -275,17 +336,14 @@ class _SuccessBody extends StatelessWidget {
                   ),
                 ],
 
-                // Bottom spacing for action buttons
-                const SizedBox(height: 24),
-              ],
-            ),
-          ),
-        ),
-
-        // ── Action buttons (only for pending offers) ──
-        if (details.canAccept || details.canReject)
-          _ActionButtons(details: details),
-      ],
+          // ── Action buttons at end of page (not pinned) ──
+          if (details.canAccept || details.canReject) ...[
+            const SizedBox(height: 24),
+            _ActionButtons(details: details),
+          ] else
+            const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 
@@ -314,69 +372,32 @@ class _ActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.paddingMd,
-        vertical: AppDimensions.paddingSm,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.divider)),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (details.canAccept)
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () {
-                    context.push(
-                      AppRouter.acceptOfferLocation(details.offerId),
-                      extra: details,
-                    );
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.brandRed,
-                    minimumSize: const Size.fromHeight(
-                      AppDimensions.buttonHeight,
-                    ),
-                  ),
-                  child: Text(l.acceptOffer),
-                ),
-              ),
-            if (details.canAccept && details.canReject)
-              const SizedBox(height: 12),
-            if (details.canReject)
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {
-                    context.push(
-                      AppRouter.rejectOfferLocation(details.offerId),
-                      extra: details,
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(
-                      AppDimensions.buttonHeight,
-                    ),
-                    side: const BorderSide(color: AppColors.brandRed),
-                  ),
-                  child: Text(
-                    l.rejectOffer,
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.brandRed,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (details.canAccept)
+          PrimaryButton(
+            label: l.acceptOffer,
+            onPressed: () {
+              context.go(
+                AppRouter.acceptOfferLocation(details.offerId),
+                extra: details,
+              );
+            },
+          ),
+        if (details.canAccept && details.canReject)
+          const SizedBox(height: 12),
+        if (details.canReject)
+          SecondaryButton(
+            label: l.rejectOffer,
+            onPressed: () {
+              context.go(
+                AppRouter.rejectOfferLocation(details.offerId),
+                extra: details,
+              );
+            },
+          ),
+      ],
     );
   }
 }

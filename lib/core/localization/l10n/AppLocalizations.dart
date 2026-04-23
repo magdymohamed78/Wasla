@@ -2636,6 +2636,18 @@ abstract class AppLocalizations {
   /// **'Elevator'**
   String get elevatorLabel;
 
+  /// No description provided for @availableLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get availableLabel;
+
+  /// No description provided for @notAvailableLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Available'**
+  String get notAvailableLabel;
+
   /// No description provided for @yes.
   ///
   /// In en, this message translates to:

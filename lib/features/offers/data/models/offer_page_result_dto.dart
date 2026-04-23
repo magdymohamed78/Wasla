@@ -41,24 +41,26 @@ class OfferPageResultDto {
   }
 
   OfferPageResult toDomain() {
-    final domainItems = items.map((dto) {
-      final rawStatus = dto.status;
-      final filter = _normalizeStatus(rawStatus);
-      return OfferSummaryItem(
-        offerId: dto.offerId,
-        offerNumber: dto.offerNumber,
-        companyId: dto.companyId,
-        companyName: dto.companyName,
-        companyLogoUrl: dto.companyLogoUrl,
-        status: rawStatus,
-        normalizedFilter: filter,
-        serviceTypeOverall: dto.serviceTypeOverall,
-        totalAmount: dto.totalAmount,
-        discountAmount: dto.discountAmount,
-        issueDate: dto.issueDate,
-        acceptDate: dto.acceptDate,
-      );
-    }).toList(growable: false);
+    final domainItems = items
+        .map((dto) {
+          final rawStatus = dto.status;
+          final filter = _normalizeStatus(rawStatus);
+          return OfferSummaryItem(
+            offerId: dto.offerId,
+            offerNumber: dto.offerNumber,
+            companyId: dto.companyId,
+            companyName: dto.companyName,
+            companyLogoUrl: dto.companyLogoUrl,
+            status: rawStatus,
+            normalizedFilter: filter,
+            serviceTypeOverall: dto.serviceTypeOverall,
+            totalAmount: dto.totalAmount,
+            discountAmount: dto.discountAmount,
+            issueDate: dto.issueDate,
+            acceptDate: dto.acceptDate,
+          );
+        })
+        .toList(growable: false);
 
     return OfferPageResult(
       items: domainItems,
@@ -66,7 +68,11 @@ class OfferPageResultDto {
       pageSize: pageSize,
       totalCount: totalCount,
       totalPages: totalPages,
-      statusCounts: _buildStatusCounts(rawStatusCounts, domainItems),
+      statusCounts: _buildStatusCounts(
+        rawStatusCounts,
+        domainItems,
+        totalCount,
+      ),
     );
   }
 
@@ -77,17 +83,59 @@ class OfferPageResultDto {
   static OfferStatusCounts _buildStatusCounts(
     Map<String, int> rawCounts,
     List<OfferSummaryItem> items,
+    int totalCount,
   ) {
+    final derived = _deriveCountsFromItems(items);
+
     if (rawCounts.isNotEmpty) {
+      final pending =
+          _resolveCount(rawCounts, const ['pending', 'sent', 'offersent']) ??
+          derived.pending;
+      final accepted =
+          _resolveCount(rawCounts, const ['accepted']) ?? derived.accepted;
+      final rejected =
+          _resolveCount(rawCounts, const ['rejected', 'declined']) ??
+          derived.rejected;
+      final expired =
+          _resolveCount(rawCounts, const ['expired']) ?? derived.expired;
+
+      final countsSum = pending + accepted + rejected + expired;
+      final all =
+          _resolveCount(rawCounts, const [
+            'all',
+            'total',
+            'totalcount',
+            'totaloffers',
+            'offerscount',
+            'offercount',
+          ]) ??
+          (totalCount > 0 ? totalCount : countsSum);
+
       return OfferStatusCounts(
-        all: rawCounts['All'] ?? rawCounts['all'] ?? items.length,
-        pending: rawCounts['Pending'] ?? rawCounts['pending'] ?? 0,
-        accepted: rawCounts['Accepted'] ?? rawCounts['accepted'] ?? 0,
-        rejected: rawCounts['Rejected'] ?? rawCounts['rejected'] ?? 0,
-        expired: rawCounts['Expired'] ?? rawCounts['expired'] ?? 0,
+        all: all < 0 ? 0 : all,
+        pending: pending < 0 ? 0 : pending,
+        accepted: accepted < 0 ? 0 : accepted,
+        rejected: rejected < 0 ? 0 : rejected,
+        expired: expired < 0 ? 0 : expired,
       );
     }
 
+    if (totalCount > 0) {
+      return OfferStatusCounts(
+        all: totalCount,
+        pending: derived.pending,
+        accepted: derived.accepted,
+        rejected: derived.rejected,
+        expired: derived.expired,
+      );
+    }
+
+    return derived;
+  }
+
+  static OfferStatusCounts _deriveCountsFromItems(
+    List<OfferSummaryItem> items,
+  ) {
     int pending = 0, accepted = 0, rejected = 0, expired = 0;
     for (final item in items) {
       switch (item.normalizedFilter) {
@@ -113,10 +161,23 @@ class OfferPageResultDto {
     );
   }
 
+  static int? _resolveCount(Map<String, int> rawCounts, List<String> aliases) {
+    for (final entry in rawCounts.entries) {
+      final normalizedKey = _normalizeCountKey(entry.key);
+      if (aliases.contains(normalizedKey)) {
+        return entry.value;
+      }
+    }
+
+    return null;
+  }
+
+  static String _normalizeCountKey(String key) {
+    return key.trim().toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
+  }
+
   static Map<String, int> _parseStatusCounts(dynamic raw) {
     if (raw is! Map) return const {};
-    return raw.map(
-      (key, value) => MapEntry(key.toString(), asInt(value)),
-    );
+    return raw.map((key, value) => MapEntry(key.toString(), asInt(value)));
   }
 }

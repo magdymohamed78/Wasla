@@ -16,6 +16,8 @@ export 'logout_remote_data_source.dart';
 export 'profile_remote_data_source.dart';
 
 abstract class CustomerPortalRemoteDataSource {
+  Future<Map<String, dynamic>> getMyDashboard();
+
   Future<List<CustomerServiceRequestSummaryDto>> getMyServiceRequests({
     int pageIndex,
     int pageSize,
@@ -81,6 +83,9 @@ abstract class CustomerPortalRemoteDataSource {
 
 class CustomerPortalRemoteDataSourceImpl
     implements CustomerPortalRemoteDataSource {
+  static const String _dashboardEndpoint = '/api/customer-portal/my/dashboard';
+
+  final Dio _dio;
   final ProfileRemoteDataSource _profile;
   final CustomerRequestsRemoteDataSource _requests;
   final CustomerOffersRemoteDataSource _offers;
@@ -89,12 +94,24 @@ class CustomerPortalRemoteDataSourceImpl
   final LogoutRemoteDataSource _logout;
 
   CustomerPortalRemoteDataSourceImpl(Dio dio)
-    : _profile = ProfileRemoteDataSource(dio),
+    : _dio = dio,
+      _profile = ProfileRemoteDataSource(dio),
       _requests = CustomerRequestsRemoteDataSource(dio),
       _offers = CustomerOffersRemoteDataSource(dio),
       _reviews = CustomerReviewsRemoteDataSource(dio),
       _signature = DigitalSignatureRemoteDataSource(dio),
       _logout = LogoutRemoteDataSource(dio);
+
+  @override
+  Future<Map<String, dynamic>> getMyDashboard() async {
+    final response = await _dio.get<dynamic>(_dashboardEndpoint);
+    final payload = response.data;
+    if (payload is Map<String, dynamic>) {
+      return payload;
+    }
+
+    return const <String, dynamic>{};
+  }
 
   @override
   Future<List<CustomerServiceRequestSummaryDto>> getMyServiceRequests({

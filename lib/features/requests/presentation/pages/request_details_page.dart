@@ -643,7 +643,12 @@ class _LinkedOfferSection extends StatelessWidget {
             label: localizations.requestDetailsViewOffer,
             onPressed: () {
               if (details.offerId != null) {
-                context.go(AppRouter.offerDetailsLocation(details.offerId!));
+                context.push(
+                  AppRouter.offerDetailsLocation(
+                    details.offerId!,
+                    sourceRequestId: details.serviceRequestId,
+                  ),
+                );
               }
             },
           ),
