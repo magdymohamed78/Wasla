@@ -1290,4 +1290,280 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get companyReviewsSubmitting => 'مراجعتك قيد المراجعة';
+
+  @override
+  String get offerTotalLabel => 'المبلغ الإجمالي';
+
+  @override
+  String get currencyEgp => 'ج.م';
+
+  @override
+  String get vatIncluded => 'شامل الضريبة';
+
+  @override
+  String get insuranceCovered => 'مشمول بالتأمين';
+
+  @override
+  String get offerSavingsLabel => 'توفيرك';
+
+  @override
+  String get locationsTitle => 'المواقع';
+
+  @override
+  String get servicesTitle => 'الخدمات';
+
+  @override
+  String get insuranceTitle => 'التأمين';
+
+  @override
+  String get includedInPriceTitle => 'مشمول في السعر';
+
+  @override
+  String get attachmentTitle => 'المرفق';
+
+  @override
+  String get pdfAttachment => 'مستند PDF';
+
+  @override
+  String get downloadAttachment => 'تحميل';
+
+  @override
+  String get acceptOffer => 'قبول العرض';
+
+  @override
+  String get rejectOffer => 'رفض العرض';
+
+  @override
+  String get reviewFullAgreement => 'مراجعة الاتفاقية كاملة';
+
+  @override
+  String get buildingTypeLabel => 'المبنى';
+
+  @override
+  String get floorLabel => 'الطابق';
+
+  @override
+  String get elevatorLabel => 'المصعد';
+
+  @override
+  String get yes => 'نعم';
+
+  @override
+  String get no => 'لا';
+
+  @override
+  String get unknownService => 'خدمة';
+
+  @override
+  String get additionalCostsLabel => 'تكاليف إضافية';
+
+  @override
+  String get cleaningTypeLabel => 'نوع التنظيف';
+
+  @override
+  String get durationHoursLabel => 'المدة (ساعات)';
+
+  @override
+  String get numberOfStaffLabel => 'عدد العمال';
+
+  @override
+  String get fillNailHolesLabel => 'سد ثقوب المسامير';
+
+  @override
+  String get highPressureCleanerLabel => 'منظف ضغط عالي';
+
+  @override
+  String get cleaningDateLabel => 'تاريخ التنظيف';
+
+  @override
+  String get cleaningStartTimeLabel => 'وقت البدء';
+
+  @override
+  String get deliveryDateLabel => 'تاريخ التسليم';
+
+  @override
+  String get deliveryTimeLabel => 'وقت التسليم';
+
+  @override
+  String get discountLabel => 'الخصم';
+
+  @override
+  String get offerNotFound => 'العرض غير موجود.';
+
+  @override
+  String get offerAccessDenied => 'ليس لديك صلاحية للوصول إلى هذا العرض.';
+
+  @override
+  String get offerLoadFailed =>
+      'تعذر تحميل تفاصيل العرض. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get offerDetailsRetry => 'إعادة المحاولة';
+
+  @override
+  String get downloadSuccess => 'تم تحميل الملف بنجاح.';
+
+  @override
+  String get downloadFailed => 'فشل تحميل الملف. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get acceptOfferTitle => 'قبول العرض';
+
+  @override
+  String get acceptOfferReviewHeader => 'مراجعة وتأكيد قبول العرض';
+
+  @override
+  String get acceptOfferSignatureHint => 'أدخل توقيعك الرقمي (SIG-...)';
+
+  @override
+  String get acceptOfferSignatureRequired => 'التوقيع الرقمي مطلوب';
+
+  @override
+  String get acceptOfferSignatureInvalidPrefix => 'يجب أن يبدأ التوقيع بـ SIG-';
+
+  @override
+  String get acceptOfferConfirmationText =>
+      'أؤكد أنني قد راجعت وأوافق على شروط هذا العرض.';
+
+  @override
+  String get acceptOfferConfirmationRequired => 'يجب التأكيد قبل القبول';
+
+  @override
+  String get acceptOfferPaymentRequired => 'يرجى اختيار طريقة الدفع';
+
+  @override
+  String get cashOnDelivery => 'الدفع عند الاستلام';
+
+  @override
+  String get onlinePayment => 'الدفع الإلكتروني';
+
+  @override
+  String get acceptOfferSubmit => 'قبول العرض';
+
+  @override
+  String get acceptOfferCancel => 'إلغاء';
+
+  @override
+  String get acceptOfferSuccessCod => 'تم قبول العرض بنجاح!';
+
+  @override
+  String get acceptOfferSuccessOnline => 'جارٍ التحويل إلى صفحة الدفع...';
+
+  @override
+  String get acceptOfferCheckoutError =>
+      'تعذر فتح صفحة الدفع. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get acceptOfferTerminalState => 'لا يمكن قبول هذا العرض بعد الآن.';
+
+  @override
+  String get acceptOfferForbidden => 'ليس لديك صلاحية لقبول هذا العرض.';
+
+  @override
+  String get acceptOfferPaymentConfigMissing =>
+      'الدفع الإلكتروني غير متاح. يرجى التواصل مع الدعم.';
+
+  @override
+  String get acceptOfferFailed => 'فشل قبول العرض. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get rejectOfferTitle => 'رفض العرض';
+
+  @override
+  String get rejectOfferWarningHeader => 'هل أنت متأكد أنك تريد رفض هذا العرض؟';
+
+  @override
+  String get rejectOfferWarningText =>
+      'لا يمكن التراجع عن هذا الإجراء. سيتم إخطار الشركة بقرارك.';
+
+  @override
+  String get rejectOfferReasonHint => 'يرجى توضيح سبب رفضك لهذا العرض...';
+
+  @override
+  String get rejectOfferReasonRequired => 'سبب الرفض مطلوب';
+
+  @override
+  String get rejectOfferReasonTooLong => 'يجب ألا يتجاوز السبب ٢٠٠٠ حرف';
+
+  @override
+  String get rejectOfferSubmit => 'رفض العرض';
+
+  @override
+  String get rejectOfferCancel => 'إلغاء';
+
+  @override
+  String get rejectOfferSuccess => 'تم رفض العرض.';
+
+  @override
+  String get rejectOfferTerminalState => 'لا يمكن رفض هذا العرض بعد الآن.';
+
+  @override
+  String get rejectOfferForbidden => 'ليس لديك صلاحية لرفض هذا العرض.';
+
+  @override
+  String get rejectOfferFailed => 'فشل رفض العرض. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get offerSummaryCardTitle => 'ملخص العرض';
+
+  @override
+  String get offerNumberLabel => 'عرض #';
+
+  @override
+  String get companyLabel => 'الشركة';
+
+  @override
+  String get rejectionReasonLabel => 'سبب الرفض ';
+
+  @override
+  String get acceptOfferFinalizeTitle => 'إتمام القبول.';
+
+  @override
+  String acceptOfferFinalizeSubtitle(String providerName) {
+    return 'يرجى مراجعة تفاصيل العرض من $providerName بعناية قبل تطبيق توقيعك الرقمي لإلزام الاتفاقية.';
+  }
+
+  @override
+  String get acceptOfferDigitalSignatureLabel => 'التوقيع الرقمي';
+
+  @override
+  String get acceptOfferSignatureHintPart1 =>
+      'تلميح: يمكنك العثور على توقيعك الرقمي في ';
+
+  @override
+  String get acceptOfferSignatureHintPart2 => 'الإعدادات -> التوقيع الرقمي';
+
+  @override
+  String get acceptOfferSignatureHintPart3 => ' (يتطلب التحقق من كلمة المرور).';
+
+  @override
+  String get acceptOfferConfirmationTextLong =>
+      'أؤكد أنني أريد قبول هذا العرض والتوقيع عليه بتوقيعي الرقمي. أدرك أن هذا الإجراء ملزم قانوناً.';
+
+  @override
+  String get acceptOfferSignAndAccept => 'توقيع وقبول';
+
+  @override
+  String get entryReferenceLabel => 'مرجع الإدخال';
+
+  @override
+  String get statusLabel => 'الحالة';
+
+  @override
+  String get providerIdentityLabel => 'هوية المزود';
+
+  @override
+  String get valuationLabel => 'التقييم';
+
+  @override
+  String get offerReferenceLabel => 'مرجع العرض';
+
+  @override
+  String get totalContractValueLabel => 'إجمالي قيمة العقد';
+
+  @override
+  String get serviceHeader => 'الخدمة';
+
+  @override
+  String get costHeader => 'التكلفة';
 }

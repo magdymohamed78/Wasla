@@ -34,6 +34,12 @@ import 'features/home/data/repositories/customer_portal_repository_impl.dart';
 import 'features/home/data/repositories/discovery_repository_impl.dart';
 import 'features/home/data/repositories/service_request_repository_impl.dart';
 import 'features/home/domain/repositories/customer_offers_repository.dart';
+import 'features/offers/data/data_sources/offers_remote_data_source.dart';
+import 'features/offers/data/repositories/offers_repository_impl.dart';
+import 'features/offers/domain/repositories/offers_repository.dart';
+import 'features/offers/domain/use_cases/get_offer_details_use_case.dart';
+import 'features/offers/domain/use_cases/accept_offer_use_case.dart';
+import 'features/offers/domain/use_cases/reject_offer_use_case.dart';
 import 'features/home/domain/repositories/customer_portal_repository.dart';
 import 'features/home/domain/repositories/customer_reviews_repository.dart';
 import 'features/home/domain/repositories/customer_requests_repository.dart';
@@ -122,6 +128,11 @@ class _AppState extends State<App> {
 
   // ── Offers ────────────────────────────────────────────────────
   late final GetCustomerOffersUseCase _getCustomerOffersUseCase;
+  late final OffersRemoteDataSource _offersRemoteDataSource;
+  late final OffersRepository _offersRepository;
+  late final GetOfferDetailsUseCase _getOfferDetailsUseCase;
+  late final AcceptOfferUseCase _acceptOfferUseCase;
+  late final RejectOfferUseCase _rejectOfferUseCase;
 
   // ── Settings / Signature / Logout ─────────────────────────────
   late final RevealDigitalSignatureUseCase _revealDigitalSignatureUseCase;
@@ -245,6 +256,13 @@ class _AppState extends State<App> {
     _getCustomerOffersUseCase = GetCustomerOffersUseCase(
       _customerPortalRepository,
     );
+
+    // ── Offer Details / Accept / Reject ─────────────────────────
+    _offersRemoteDataSource = OffersRemoteDataSource(_dio);
+    _offersRepository = OffersRepositoryImpl(remote: _offersRemoteDataSource);
+    _getOfferDetailsUseCase = GetOfferDetailsUseCase(_offersRepository);
+    _acceptOfferUseCase = AcceptOfferUseCase(_offersRepository);
+    _rejectOfferUseCase = RejectOfferUseCase(_offersRepository);
 
     _revealDigitalSignatureUseCase = RevealDigitalSignatureUseCase(
       _customerPortalRepository,
@@ -414,6 +432,18 @@ class _AppState extends State<App> {
         // ── Offers ──────────────────────────────────────────────
         RepositoryProvider<GetCustomerOffersUseCase>.value(
           value: _getCustomerOffersUseCase,
+        ),
+        RepositoryProvider<OffersRepository>.value(
+          value: _offersRepository,
+        ),
+        RepositoryProvider<GetOfferDetailsUseCase>.value(
+          value: _getOfferDetailsUseCase,
+        ),
+        RepositoryProvider<AcceptOfferUseCase>.value(
+          value: _acceptOfferUseCase,
+        ),
+        RepositoryProvider<RejectOfferUseCase>.value(
+          value: _rejectOfferUseCase,
         ),
 
         // ── Settings / Signature / Logout ───────────────────────

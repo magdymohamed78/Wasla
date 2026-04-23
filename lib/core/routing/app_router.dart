@@ -21,6 +21,9 @@ import '../../features/requests/presentation/pages/request_details_page.dart';
 import '../../features/companies/presentation/pages/recommended_companies_page.dart';
 import '../../features/companies/presentation/pages/trending_companies_page.dart';
 import '../../features/offers/presentation/pages/offer_details_page.dart';
+import '../../features/offers/presentation/pages/accept_offer_page.dart';
+import '../../features/offers/presentation/pages/reject_offer_page.dart';
+import '../../features/offers/domain/entities/offer_details.dart';
 import '../../features/reviews/presentation/pages/my_reviews_page.dart';
 import '../../features/offers/domain/entities/offer_filter.dart';
 import '../../features/home/presentation/cubit/lead_access_state.dart';
@@ -71,6 +74,8 @@ class AppRouter {
   static const String requestDetails = '/my/service-requests/:requestId';
   static const String requestsFullList = '/my/service-requests/list';
   static const String offerDetailsPath = '/my/offers/:offerId';
+  static const String acceptOfferPath = '/my/offers/:offerId/accept';
+  static const String rejectOfferPath = '/my/offers/:offerId/reject';
   static const String offersFilterQueryKey = 'filter';
   static const String authReasonQueryKey = 'authReason';
   static const String authReasonSessionExpired = 'session_expired';
@@ -171,6 +176,12 @@ class AppRouter {
   }
 
   static String offerDetailsLocation(int offerId) => '/my/offers/$offerId';
+
+  static String acceptOfferLocation(int offerId) =>
+      '/my/offers/$offerId/accept';
+
+  static String rejectOfferLocation(int offerId) =>
+      '/my/offers/$offerId/reject';
 
   static GoRouter router(
     AuthRepository authRepository, {
@@ -480,6 +491,32 @@ class AppRouter {
             final offerId = int.tryParse(offerIdRaw ?? '') ?? -1;
             return OfferDetailsPage(offerId: offerId);
           },
+          routes: [
+            GoRoute(
+              path: 'accept',
+              builder: (context, state) {
+                final offerIdRaw = state.pathParameters['offerId'];
+                final offerId = int.tryParse(offerIdRaw ?? '') ?? -1;
+                final details = state.extra as OfferDetails?;
+                return AcceptOfferPage(
+                  offerId: offerId,
+                  offerDetails: details,
+                );
+              },
+            ),
+            GoRoute(
+              path: 'reject',
+              builder: (context, state) {
+                final offerIdRaw = state.pathParameters['offerId'];
+                final offerId = int.tryParse(offerIdRaw ?? '') ?? -1;
+                final details = state.extra as OfferDetails?;
+                return RejectOfferPage(
+                  offerId: offerId,
+                  offerDetails: details,
+                );
+              },
+            ),
+          ],
         ),
       ],
     );

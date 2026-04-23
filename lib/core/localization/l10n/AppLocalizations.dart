@@ -2527,6 +2527,540 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your review is under review'**
   String get companyReviewsSubmitting;
+
+  /// No description provided for @offerTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get offerTotalLabel;
+
+  /// No description provided for @currencyEgp.
+  ///
+  /// In en, this message translates to:
+  /// **'EGP'**
+  String get currencyEgp;
+
+  /// No description provided for @vatIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'VAT Included'**
+  String get vatIncluded;
+
+  /// No description provided for @insuranceCovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance Covered'**
+  String get insuranceCovered;
+
+  /// No description provided for @offerSavingsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You Save'**
+  String get offerSavingsLabel;
+
+  /// No description provided for @locationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Locations'**
+  String get locationsTitle;
+
+  /// No description provided for @servicesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Services'**
+  String get servicesTitle;
+
+  /// No description provided for @insuranceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance'**
+  String get insuranceTitle;
+
+  /// No description provided for @includedInPriceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Included in Price'**
+  String get includedInPriceTitle;
+
+  /// No description provided for @attachmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attachment'**
+  String get attachmentTitle;
+
+  /// No description provided for @pdfAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF Document'**
+  String get pdfAttachment;
+
+  /// No description provided for @downloadAttachment.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get downloadAttachment;
+
+  /// No description provided for @acceptOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Offer'**
+  String get acceptOffer;
+
+  /// No description provided for @rejectOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Offer'**
+  String get rejectOffer;
+
+  /// No description provided for @reviewFullAgreement.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Full Agreement'**
+  String get reviewFullAgreement;
+
+  /// No description provided for @buildingTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Building'**
+  String get buildingTypeLabel;
+
+  /// No description provided for @floorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Floor'**
+  String get floorLabel;
+
+  /// No description provided for @elevatorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Elevator'**
+  String get elevatorLabel;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @unknownService.
+  ///
+  /// In en, this message translates to:
+  /// **'Service'**
+  String get unknownService;
+
+  /// No description provided for @additionalCostsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Costs'**
+  String get additionalCostsLabel;
+
+  /// No description provided for @cleaningTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning Type'**
+  String get cleaningTypeLabel;
+
+  /// No description provided for @durationHoursLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration (hours)'**
+  String get durationHoursLabel;
+
+  /// No description provided for @numberOfStaffLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Staff'**
+  String get numberOfStaffLabel;
+
+  /// No description provided for @fillNailHolesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill Nail Holes'**
+  String get fillNailHolesLabel;
+
+  /// No description provided for @highPressureCleanerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'High Pressure Cleaner'**
+  String get highPressureCleanerLabel;
+
+  /// No description provided for @cleaningDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning Date'**
+  String get cleaningDateLabel;
+
+  /// No description provided for @cleaningStartTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Time'**
+  String get cleaningStartTimeLabel;
+
+  /// No description provided for @deliveryDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Date'**
+  String get deliveryDateLabel;
+
+  /// No description provided for @deliveryTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Time'**
+  String get deliveryTimeLabel;
+
+  /// No description provided for @discountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get discountLabel;
+
+  /// No description provided for @offerNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer not found.'**
+  String get offerNotFound;
+
+  /// No description provided for @offerAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have access to this offer.'**
+  String get offerAccessDenied;
+
+  /// No description provided for @offerLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load offer details. Please try again.'**
+  String get offerLoadFailed;
+
+  /// No description provided for @offerDetailsRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get offerDetailsRetry;
+
+  /// No description provided for @downloadSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'File downloaded successfully.'**
+  String get downloadSuccess;
+
+  /// No description provided for @downloadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download file. Please try again.'**
+  String get downloadFailed;
+
+  /// No description provided for @acceptOfferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Offer'**
+  String get acceptOfferTitle;
+
+  /// No description provided for @acceptOfferReviewHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and confirm offer acceptance'**
+  String get acceptOfferReviewHeader;
+
+  /// No description provided for @acceptOfferSignatureHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your digital signature (SIG-...)'**
+  String get acceptOfferSignatureHint;
+
+  /// No description provided for @acceptOfferSignatureRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital signature is required'**
+  String get acceptOfferSignatureRequired;
+
+  /// No description provided for @acceptOfferSignatureInvalidPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature must start with SIG-'**
+  String get acceptOfferSignatureInvalidPrefix;
+
+  /// No description provided for @acceptOfferConfirmationText.
+  ///
+  /// In en, this message translates to:
+  /// **'I confirm that I have reviewed and agree to the terms of this offer.'**
+  String get acceptOfferConfirmationText;
+
+  /// No description provided for @acceptOfferConfirmationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'You must confirm before accepting'**
+  String get acceptOfferConfirmationRequired;
+
+  /// No description provided for @acceptOfferPaymentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a payment method'**
+  String get acceptOfferPaymentRequired;
+
+  /// No description provided for @cashOnDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash on Delivery'**
+  String get cashOnDelivery;
+
+  /// No description provided for @onlinePayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Online Payment'**
+  String get onlinePayment;
+
+  /// No description provided for @acceptOfferSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Offer'**
+  String get acceptOfferSubmit;
+
+  /// No description provided for @acceptOfferCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get acceptOfferCancel;
+
+  /// No description provided for @acceptOfferSuccessCod.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer accepted successfully!'**
+  String get acceptOfferSuccessCod;
+
+  /// No description provided for @acceptOfferSuccessOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Redirecting to payment...'**
+  String get acceptOfferSuccessOnline;
+
+  /// No description provided for @acceptOfferCheckoutError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open payment page. Please try again.'**
+  String get acceptOfferCheckoutError;
+
+  /// No description provided for @acceptOfferTerminalState.
+  ///
+  /// In en, this message translates to:
+  /// **'This offer can no longer be accepted.'**
+  String get acceptOfferTerminalState;
+
+  /// No description provided for @acceptOfferForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to accept this offer.'**
+  String get acceptOfferForbidden;
+
+  /// No description provided for @acceptOfferPaymentConfigMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Online payment is not available. Please contact support.'**
+  String get acceptOfferPaymentConfigMissing;
+
+  /// No description provided for @acceptOfferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to accept offer. Please try again.'**
+  String get acceptOfferFailed;
+
+  /// No description provided for @rejectOfferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Offer'**
+  String get rejectOfferTitle;
+
+  /// No description provided for @rejectOfferWarningHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this offer?'**
+  String get rejectOfferWarningHeader;
+
+  /// No description provided for @rejectOfferWarningText.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. The company will be notified of your decision.'**
+  String get rejectOfferWarningText;
+
+  /// No description provided for @rejectOfferReasonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please explain why you are rejecting this offer...'**
+  String get rejectOfferReasonHint;
+
+  /// No description provided for @rejectOfferReasonRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejection reason is required'**
+  String get rejectOfferReasonRequired;
+
+  /// No description provided for @rejectOfferReasonTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason must be 2,000 characters or less'**
+  String get rejectOfferReasonTooLong;
+
+  /// No description provided for @rejectOfferSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Offer'**
+  String get rejectOfferSubmit;
+
+  /// No description provided for @rejectOfferCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get rejectOfferCancel;
+
+  /// No description provided for @rejectOfferSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer rejected.'**
+  String get rejectOfferSuccess;
+
+  /// No description provided for @rejectOfferTerminalState.
+  ///
+  /// In en, this message translates to:
+  /// **'This offer can no longer be rejected.'**
+  String get rejectOfferTerminalState;
+
+  /// No description provided for @rejectOfferForbidden.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to reject this offer.'**
+  String get rejectOfferForbidden;
+
+  /// No description provided for @rejectOfferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to reject offer. Please try again.'**
+  String get rejectOfferFailed;
+
+  /// No description provided for @offerSummaryCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer Summary'**
+  String get offerSummaryCardTitle;
+
+  /// No description provided for @offerNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer #'**
+  String get offerNumberLabel;
+
+  /// No description provided for @companyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Company'**
+  String get companyLabel;
+
+  /// No description provided for @rejectionReasonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'REJECTION REASON '**
+  String get rejectionReasonLabel;
+
+  /// No description provided for @acceptOfferFinalizeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finalize Acceptance.'**
+  String get acceptOfferFinalizeTitle;
+
+  /// No description provided for @acceptOfferFinalizeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please review the offer details from {providerName} carefully before applying your digital signature to bind the agreement.'**
+  String acceptOfferFinalizeSubtitle(String providerName);
+
+  /// No description provided for @acceptOfferDigitalSignatureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'DIGITAL SIGNATURE'**
+  String get acceptOfferDigitalSignatureLabel;
+
+  /// No description provided for @acceptOfferSignatureHintPart1.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint: You can find your digital signature in '**
+  String get acceptOfferSignatureHintPart1;
+
+  /// No description provided for @acceptOfferSignatureHintPart2.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings -> Digital Signature'**
+  String get acceptOfferSignatureHintPart2;
+
+  /// No description provided for @acceptOfferSignatureHintPart3.
+  ///
+  /// In en, this message translates to:
+  /// **' (requires password verification).'**
+  String get acceptOfferSignatureHintPart3;
+
+  /// No description provided for @acceptOfferConfirmationTextLong.
+  ///
+  /// In en, this message translates to:
+  /// **'I confirm I want to accept this offer and sign with my digital signature. I understand this action is legally binding.'**
+  String get acceptOfferConfirmationTextLong;
+
+  /// No description provided for @acceptOfferSignAndAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign & Accept'**
+  String get acceptOfferSignAndAccept;
+
+  /// No description provided for @entryReferenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ENTRY REFERENCE'**
+  String get entryReferenceLabel;
+
+  /// No description provided for @statusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'STATUS'**
+  String get statusLabel;
+
+  /// No description provided for @providerIdentityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PROVIDER IDENTITY'**
+  String get providerIdentityLabel;
+
+  /// No description provided for @valuationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'VALUATION'**
+  String get valuationLabel;
+
+  /// No description provided for @offerReferenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'OFFER REFERENCE'**
+  String get offerReferenceLabel;
+
+  /// No description provided for @totalContractValueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL CONTRACT VALUE'**
+  String get totalContractValueLabel;
+
+  /// No description provided for @serviceHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'SERVICE'**
+  String get serviceHeader;
+
+  /// No description provided for @costHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'COST'**
+  String get costHeader;
 }
 
 class _AppLocalizationsDelegate

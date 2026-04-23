@@ -1303,4 +1303,291 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get companyReviewsSubmitting => 'Your review is under review';
+
+  @override
+  String get offerTotalLabel => 'Total Amount';
+
+  @override
+  String get currencyEgp => 'EGP';
+
+  @override
+  String get vatIncluded => 'VAT Included';
+
+  @override
+  String get insuranceCovered => 'Insurance Covered';
+
+  @override
+  String get offerSavingsLabel => 'You Save';
+
+  @override
+  String get locationsTitle => 'Locations';
+
+  @override
+  String get servicesTitle => 'Services';
+
+  @override
+  String get insuranceTitle => 'Insurance';
+
+  @override
+  String get includedInPriceTitle => 'Included in Price';
+
+  @override
+  String get attachmentTitle => 'Attachment';
+
+  @override
+  String get pdfAttachment => 'PDF Document';
+
+  @override
+  String get downloadAttachment => 'Download';
+
+  @override
+  String get acceptOffer => 'Accept Offer';
+
+  @override
+  String get rejectOffer => 'Reject Offer';
+
+  @override
+  String get reviewFullAgreement => 'Review Full Agreement';
+
+  @override
+  String get buildingTypeLabel => 'Building';
+
+  @override
+  String get floorLabel => 'Floor';
+
+  @override
+  String get elevatorLabel => 'Elevator';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get unknownService => 'Service';
+
+  @override
+  String get additionalCostsLabel => 'Additional Costs';
+
+  @override
+  String get cleaningTypeLabel => 'Cleaning Type';
+
+  @override
+  String get durationHoursLabel => 'Duration (hours)';
+
+  @override
+  String get numberOfStaffLabel => 'Number of Staff';
+
+  @override
+  String get fillNailHolesLabel => 'Fill Nail Holes';
+
+  @override
+  String get highPressureCleanerLabel => 'High Pressure Cleaner';
+
+  @override
+  String get cleaningDateLabel => 'Cleaning Date';
+
+  @override
+  String get cleaningStartTimeLabel => 'Start Time';
+
+  @override
+  String get deliveryDateLabel => 'Delivery Date';
+
+  @override
+  String get deliveryTimeLabel => 'Delivery Time';
+
+  @override
+  String get discountLabel => 'Discount';
+
+  @override
+  String get offerNotFound => 'Offer not found.';
+
+  @override
+  String get offerAccessDenied => 'You do not have access to this offer.';
+
+  @override
+  String get offerLoadFailed =>
+      'Unable to load offer details. Please try again.';
+
+  @override
+  String get offerDetailsRetry => 'Retry';
+
+  @override
+  String get downloadSuccess => 'File downloaded successfully.';
+
+  @override
+  String get downloadFailed => 'Failed to download file. Please try again.';
+
+  @override
+  String get acceptOfferTitle => 'Accept Offer';
+
+  @override
+  String get acceptOfferReviewHeader => 'Review and confirm offer acceptance';
+
+  @override
+  String get acceptOfferSignatureHint =>
+      'Enter your digital signature (SIG-...)';
+
+  @override
+  String get acceptOfferSignatureRequired => 'Digital signature is required';
+
+  @override
+  String get acceptOfferSignatureInvalidPrefix =>
+      'Signature must start with SIG-';
+
+  @override
+  String get acceptOfferConfirmationText =>
+      'I confirm that I have reviewed and agree to the terms of this offer.';
+
+  @override
+  String get acceptOfferConfirmationRequired =>
+      'You must confirm before accepting';
+
+  @override
+  String get acceptOfferPaymentRequired => 'Please select a payment method';
+
+  @override
+  String get cashOnDelivery => 'Cash on Delivery';
+
+  @override
+  String get onlinePayment => 'Online Payment';
+
+  @override
+  String get acceptOfferSubmit => 'Accept Offer';
+
+  @override
+  String get acceptOfferCancel => 'Cancel';
+
+  @override
+  String get acceptOfferSuccessCod => 'Offer accepted successfully!';
+
+  @override
+  String get acceptOfferSuccessOnline => 'Redirecting to payment...';
+
+  @override
+  String get acceptOfferCheckoutError =>
+      'Unable to open payment page. Please try again.';
+
+  @override
+  String get acceptOfferTerminalState =>
+      'This offer can no longer be accepted.';
+
+  @override
+  String get acceptOfferForbidden =>
+      'You do not have permission to accept this offer.';
+
+  @override
+  String get acceptOfferPaymentConfigMissing =>
+      'Online payment is not available. Please contact support.';
+
+  @override
+  String get acceptOfferFailed => 'Failed to accept offer. Please try again.';
+
+  @override
+  String get rejectOfferTitle => 'Reject Offer';
+
+  @override
+  String get rejectOfferWarningHeader =>
+      'Are you sure you want to reject this offer?';
+
+  @override
+  String get rejectOfferWarningText =>
+      'This action cannot be undone. The company will be notified of your decision.';
+
+  @override
+  String get rejectOfferReasonHint =>
+      'Please explain why you are rejecting this offer...';
+
+  @override
+  String get rejectOfferReasonRequired => 'Rejection reason is required';
+
+  @override
+  String get rejectOfferReasonTooLong =>
+      'Reason must be 2,000 characters or less';
+
+  @override
+  String get rejectOfferSubmit => 'Reject Offer';
+
+  @override
+  String get rejectOfferCancel => 'Cancel';
+
+  @override
+  String get rejectOfferSuccess => 'Offer rejected.';
+
+  @override
+  String get rejectOfferTerminalState =>
+      'This offer can no longer be rejected.';
+
+  @override
+  String get rejectOfferForbidden =>
+      'You do not have permission to reject this offer.';
+
+  @override
+  String get rejectOfferFailed => 'Failed to reject offer. Please try again.';
+
+  @override
+  String get offerSummaryCardTitle => 'Offer Summary';
+
+  @override
+  String get offerNumberLabel => 'Offer #';
+
+  @override
+  String get companyLabel => 'Company';
+
+  @override
+  String get rejectionReasonLabel => 'REJECTION REASON ';
+
+  @override
+  String get acceptOfferFinalizeTitle => 'Finalize Acceptance.';
+
+  @override
+  String acceptOfferFinalizeSubtitle(String providerName) {
+    return 'Please review the offer details from $providerName carefully before applying your digital signature to bind the agreement.';
+  }
+
+  @override
+  String get acceptOfferDigitalSignatureLabel => 'DIGITAL SIGNATURE';
+
+  @override
+  String get acceptOfferSignatureHintPart1 =>
+      'Hint: You can find your digital signature in ';
+
+  @override
+  String get acceptOfferSignatureHintPart2 => 'Settings -> Digital Signature';
+
+  @override
+  String get acceptOfferSignatureHintPart3 =>
+      ' (requires password verification).';
+
+  @override
+  String get acceptOfferConfirmationTextLong =>
+      'I confirm I want to accept this offer and sign with my digital signature. I understand this action is legally binding.';
+
+  @override
+  String get acceptOfferSignAndAccept => 'Sign & Accept';
+
+  @override
+  String get entryReferenceLabel => 'ENTRY REFERENCE';
+
+  @override
+  String get statusLabel => 'STATUS';
+
+  @override
+  String get providerIdentityLabel => 'PROVIDER IDENTITY';
+
+  @override
+  String get valuationLabel => 'VALUATION';
+
+  @override
+  String get offerReferenceLabel => 'OFFER REFERENCE';
+
+  @override
+  String get totalContractValueLabel => 'TOTAL CONTRACT VALUE';
+
+  @override
+  String get serviceHeader => 'SERVICE';
+
+  @override
+  String get costHeader => 'COST';
 }
