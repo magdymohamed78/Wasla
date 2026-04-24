@@ -14,13 +14,20 @@ class DashboardSectionSkeleton extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final isTablet = width >= 720;
-        final isMedium = width >= 540 && width < 720;
-        final crossAxisCount = isTablet ? 4 : (isMedium ? 3 : 2);
-        final spacing = isMedium || isTablet
+        int crossAxisCount;
+        if (width >= 1024) {
+          crossAxisCount = 4;
+        } else if (width >= 720) {
+          crossAxisCount = 4;
+        } else if (width >= 540) {
+          crossAxisCount = 3;
+        } else {
+          crossAxisCount = 2;
+        }
+
+        final spacing = width >= 540
             ? AppDimensions.spacingMd
             : AppDimensions.spacingSm;
-        final childAspectRatio = isTablet ? 1.65 : (isMedium ? 1.45 : 1.3);
 
         return GridView.builder(
           shrinkWrap: true,
@@ -30,7 +37,7 @@ class DashboardSectionSkeleton extends StatelessWidget {
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: spacing,
             mainAxisSpacing: spacing,
-            childAspectRatio: childAspectRatio,
+            mainAxisExtent: 140,
           ),
           itemBuilder: (context, index) {
             return Shimmer.fromColors(

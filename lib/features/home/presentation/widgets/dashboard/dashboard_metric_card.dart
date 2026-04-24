@@ -77,9 +77,13 @@ class _DashboardMetricCardState extends State<DashboardMetricCard> {
                   ),
                 ),
                 const Spacer(),
-                Text(
-                  '${widget.value}',
-                  style: AppTypography.heading2.copyWith(height: 1),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    '${widget.value}',
+                    style: AppTypography.heading2.copyWith(height: 1),
+                  ),
                 ),
                 const SizedBox(height: AppDimensions.spacingXs),
                 Text(
