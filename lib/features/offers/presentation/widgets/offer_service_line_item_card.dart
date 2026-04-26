@@ -158,6 +158,34 @@ class OfferServiceLineItemCard extends StatelessWidget {
       String displayValue;
       if (value is bool) {
         displayValue = value ? l.yes : l.no;
+      } else if (key == 'cleaningDate' || key == 'deliveryDate') {
+        try {
+          final date = DateTime.parse(value.toString());
+          displayValue = DateFormat('d/M/yyyy').format(date);
+        } catch (e) {
+          displayValue = value.toString();
+        }
+      } else if (key == 'cleaningStartTime' || key == 'deliveryTime') {
+        try {
+          final timeStr = value.toString();
+          if (timeStr.contains('T')) {
+            final date = DateTime.parse(timeStr);
+            displayValue = DateFormat('h:mm a').format(date);
+          } else {
+            final parts = timeStr.split(':');
+            if (parts.length >= 2) {
+              final hour = int.parse(parts[0]);
+              final minute = int.parse(parts[1]);
+              final now = DateTime.now();
+              final date = DateTime(now.year, now.month, now.day, hour, minute);
+              displayValue = DateFormat('h:mm a').format(date);
+            } else {
+              displayValue = timeStr;
+            }
+          }
+        } catch (e) {
+          displayValue = value.toString();
+        }
       } else {
         displayValue = value.toString();
       }
@@ -188,10 +216,7 @@ class OfferServiceLineItemCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        for (final row in rows) ...[
-          row,
-          const SizedBox(height: 12),
-        ],
+        for (final row in rows) ...[row, const SizedBox(height: 12)],
       ],
     );
   }
