@@ -5,14 +5,14 @@ class OfferStatusCounts {
   final int pending;
   final int accepted;
   final int rejected;
-  final int expired;
+  final int canceled;
 
   const OfferStatusCounts({
     this.all = 0,
     this.pending = 0,
     this.accepted = 0,
     this.rejected = 0,
-    this.expired = 0,
+    this.canceled = 0,
   });
 
   int countForFilter(OfferFilter filter) {
@@ -25,8 +25,8 @@ class OfferStatusCounts {
         return accepted;
       case OfferFilter.rejected:
         return rejected;
-      case OfferFilter.expired:
-        return expired;
+      case OfferFilter.canceled:
+        return canceled;
     }
   }
 }

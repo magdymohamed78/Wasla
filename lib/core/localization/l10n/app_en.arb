@@ -374,7 +374,7 @@
   "offersFilterPending": "Pending",
   "offersFilterAccepted": "Accepted",
   "offersFilterRejected": "Rejected",
-  "offersFilterExpired": "Expired",
+  "offersFilterCanceled": "Canceled",
   "offersTotalAmount": "Total Amount",
   "offersIssueDate": "Issue Date",
   "offersAcceptDate": "Accept Date",

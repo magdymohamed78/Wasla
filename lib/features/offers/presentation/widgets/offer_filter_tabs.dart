@@ -38,8 +38,8 @@ class OfferFilterTabs extends StatelessWidget {
         label: localizations.offersFilterRejected,
       ),
       (
-        filter: OfferFilter.expired,
-        label: localizations.offersFilterExpired,
+        filter: OfferFilter.canceled,
+        label: localizations.offersFilterCanceled,
       ),
     ];
 

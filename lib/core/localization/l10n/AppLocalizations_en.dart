@@ -1016,7 +1016,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offersFilterRejected => 'Rejected';
 
   @override
-  String get offersFilterExpired => 'Expired';
+  String get offersFilterCanceled => 'Canceled';
 
   @override
   String get offersTotalAmount => 'Total Amount';

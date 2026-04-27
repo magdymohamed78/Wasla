@@ -1976,11 +1976,11 @@ abstract class AppLocalizations {
   /// **'Rejected'**
   String get offersFilterRejected;
 
-  /// No description provided for @offersFilterExpired.
+  /// No description provided for @offersFilterCanceled.
   ///
   /// In en, this message translates to:
-  /// **'Expired'**
-  String get offersFilterExpired;
+  /// **'Canceled'**
+  String get offersFilterCanceled;
 
   /// No description provided for @offersTotalAmount.
   ///

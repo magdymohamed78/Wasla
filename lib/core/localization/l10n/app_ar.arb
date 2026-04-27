@@ -366,7 +366,7 @@
   "offersFilterPending": "قيد الانتظار",
   "offersFilterAccepted": "مقبول",
   "offersFilterRejected": "مرفوض",
-  "offersFilterExpired": "منتهية",
+  "offersFilterCanceled": "ملغاة",
   "offersTotalAmount": "المبلغ الإجمالي",
   "offersIssueDate": "تاريخ الإصدار",
   "offersAcceptDate": "تاريخ القبول",

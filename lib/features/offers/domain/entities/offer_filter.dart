@@ -7,7 +7,7 @@ enum OfferFilter {
   pending,
   accepted,
   rejected,
-  expired;
+  canceled;
 
   String toQueryValue() {
     switch (this) {
@@ -19,8 +19,8 @@ enum OfferFilter {
         return 'Accepted';
       case OfferFilter.rejected:
         return 'Rejected';
-      case OfferFilter.expired:
-        return 'Expired';
+      case OfferFilter.canceled:
+        return 'Canceled';
     }
   }
 
@@ -33,6 +33,9 @@ enum OfferFilter {
     }
     if (normalized == 'declined') {
       return OfferFilter.rejected;
+    }
+    if (normalized == 'expired') {
+      return OfferFilter.canceled;
     }
 
     return OfferFilter.values.firstWhere(
@@ -52,8 +55,8 @@ enum OfferFilter {
         return AppColors.statusAccepted;
       case OfferFilter.rejected:
         return AppColors.statusDeclined;
-      case OfferFilter.expired:
-        return AppColors.statusExpired;
+      case OfferFilter.canceled:
+        return AppColors.statusCanceled;
     }
   }
 }

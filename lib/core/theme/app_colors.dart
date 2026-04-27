@@ -19,4 +19,5 @@ class AppColors {
   static const Color statusOfferSent = Color(0xFF3B82F6);
   static const Color statusDeclined = Color(0xFFEF4444);
   static const Color statusExpired = Color(0xFF9CA3AF);
+  static const Color statusCanceled = Color(0xFF9CA3AF);
 }

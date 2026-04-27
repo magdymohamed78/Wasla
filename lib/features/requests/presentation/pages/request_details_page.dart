@@ -669,6 +669,7 @@ class _LinkedOfferSection extends StatelessWidget {
     if (lower.contains('reject') || lower.contains('declin')) {
       return AppColors.statusDeclined;
     }
+    if (lower.contains('cancel')) return AppColors.statusCanceled;
     if (lower.contains('expire')) return AppColors.statusExpired;
     if (lower.contains('pending')) return AppColors.statusPending;
     return AppColors.textSecondary;

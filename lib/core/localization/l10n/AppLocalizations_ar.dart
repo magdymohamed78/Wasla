@@ -1006,7 +1006,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get offersFilterRejected => 'مرفوض';
 
   @override
-  String get offersFilterExpired => 'منتهية';
+  String get offersFilterCanceled => 'ملغاة';
 
   @override
   String get offersTotalAmount => 'المبلغ الإجمالي';

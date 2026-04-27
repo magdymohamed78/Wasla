@@ -96,10 +96,11 @@ class OfferPageResultDto {
       final rejected =
           _resolveCount(rawCounts, const ['rejected', 'declined']) ??
           derived.rejected;
-      final expired =
-          _resolveCount(rawCounts, const ['expired']) ?? derived.expired;
+      final canceled =
+          _resolveCount(rawCounts, const ['canceled', 'expired']) ??
+          derived.canceled;
 
-      final countsSum = pending + accepted + rejected + expired;
+      final countsSum = pending + accepted + rejected + canceled;
       final all =
           _resolveCount(rawCounts, const [
             'all',
@@ -116,7 +117,7 @@ class OfferPageResultDto {
         pending: pending < 0 ? 0 : pending,
         accepted: accepted < 0 ? 0 : accepted,
         rejected: rejected < 0 ? 0 : rejected,
-        expired: expired < 0 ? 0 : expired,
+        canceled: canceled < 0 ? 0 : canceled,
       );
     }
 
@@ -126,7 +127,7 @@ class OfferPageResultDto {
         pending: derived.pending,
         accepted: derived.accepted,
         rejected: derived.rejected,
-        expired: derived.expired,
+        canceled: derived.canceled,
       );
     }
 
@@ -136,7 +137,7 @@ class OfferPageResultDto {
   static OfferStatusCounts _deriveCountsFromItems(
     List<OfferSummaryItem> items,
   ) {
-    int pending = 0, accepted = 0, rejected = 0, expired = 0;
+    int pending = 0, accepted = 0, rejected = 0, canceled = 0;
     for (final item in items) {
       switch (item.normalizedFilter) {
         case OfferFilter.pending:
@@ -145,8 +146,8 @@ class OfferPageResultDto {
           accepted++;
         case OfferFilter.rejected:
           rejected++;
-        case OfferFilter.expired:
-          expired++;
+        case OfferFilter.canceled:
+          canceled++;
         case OfferFilter.all:
           break;
       }
@@ -157,7 +158,7 @@ class OfferPageResultDto {
       pending: pending,
       accepted: accepted,
       rejected: rejected,
-      expired: expired,
+      canceled: canceled,
     );
   }
 
