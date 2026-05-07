@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../../../core/localization/l10n/AppLocalizations.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
-import '../../../../core/utils/toast_utils.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/secondary_button.dart';
 import '../../domain/entities/offer_details.dart';
@@ -24,7 +21,6 @@ import '../widgets/offer_locations_section.dart';
 import '../widgets/offer_service_line_item_card.dart';
 import '../widgets/offer_insurance_section.dart';
 import '../widgets/offer_included_in_price_section.dart';
-import '../widgets/offer_attachment_row.dart';
 import '../widgets/offer_details_skeleton.dart';
 
 class OfferDetailsPage extends StatelessWidget {
@@ -319,23 +315,6 @@ class _SuccessBody extends StatelessWidget {
                   ),
                 ],
 
-                // ── Attachment row ──
-                if (details.hasAttachment) ...[
-                  const SizedBox(height: 20),
-                  Text(
-                    l.attachmentTitle,
-                    style: AppTypography.heading3.copyWith(
-                      color: AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  OfferAttachmentRow(
-                    pdfUrl: details.pdfUrl!,
-                    onDownload: () =>
-                        _downloadAttachment(context, details.pdfUrl!),
-                  ),
-                ],
-
           // ── Action buttons at end of page (not pinned) ──
           if (details.canAccept || details.canReject) ...[
             const SizedBox(height: 24),
@@ -347,20 +326,7 @@ class _SuccessBody extends StatelessWidget {
     );
   }
 
-  Future<void> _downloadAttachment(BuildContext context, String url) async {
-    final l = AppLocalizations.of(context);
 
-    final uri = Uri.tryParse(url);
-    if (uri != null) {
-      try {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } catch (_) {
-        if (context.mounted) ToastUtils.showError(context, l.downloadFailed);
-      }
-    } else {
-      if (context.mounted) ToastUtils.showError(context, l.downloadFailed);
-    }
-  }
 }
 
 class _ActionButtons extends StatelessWidget {

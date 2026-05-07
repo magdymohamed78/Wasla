@@ -573,5 +573,12 @@
   "offerReferenceLabel": "OFFER REFERENCE",
   "totalContractValueLabel": "TOTAL CONTRACT VALUE",
   "serviceHeader": "SERVICE",
-  "costHeader": "COST"
+  "costHeader": "COST",
+
+  "chatbotSuggestionHelp": "What can you help me with?",
+  "chatbotSuggestionExploreServices": "Explore services",
+  "chatbotSuggestionViewOffers": "View my offers",
+  "chatbotSuggestionFindCompany": "Find a suitable company",
+  "chatbotSuggestionCreateRequest": "Create a service request",
+  "chatbotSuggestionTrackStatus": "Track request status"
 }

@@ -3073,6 +3073,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'COST'**
   String get costHeader;
+
+  /// No description provided for @chatbotSuggestionHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'What can you help me with?'**
+  String get chatbotSuggestionHelp;
+
+  /// No description provided for @chatbotSuggestionExploreServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore services'**
+  String get chatbotSuggestionExploreServices;
+
+  /// No description provided for @chatbotSuggestionViewOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'View my offers'**
+  String get chatbotSuggestionViewOffers;
+
+  /// No description provided for @chatbotSuggestionFindCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a suitable company'**
+  String get chatbotSuggestionFindCompany;
+
+  /// No description provided for @chatbotSuggestionCreateRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a service request'**
+  String get chatbotSuggestionCreateRequest;
+
+  /// No description provided for @chatbotSuggestionTrackStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Track request status'**
+  String get chatbotSuggestionTrackStatus;
 }
 
 class _AppLocalizationsDelegate

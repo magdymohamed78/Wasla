@@ -1572,4 +1572,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get costHeader => 'التكلفة';
+
+  @override
+  String get chatbotSuggestionHelp => 'بماذا يمكنك مساعدتي؟';
+
+  @override
+  String get chatbotSuggestionExploreServices => 'استكشاف الخدمات';
+
+  @override
+  String get chatbotSuggestionViewOffers => 'عرض عروضي';
+
+  @override
+  String get chatbotSuggestionFindCompany => 'البحث عن شركة مناسبة';
+
+  @override
+  String get chatbotSuggestionCreateRequest => 'إنشاء طلب خدمة';
+
+  @override
+  String get chatbotSuggestionTrackStatus => 'تتبع حالة الطلب';
 }

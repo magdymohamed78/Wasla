@@ -48,8 +48,7 @@ class OfferDetailsSkeleton extends StatelessWidget {
             // Insurance
             _Box(width: double.infinity, height: 50),
             const SizedBox(height: 12),
-            // Attachment
-            _Box(width: double.infinity, height: 60),
+
           ],
         ),
       ),

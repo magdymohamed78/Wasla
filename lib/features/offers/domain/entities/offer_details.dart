@@ -24,7 +24,6 @@ class OfferDetails {
   final String? insurance;
   final String? includedInPrice;
   final bool? costsIncludeVAT;
-  final String? pdfUrl;
   final List<OfferLocation> locations;
   final List<OfferServiceLineItem> serviceLineItems;
 
@@ -45,7 +44,6 @@ class OfferDetails {
     this.insurance,
     this.includedInPrice,
     this.costsIncludeVAT,
-    this.pdfUrl,
     this.locations = const [],
     this.serviceLineItems = const [],
   });
@@ -66,8 +64,6 @@ class OfferDetails {
 
   /// Only pending offers can be rejected.
   bool get canReject => isPending;
-
-  bool get hasAttachment => pdfUrl != null && pdfUrl!.isNotEmpty;
 
   OfferLocation? get originLocation => locations.where(
     (l) => l.locationType?.toLowerCase() == 'origin',

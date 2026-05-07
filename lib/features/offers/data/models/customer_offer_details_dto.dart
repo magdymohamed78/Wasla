@@ -25,7 +25,6 @@ class CustomerOfferDetailsDto {
   final String? insurance;
   final String? includedInPrice;
   final bool? costsIncludeVAT;
-  final String? pdfUrl;
   final List<OfferLocationSummaryDto> locations;
   final List<OfferServiceLineItemSummaryDto> serviceLineItems;
 
@@ -45,7 +44,6 @@ class CustomerOfferDetailsDto {
     this.insurance,
     this.includedInPrice,
     this.costsIncludeVAT,
-    this.pdfUrl,
     this.locations = const [],
     this.serviceLineItems = const [],
   });
@@ -70,7 +68,6 @@ class CustomerOfferDetailsDto {
       insurance: asString(json['insurance']),
       includedInPrice: asString(json['includedInPrice']),
       costsIncludeVAT: json['costsIncludeVAT'] as bool?,
-      pdfUrl: asString(json['pdfUrl']),
       locations: rawLocations
               ?.map(
                 (e) =>
@@ -107,7 +104,6 @@ class CustomerOfferDetailsDto {
       insurance: insurance,
       includedInPrice: includedInPrice,
       costsIncludeVAT: costsIncludeVAT,
-      pdfUrl: pdfUrl,
       locations:
           locations.map((l) => l.toDomain()).toList(growable: false),
       serviceLineItems:

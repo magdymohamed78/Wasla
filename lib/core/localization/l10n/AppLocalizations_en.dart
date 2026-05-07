@@ -1596,4 +1596,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get costHeader => 'COST';
+
+  @override
+  String get chatbotSuggestionHelp => 'What can you help me with?';
+
+  @override
+  String get chatbotSuggestionExploreServices => 'Explore services';
+
+  @override
+  String get chatbotSuggestionViewOffers => 'View my offers';
+
+  @override
+  String get chatbotSuggestionFindCompany => 'Find a suitable company';
+
+  @override
+  String get chatbotSuggestionCreateRequest => 'Create a service request';
+
+  @override
+  String get chatbotSuggestionTrackStatus => 'Track request status';
 }

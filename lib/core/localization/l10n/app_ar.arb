@@ -565,5 +565,12 @@
   "offerReferenceLabel": "مرجع العرض",
   "totalContractValueLabel": "إجمالي قيمة العقد",
   "serviceHeader": "الخدمة",
-  "costHeader": "التكلفة"
+  "costHeader": "التكلفة",
+
+  "chatbotSuggestionHelp": "بماذا يمكنك مساعدتي؟",
+  "chatbotSuggestionExploreServices": "استكشاف الخدمات",
+  "chatbotSuggestionViewOffers": "عرض عروضي",
+  "chatbotSuggestionFindCompany": "البحث عن شركة مناسبة",
+  "chatbotSuggestionCreateRequest": "إنشاء طلب خدمة",
+  "chatbotSuggestionTrackStatus": "تتبع حالة الطلب"
 }

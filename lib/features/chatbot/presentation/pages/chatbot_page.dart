@@ -166,17 +166,20 @@ class _SuggestionChips extends StatelessWidget {
 
   const _SuggestionChips({required this.onSuggestionTap});
 
-  static const _suggestions = [
-    'What services do you offer?',
-    'Show my offers',
-    'Help me with a move',
-    'Track my requests',
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final suggestions = [
+      l.chatbotSuggestionHelp,
+      l.chatbotSuggestionExploreServices,
+      l.chatbotSuggestionViewOffers,
+      l.chatbotSuggestionFindCompany,
+      l.chatbotSuggestionCreateRequest,
+      l.chatbotSuggestionTrackStatus,
+    ];
+
     return Container(
-      color: AppColors.surface,
+      color: AppColors.background,
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingMd,
         vertical: AppDimensions.spacingXs,
@@ -184,7 +187,7 @@ class _SuggestionChips extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: _suggestions.map((suggestion) {
+          children: suggestions.map((suggestion) {
             return Padding(
               padding: const EdgeInsetsDirectional.only(
                 end: AppDimensions.spacingSm,
@@ -192,17 +195,18 @@ class _SuggestionChips extends StatelessWidget {
               child: ActionChip(
                 label: Text(
                   suggestion,
-                  style: AppTypography.bodySmall.copyWith(
-                    color: AppColors.brandRed,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: AppColors.surface,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                side: const BorderSide(color: AppColors.brandRed),
+                side: const BorderSide(color: AppColors.surface),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(
                     AppDimensions.borderRadiusXl,
                   ),
                 ),
-                backgroundColor: AppColors.surface,
+                backgroundColor: AppColors.brandRed,
                 onPressed: () => onSuggestionTap(suggestion),
               ),
             );
