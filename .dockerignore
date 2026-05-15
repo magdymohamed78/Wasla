@@ -1,0 +1,48 @@
+# Version control and editor state
+.git/
+.github/
+.agent/
+.kilocode/
+.opencode/
+.specify/
+.vscode/
+.idea/
+*.iml
+
+# Flutter, Dart, Gradle, and build outputs
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+dist/
+coverage/
+test_results/
+.gradle/
+android/.gradle/
+android/app/debug/
+android/app/profile/
+android/app/release/
+
+# Host-specific Android configuration
+android/local.properties
+
+# Logs, temporary files, and local metadata
+*.log
+*.tmp
+*.cache
+.DS_Store
+Thumbs.db
+telemetry-id
+
+# Local environment files; this project does not require env files for Docker
+.env*
+!.env.example
+
+# Non-build context
+specs/
+swagger.json
+error-responses.md
+AGENTS.md

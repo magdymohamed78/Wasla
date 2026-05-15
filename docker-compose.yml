@@ -1,0 +1,13 @@
+services:
+  android:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: wasla-flutter-android
+    volumes:
+      - ./dist:/output
+      - gradle-cache:/root/.gradle
+    command: apk
+
+volumes:
+  gradle-cache:

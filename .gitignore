@@ -38,6 +38,7 @@ logs/
 .pub-cache/
 .pub/
 build/
+dist/
 .packages
 
 # =========================
