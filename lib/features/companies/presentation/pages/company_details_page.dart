@@ -110,6 +110,10 @@ class _CompanyDetailsView extends StatelessWidget {
         backgroundColor: AppColors.background,
         appBar: AppBar(
           backgroundColor: AppColors.background,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: () => context.go(AppRouter.home),
+          ),
           title: Text(localizations.companyDetailsPageTitle),
         ),
         body: SafeArea(
