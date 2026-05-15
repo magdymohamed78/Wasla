@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
-import '../theme/app_typography.dart';
 import '../theme/app_dimensions.dart';
+import '../theme/app_typography.dart';
+
+class _LanguageMenuOption {
+  final Locale locale;
+  final String label;
+
+  const _LanguageMenuOption({required this.locale, required this.label});
+}
+
+const List<_LanguageMenuOption> _languageMenuOptions = [
+  _LanguageMenuOption(locale: Locale('en'), label: 'English'),
+  _LanguageMenuOption(locale: Locale('ar'), label: 'العربية'),
+  _LanguageMenuOption(locale: Locale('de'), label: 'Deutsch'),
+  _LanguageMenuOption(locale: Locale('fr'), label: 'Français'),
+  _LanguageMenuOption(locale: Locale('it'), label: 'Italiano'),
+  _LanguageMenuOption(locale: Locale('es'), label: 'Español'),
+];
 
 class LanguageDropdown extends StatelessWidget {
   final Locale currentLocale;
@@ -22,46 +39,26 @@ class LanguageDropdown extends StatelessWidget {
         size: AppDimensions.iconSizeMd,
       ),
       onSelected: onLocaleChanged,
-      itemBuilder: (context) => [
-        PopupMenuItem<Locale>(
-          value: const Locale('en'),
+      itemBuilder: (context) => _languageMenuOptions.map((option) {
+        final isSelected =
+            currentLocale.languageCode == option.locale.languageCode;
+
+        return PopupMenuItem<Locale>(
+          value: option.locale,
           child: Row(
             children: [
-              if (currentLocale.languageCode == 'en')
+              if (isSelected)
                 const Icon(
                   Icons.check,
                   size: AppDimensions.iconSizeSm,
                   color: AppColors.brandRed,
                 ),
-              if (currentLocale.languageCode == 'en')
-                const SizedBox(width: AppDimensions.spacingSm),
-              Text(
-                'English',
-                style: AppTypography.bodyMedium,
-              ),
+              if (isSelected) const SizedBox(width: AppDimensions.spacingSm),
+              Text(option.label, style: AppTypography.bodyMedium),
             ],
           ),
-        ),
-        PopupMenuItem<Locale>(
-          value: const Locale('ar'),
-          child: Row(
-            children: [
-              if (currentLocale.languageCode == 'ar')
-                const Icon(
-                  Icons.check,
-                  size: AppDimensions.iconSizeSm,
-                  color: AppColors.brandRed,
-                ),
-              if (currentLocale.languageCode == 'ar')
-                const SizedBox(width: AppDimensions.spacingSm),
-              Text(
-                'العربية',
-                style: AppTypography.bodyMedium,
-              ),
-            ],
-          ),
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 }

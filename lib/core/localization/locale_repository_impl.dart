@@ -4,7 +4,14 @@ import 'locale_repository.dart';
 
 class LocaleRepositoryImpl implements LocaleRepository {
   static const String _localeKey = 'app_locale';
-  static const List<String> _supportedLocales = ['en', 'ar'];
+  static const List<String> _supportedLocales = [
+    'en',
+    'ar',
+    'de',
+    'fr',
+    'it',
+    'es',
+  ];
 
   final SharedPreferences _prefs;
 

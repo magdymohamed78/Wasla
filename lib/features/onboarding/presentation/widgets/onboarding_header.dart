@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
+
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_dimensions.dart';
 import '../../../../../core/theme/app_typography.dart';
+
+class _LanguageChoice {
+  final Locale locale;
+  final String label;
+  final String shortLabel;
+
+  const _LanguageChoice({
+    required this.locale,
+    required this.label,
+    required this.shortLabel,
+  });
+}
+
+const List<_LanguageChoice> _languageChoices = [
+  _LanguageChoice(locale: Locale('en'), label: 'English', shortLabel: 'EN'),
+  _LanguageChoice(locale: Locale('ar'), label: 'العربية', shortLabel: 'AR'),
+  _LanguageChoice(locale: Locale('de'), label: 'Deutsch', shortLabel: 'DE'),
+  _LanguageChoice(locale: Locale('fr'), label: 'Français', shortLabel: 'FR'),
+  _LanguageChoice(locale: Locale('it'), label: 'Italiano', shortLabel: 'IT'),
+  _LanguageChoice(locale: Locale('es'), label: 'Español', shortLabel: 'ES'),
+];
 
 class OnboardingHeader extends StatelessWidget {
   final Locale currentLocale;
@@ -49,119 +71,142 @@ class _LanguageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final languageText = currentLocale.languageCode == 'ar' ? 'AR' : 'EN';
-    
-    return GestureDetector(
-      onTap: () => _showLanguageDialog(context),
+    final selectedChoice = _languageChoices.firstWhere(
+      (choice) => choice.locale.languageCode == currentLocale.languageCode,
+      orElse: () => _languageChoices.first,
+    );
+
+    return PopupMenuButton<Locale>(
+      onSelected: onLocaleChanged,
+      color: AppColors.surface,
+      elevation: 10,
+      offset: const Offset(0, AppDimensions.spacingSm),
+      position: PopupMenuPosition.under,
+      padding: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppDimensions.borderRadiusLg),
+        side: BorderSide(color: AppColors.divider.withValues(alpha: 0.7)),
+      ),
+      itemBuilder: (context) => _languageChoices.map((choice) {
+        final isSelected =
+            currentLocale.languageCode == choice.locale.languageCode;
+
+        return PopupMenuItem<Locale>(
+          value: choice.locale,
+          padding: EdgeInsets.zero,
+          height: 52,
+          child: _LanguageMenuItem(choice: choice, isSelected: isSelected),
+        );
+      }).toList(),
       child: Container(
         padding: EdgeInsetsDirectional.symmetric(
           horizontal: AppDimensions.paddingSm,
-          vertical: AppDimensions.spacingXs,
+          vertical: AppDimensions.spacingSm,
         ),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(AppDimensions.borderRadiusRound),
+          border: Border.all(color: AppColors.divider.withValues(alpha: 0.75)),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.cardShadow,
+              blurRadius: 12,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.language,
-              color: AppColors.brandRed,
-              size: AppDimensions.iconSizeMd,
+            Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: AppColors.brandRed.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.language,
+                color: AppColors.brandRed,
+                size: AppDimensions.iconSizeSm,
+              ),
+            ),
+            const SizedBox(width: AppDimensions.spacingSm),
+            Text(
+              selectedChoice.shortLabel,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w700,
+              ),
             ),
             const SizedBox(width: AppDimensions.spacingXs),
-            Text(
-              languageText,
-              style: AppTypography.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: AppColors.textSecondary,
+              size: AppDimensions.iconSizeSm,
             ),
           ],
         ),
       ),
     );
   }
-
-  void _showLanguageDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.borderRadiusMd),
-          ),
-          contentPadding: EdgeInsetsDirectional.symmetric(
-            vertical: AppDimensions.paddingMd,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _LanguageOption(
-                label: 'English',
-                isSelected: currentLocale.languageCode == 'en',
-                onTap: () {
-                  onLocaleChanged(const Locale('en'));
-                  Navigator.of(dialogContext).pop();
-                },
-              ),
-              const Divider(height: AppDimensions.spacingSm),
-              _LanguageOption(
-                label: 'العربية',
-                isSelected: currentLocale.languageCode == 'ar',
-                onTap: () {
-                  onLocaleChanged(const Locale('ar'));
-                  Navigator.of(dialogContext).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
 
-class _LanguageOption extends StatelessWidget {
-  final String label;
+class _LanguageMenuItem extends StatelessWidget {
+  final _LanguageChoice choice;
   final bool isSelected;
-  final VoidCallback onTap;
 
-  const _LanguageOption({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const _LanguageMenuItem({required this.choice, required this.isSelected});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsetsDirectional.symmetric(
-          horizontal: AppDimensions.paddingLg,
-          vertical: AppDimensions.paddingMd,
-        ),
-        child: Row(
-          children: [
-            if (isSelected)
-              const Icon(
-                Icons.check,
-                color: AppColors.brandRed,
-                size: AppDimensions.iconSizeMd,
-              )
-            else
-              const SizedBox(width: AppDimensions.iconSizeMd),
-            SizedBox(width: isSelected ? AppDimensions.spacingSm : 0),
-            Text(
-              label,
-              style: AppTypography.bodyLarge.copyWith(
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                color: isSelected ? AppColors.brandRed : AppColors.textPrimary,
+    return Container(
+      width: 220,
+      padding: EdgeInsetsDirectional.symmetric(
+        horizontal: AppDimensions.paddingMd,
+        vertical: AppDimensions.spacingSm,
+      ),
+      color: isSelected
+          ? AppColors.brandRed.withValues(alpha: 0.06)
+          : AppColors.surface,
+      child: Row(
+        children: [
+          Container(
+            width: 38,
+            height: 28,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: isSelected ? AppColors.brandRed : AppColors.background,
+              borderRadius: BorderRadius.circular(AppDimensions.borderRadiusSm),
+            ),
+            child: Text(
+              choice.shortLabel,
+              style: AppTypography.bodySmall.copyWith(
+                color: isSelected ? AppColors.surface : AppColors.textSecondary,
+                fontWeight: FontWeight.w700,
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: AppDimensions.spacingMd),
+          Expanded(
+            child: Text(
+              choice.label,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.bodyMedium.copyWith(
+                color: isSelected ? AppColors.brandRed : AppColors.textPrimary,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
+          ),
+          if (isSelected)
+            const Icon(
+              Icons.check_circle_rounded,
+              color: AppColors.brandRed,
+              size: AppDimensions.iconSizeSm,
+            )
+          else
+            const SizedBox(width: AppDimensions.iconSizeSm),
+        ],
       ),
     );
   }

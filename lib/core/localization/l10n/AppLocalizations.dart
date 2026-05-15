@@ -6,7 +6,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'AppLocalizations_ar.dart';
+import 'AppLocalizations_de.dart';
 import 'AppLocalizations_en.dart';
+import 'AppLocalizations_es.dart';
+import 'AppLocalizations_fr.dart';
+import 'AppLocalizations_it.dart';
 
 // ignore_for_file: type=lint
 
@@ -95,7 +99,11 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('ar'),
+    Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('it'),
   ];
 
   /// No description provided for @onboardingLogIn.
@@ -131,7 +139,7 @@ abstract class AppLocalizations {
   /// No description provided for @supportPageDescription.
   ///
   /// In en, this message translates to:
-  /// **'For support, please contact us at support@wasla.com'**
+  /// **'For support, please contact us at waslacrmteam@wasla.com'**
   String get supportPageDescription;
 
   /// No description provided for @loginTitle.
@@ -3121,8 +3129,14 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['ar', 'en'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ar',
+    'de',
+    'en',
+    'es',
+    'fr',
+    'it',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -3133,8 +3147,16 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar':
       return AppLocalizationsAr();
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'it':
+      return AppLocalizationsIt();
   }
 
   throw FlutterError(

@@ -25,7 +25,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get supportPageDescription =>
-      'للدعم، يرجى التواصل معنا على support@wasla.com';
+      'للدعم، يرجى التواصل معنا على waslacrmteam@wasla.com';
 
   @override
   String get loginTitle => 'تسجيل الدخول';

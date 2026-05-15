@@ -7,6 +7,22 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimensions.dart';
 import '../../../../core/theme/app_typography.dart';
 
+class _SettingsLanguageOption {
+  final Locale locale;
+  final String label;
+
+  const _SettingsLanguageOption({required this.locale, required this.label});
+}
+
+const List<_SettingsLanguageOption> _settingsLanguageOptions = [
+  _SettingsLanguageOption(locale: Locale('en'), label: 'English'),
+  _SettingsLanguageOption(locale: Locale('ar'), label: 'العربية'),
+  _SettingsLanguageOption(locale: Locale('de'), label: 'Deutsch'),
+  _SettingsLanguageOption(locale: Locale('fr'), label: 'Français'),
+  _SettingsLanguageOption(locale: Locale('it'), label: 'Italiano'),
+  _SettingsLanguageOption(locale: Locale('es'), label: 'Español'),
+];
+
 class SettingsLanguageSection extends StatelessWidget {
   const SettingsLanguageSection({super.key});
 
@@ -16,21 +32,18 @@ class SettingsLanguageSection extends StatelessWidget {
       builder: (context, state) {
         return Column(
           children: [
-            _LanguageTile(
-              icon: Icons.language_rounded,
-              label: 'English',
-              isSelected: state.locale.languageCode == 'en',
-              onTap: () =>
-                  context.read<LocaleCubit>().changeLocale(const Locale('en')),
-              showDivider: true,
-            ),
-            _LanguageTile(
-              icon: Icons.language_rounded,
-              label: 'Arabic',
-              isSelected: state.locale.languageCode == 'ar',
-              onTap: () =>
-                  context.read<LocaleCubit>().changeLocale(const Locale('ar')),
-            ),
+            for (final option in _settingsLanguageOptions)
+              _LanguageTile(
+                icon: Icons.language_rounded,
+                label: option.label,
+                isSelected:
+                    state.locale.languageCode == option.locale.languageCode,
+                onTap: () =>
+                    context.read<LocaleCubit>().changeLocale(option.locale),
+                showDivider:
+                    option.locale.languageCode !=
+                    _settingsLanguageOptions.last.locale.languageCode,
+              ),
           ],
         );
       },
