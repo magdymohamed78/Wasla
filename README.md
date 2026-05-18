@@ -20,7 +20,7 @@ The app is configured for Android and iOS. A Flutter Web target is not present i
 - [Available Scripts](#available-scripts)
 - [Build Instructions](#build-instructions)
 - [Usage Guide](#usage-guide)
-- [API Endpoints](#api-endpoints)
+- [Backend/API Overview](#backendapi-overview)
 - [Authentication and Access Notes](#authentication-and-access-notes)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
@@ -103,7 +103,7 @@ Verified highlights from the current codebase. &#x2728;
 |-- error-responses.md        # API error response notes
 |-- l10n.yaml                 # Flutter localization generator config
 |-- pubspec.yaml              # Flutter package metadata and dependencies
-`-- swagger.json              # Wasla CRM API OpenAPI specification
+`-- swagger.json              # Internal API contract artifact; details omitted from this public README
 ```
 
 ## Installation
@@ -139,16 +139,16 @@ flutter gen-l10n
 
 No `.env.example` file was found, and the app does not currently use `flutter_dotenv`, `String.fromEnvironment`, or `--dart-define` configuration.
 
-The current configuration values are hard-coded in Dart:
+For public documentation, real backend URLs and private configuration values are intentionally not listed. If configuration is externalized later, use safe placeholder values like these:
 
-| Configuration | Current value | Source |
+| Name | Example value | Notes |
 | --- | --- | --- |
-| Main REST API base URL | `http://waslacrm.runasp.net/` | `lib/app.dart`, `lib/core/utils/url_utils.dart` |
-| Chatbot API base URL | `https://mohameddda-wasla-ai-agent.hf.space/` | `lib/app.dart` |
+| `WASLA_API_BASE_URL` | `<API_BASE_URL>` | Main backend API base URL |
+| `WASLA_CHATBOT_API_BASE_URL` | `<CHATBOT_API_BASE_URL>` | Chatbot service base URL |
 
-Required environment variables: none in the current codebase.
+Required environment variables in the current codebase: none.
 
-> Note: Android enables cleartext traffic in `android/app/src/main/AndroidManifest.xml` for the HTTP API URL. iOS HTTP transport policy should be reviewed before production use.
+Do not commit secrets, tokens, API keys, database URLs, webhook secrets, signing keys, or production service URLs.
 
 ## Running Locally
 
@@ -293,65 +293,36 @@ Typical app flow:
 6. Accept or reject offers from the offers flow.
 7. Manage reviews from the My Reviews screen.
 
-## API Endpoints
+## Backend/API Overview
 
-This repository does not implement backend routes. It is a Flutter client that consumes external APIs.
+This repository is a Flutter mobile client. It consumes backend services but does not implement public backend routes itself.
 
-- Main API base URL: `http://waslacrm.runasp.net/`
-- Chatbot API base URL: `https://mohameddda-wasla-ai-agent.hf.space/`
-- OpenAPI spec included: `swagger.json` with title `Wasla CRM API`
+For security reasons, detailed internal API documentation, route paths, webhook URLs, admin routes, database routes, and security-sensitive endpoints are not published in this README.
 
-Endpoints used by the Flutter app include:
+High-level backend capabilities used by the app include:
 
-| Area | Method | Endpoint |
-| --- | --- | --- |
-| Auth | `POST` | `/api/customer-portal/login` |
-| Auth | `POST` | `/api/customer-portal/register` |
-| Auth | `POST` | `/api/customer-portal/refresh-token` |
-| Auth | `POST` | `/api/customer-portal/logout` |
-| Auth | `POST` | `/api/customer-portal/logout-all` |
-| Passwords | `POST` | `/api/Auth/forgot-password` |
-| Passwords | `POST` | `/api/Auth/resend-otp` |
-| Passwords | `POST` | `/api/Auth/reset-password` |
-| Passwords | `POST` | `/api/Auth/change-password` |
-| Companies | `GET` | `/api/customer-portal/companies` |
-| Companies | `GET` | `/api/customer-portal/recommended-companies` |
-| Companies | `GET` | `/api/customer-portal/trending-companies` |
-| Companies | `GET` | `/api/customer-portal/companies/{companyId}` |
-| Reviews | `GET` | `/api/customer-portal/companies/{companyId}/reviews` |
-| Reviews | `GET` | `/api/customer-portal/my/reviews` |
-| Reviews | `POST` | `/api/customer-portal/companies/{companyId}/reviews` |
-| Reviews | `PUT` | `/api/customer-portal/companies/{companyId}/reviews` |
-| Reviews | `DELETE` | `/api/customer-portal/companies/{companyId}/reviews` |
-| Dashboard | `GET` | `/api/customer-portal/my/dashboard` |
-| Profile | `GET`, `PUT` | `/api/customer-portal/my/profile` |
-| Profile | `GET`, `PUT` | `/api/customer-portal/my/lead-profile` |
-| Digital signature | `POST` | `/api/customer-portal/my/digital-signature` |
-| Service requests | `POST` | `/api/customer-portal/service-requests` |
-| Service requests | `GET` | `/api/customer-portal/my/service-requests` |
-| Service requests | `GET` | `/api/customer-portal/my/service-requests/{id}` |
-| Offers | `GET` | `/api/customer-portal/my/offers` |
-| Offers | `GET` | `/api/customer-portal/my/offers/{offerId}` |
-| Offers | `POST` | `/api/customer-portal/my/offers/{offerId}/accept` |
-| Offers | `POST` | `/api/customer-portal/my/offers/{offerId}/reject` |
-| Chatbot | `POST` | `/api/chat` |
+| Area | Description |
+| --- | --- |
+| Authentication | Customer registration, sign-in, password recovery, session management, and account security flows |
+| Company discovery | Browsing service companies, viewing company details, and reading reviews |
+| Lead and consultation requests | Creating and tracking service requests from interested users and customers |
+| Offers | Viewing, accepting, or rejecting offers connected to service requests |
+| Profile and settings | Managing customer or lead profile data, app language, security settings, and account actions |
+| Reviews | Creating, updating, deleting, and viewing customer reviews |
+| Chatbot | Sending customer messages to an external assistant service and rendering structured responses |
+| Admin-related actions | Supported by the broader backend, but not documented publicly here |
+| External integrations | Payment, messaging, AI, or webhook-style integrations may exist outside this public client documentation |
 
-`swagger.json` also contains company, employee, task, super-admin, Stripe webhook, and other backend endpoints that are not currently wired into this mobile app.
+Security note: keep internal API contracts, privileged routes, webhook configuration, tokens, keys, and production URLs in private documentation or protected secret stores.
 
 ## Authentication and Access Notes
 
-- The app attaches JWT Bearer tokens through `AuthInterceptor`.
-- Access tokens and refresh tokens are stored with `flutter_secure_storage` when remember-me is enabled.
-- When remember-me is not enabled, session data is stored in the in-memory auth data source.
-- On `401` or `403`, the interceptor attempts one refresh-token flow, retries the failed request, then clears the session and redirects to login if refresh fails.
-- Session roles are resolved as:
-  - `guest`: no token
-  - `lead`: token exists but no customer claim
-  - `customer`: token includes a customer claim
-- Requests, offers, and chatbot tabs are customer-only.
-- Profile/settings require authentication.
-- Leads can submit service requests; after submission, the app refreshes the session to detect conversion to a customer.
-- No admin mobile UI was found in `lib/`. Admin and company-management endpoints exist in `swagger.json`, but they are not implemented as app screens here.
+- The app uses token-based authentication for protected mobile features.
+- Persistent sessions use secure device storage when remember-me is enabled.
+- Non-persistent sessions are kept in memory.
+- The UI distinguishes between guest, lead, and customer access levels.
+- Requests, offers, profile, settings, and chatbot access are role-aware.
+- Admin mobile screens were not found in `lib/`.
 
 ## Deployment
 
