@@ -195,8 +195,8 @@ Use these Flutter and Docker commands instead:
 | `flutter build apk --release` | Build an Android APK |
 | `flutter build appbundle --release` | Build an Android App Bundle |
 | `flutter build ios --release` | Build iOS release artifacts on macOS |
-| `docker compose up --build` | Build the Android APK through Docker |
-| `docker compose run --rm android appbundle` | Build the Android AAB through Docker |
+| `docker run --rm -v "${PWD}/dist:/output" magdymohamed/wasla-flutter-android:latest` | Build an Android APK with the Docker Hub image |
+| `docker run --rm -v "${PWD}/dist:/output" magdymohamed/wasla-flutter-android:latest appbundle` | Build an Android AAB with the Docker Hub image |
 
 ## Build Instructions
 
@@ -222,48 +222,74 @@ flutter build ios --release
 
 ### Docker Android Builder
 
-This repository is dockerized as an Android build environment. It is not packaged as a Flutter Web/Nginx app because the project currently has no `web/` platform folder.
+The Android build environment is available as a Docker image on Docker Hub:
 
-Build the Docker image and APK with Docker Compose:
+```text
+magdymohamed/wasla-flutter-android:latest
+```
 
-```sh
-docker compose up --build
+You do not need to install Flutter, Android Studio, or the Android SDK locally to create Android release artifacts with this image. You only need Docker Desktop.
+
+This image builds Android artifacts only. It does not run the mobile app, and no ports are exposed.
+
+#### Build an APK from Docker Hub
+
+1. Open Docker Desktop and keep it running.
+2. Open PowerShell in any empty folder.
+3. Create a release folder and an output directory:
+
+```powershell
+mkdir wasla-release
+cd wasla-release
+mkdir dist
+```
+
+4. Build the APK:
+
+```powershell
+docker run --rm -v "${PWD}/dist:/output" magdymohamed/wasla-flutter-android:latest
 ```
 
 The APK is copied to:
 
 ```text
-dist/app-release.apk
+wasla-release\dist\app-release.apk
 ```
 
-Build the Android App Bundle with Docker Compose:
+#### Build an AAB from Docker Hub
 
-```sh
-docker compose run --rm android appbundle
+Use the same folder setup, then run:
+
+```powershell
+docker run --rm -v "${PWD}/dist:/output" magdymohamed/wasla-flutter-android:latest appbundle
 ```
 
 The AAB is copied to:
 
 ```text
-dist/app-release.aab
+wasla-release\dist\app-release.aab
 ```
 
-Build the image directly:
+#### Optional: Rebuild the Docker Image Locally
+
+This repository also includes a `Dockerfile`, `docker-compose.yml`, and `docker/android-build.sh` if you want to rebuild the image from source.
+
+Build the local image:
 
 ```sh
 docker build -t wasla-flutter-android .
 ```
 
-Run the Android APK build directly with Docker:
+Build an APK with Docker Compose:
 
 ```sh
-docker run --rm -v "${PWD}/dist:/output" wasla-flutter-android
+docker compose up --build
 ```
 
-Run the Android AAB build directly with Docker:
+Build an AAB with Docker Compose:
 
 ```sh
-docker run --rm -v "${PWD}/dist:/output" wasla-flutter-android appbundle
+docker compose run --rm android appbundle
 ```
 
 The Docker image installs Flutter `3.41.1`, Android SDK platform `36`, Android build tools `36.0.0`, compatibility Android SDK/build tools `34`, NDK `28.2.13676358`, and CMake `3.22.1`.
@@ -351,8 +377,8 @@ iOS signing and release setup: To be added.
 
 Docker is supported for Android artifact builds only. No ports are exposed, and the container does not run the mobile app.
 
-```sh
-docker compose up --build
+```powershell
+docker run --rm -v "${PWD}/dist:/output" magdymohamed/wasla-flutter-android:latest
 ```
 
 
