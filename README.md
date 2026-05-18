@@ -128,18 +128,6 @@ docker run --rm -v "${PWD}/dist:/output" magdymohamed/wasla-flutter-android:late
 
 Outputs are written to `dist/app-release.apk` or `dist/app-release.aab`.
 
-## Configuration
-
-No required environment variables are currently used by the app.
-
-If configuration is externalized later, use safe placeholder-based values:
-
-| Name | Example |
-| --- | --- |
-| `WASLA_API_BASE_URL` | `<API_BASE_URL>` |
-| `WASLA_CHATBOT_API_BASE_URL` | `<CHATBOT_API_BASE_URL>` |
-
-Do not commit secrets, tokens, API keys, database URLs, webhook secrets, signing keys, or production service URLs.
 
 ## Backend/API
 
