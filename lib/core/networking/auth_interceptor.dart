@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
 import '../routing/app_router.dart';
+import '../../features/auth/data/models/refresh_token_request_model.dart';
+import '../../features/auth/data/models/refresh_token_response_model.dart';
 import '../../features/auth/domain/repositories/auth_repository.dart';
 
 class AuthInterceptor extends QueuedInterceptorsWrapper {
@@ -13,10 +15,11 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
   Future<bool>? _refreshInFlight;
 
   static const String _refreshAttemptedKey = 'auth_refresh_attempted';
+  static const String _refreshTokenEndpoint = '/api/customer-portal/refresh-token';
   static const List<String> _noRefreshEndpoints = <String>[
     '/api/customer-portal/login',
     '/api/customer-portal/register',
-    '/api/customer-portal/refresh-token',
+    _refreshTokenEndpoint,
     '/api/customer-portal/logout',
   ];
 
@@ -146,9 +149,26 @@ class AuthInterceptor extends QueuedInterceptorsWrapper {
         return;
       }
 
-      final refreshedSession = await _authRepository!.refreshToken(
-        refreshToken: refreshToken,
+      // Use the interceptor-free client so QueuedInterceptorsWrapper cannot
+      // deadlock while this handler is still awaiting refresh.
+      final response = await _refreshDio.post<Map<String, dynamic>>(
+        _refreshTokenEndpoint,
+        data: RefreshTokenRequestModel(refreshToken: refreshToken).toJson(),
       );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        completer.complete(false);
+        return;
+      }
+
+      final payload = response.data;
+      if (payload == null) {
+        completer.complete(false);
+        return;
+      }
+
+      final refreshedSession =
+          RefreshTokenResponseModel.fromJson(payload).toEntity();
 
       await _authRepository!.updateStoredSession(
         refreshedSession,

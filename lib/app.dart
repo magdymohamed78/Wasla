@@ -176,7 +176,12 @@ class _AppState extends State<App> {
 
     // ── Auth ────────────────────────────────────────────────────
     _authRemoteDataSource = AuthRemoteDataSourceImpl(_dio);
-    _secureStorage = const FlutterSecureStorage();
+    _secureStorage = const FlutterSecureStorage(
+      aOptions: AndroidOptions(
+        encryptedSharedPreferences: true,
+        resetOnError: true,
+      ),
+    );
     _secureAuthLocalDataSource = SecureAuthLocalDataSource(
       storage: _secureStorage,
     );
